@@ -2,17 +2,17 @@ package examples.tools.spritegen;
 
 public class Sprite {
 	// render parameters as part of instance
-	int[] coltable;
+	public int[] coltable;
 	PixelArtGen gen;
 	// output
 	// xsize*ysize fill types
-	int[][] hull;
+	public int[][] hull;
 	// xsize*ysize color indexes
-	int[][] colidx;
+	public int[][] colidx;
 	// xsize*ysize shade levels (0..2)
 	// int [][] shades;
 	// xsize*animsize*ysize colours
-	int[][] pixels;
+	public int[][] pixels;
 
 	public Sprite(int[] coltable, PixelArtGen gen, int xsize, int totalxsize,
 			int ysize) {
@@ -65,5 +65,25 @@ public class Sprite {
 		int width = totalwidth / nrframes;
 		int[] outArr = Hq2x.Parse(inArr, width, getHeight());
 		return outArr;
+	}
+	
+	public Sprite clone(){
+		Sprite spr = new Sprite(null,gen,0,0,0);
+		spr.coltable = coltable.clone();
+		spr.colidx = colidx.clone();
+		for(int i = 0; i < spr.colidx.length; i++){
+			spr.colidx[i] = colidx[i].clone();
+		}
+		
+		spr.hull = hull.clone();
+		for(int i = 0; i < spr.hull.length; i++){
+			spr.hull[i] = hull[i].clone();
+		}
+		
+		spr.pixels = pixels.clone();
+		for(int i = 0; i < spr.pixels.length; i++){
+			spr.pixels[i] = pixels[i].clone();
+		}
+		return spr;
 	}
 }
