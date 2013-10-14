@@ -3,7 +3,7 @@ package examples.tools.spritegen;
 import java.io.*;
 import java.util.Random;
 
-class PixelArtGen {
+public class PixelArtGen {
 
 	static int transcolor = 0x010101;
 
@@ -1128,7 +1128,7 @@ class PixelArtGen {
 	// balance between taking horizontal versus vertical neighbours
 	double color_smoothing_horiz_bias = 0.5;
 
-	static PixelArtGen[] shapes = new PixelArtGen[] {
+	public static PixelArtGen[] shapes = new PixelArtGen[] {
 			new PixelArtGen(16, 16, shipfilltable, null, true, false, 1, 1,
 					0.5, 0.6, 0.5, 0.3, 0.4, 0.6, 0.5),
 			new PixelArtGen(18, 18, butterflyfilltable18, birdanimtable18,
@@ -1138,7 +1138,7 @@ class PixelArtGen {
 			new PixelArtGen(18, 18, ufofilltable18, null, true, true, 1, 1,
 					0.5, 0.75, 0.5, 0.3, 0.4, 0.8, 0.5) };
 
-	static PixelArtGen[] shapes2 = new PixelArtGen[] {
+	public static PixelArtGen[] shapes2 = new PixelArtGen[] {
 			new PixelArtGen(12, 12, rand12filltable, rand12walkanimtable, true,
 					false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
 			new PixelArtGen(12, 12, rand12filltable, rand12flyanimtable, true,
