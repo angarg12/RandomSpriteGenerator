@@ -1,6 +1,7 @@
 package examples.tools.spritegen;
 
 import java.io.*;
+import java.util.Random;
 
 class PixelArtGen {
 
@@ -1077,7 +1078,12 @@ class PixelArtGen {
 					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, } };
 
 	static int[][][] rand12rwiggleanimtable = rotateAnimTable(rand12wiggleanimtable);
-
+	
+	static Random random = new Random();
+	public static void fixRandom(int seed){
+		random = new Random(seed);
+	}
+	
 	// hull code:
 	// 0 = transparent
 	// 1 = any colour

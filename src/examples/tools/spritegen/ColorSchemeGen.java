@@ -1,7 +1,13 @@
 package examples.tools.spritegen;
 
+import java.util.Random;
+
 public class ColorSchemeGen {
 	// https://lotsacode.wordpress.com/2010/03/11/hsvtorgb-and-rgbtohsv-in-c/
+	static Random random = new Random();
+	public static void fixRandom(int seed){
+		random = new Random(seed);
+	}
 	/**
 	 * h,s,v between 0 and 1. XXX this algorithm has h=0-blue,
 	 * h=0.3333333-green, h=0.5-yellow
@@ -62,7 +68,7 @@ public class ColorSchemeGen {
 	public static int[] genSpriteColorScheme(int transcol, int black,
 			int colors, int shades) {
 		int[] ret = new int[(colors + 3) * shades];
-		double darken = (0.3 + 0.2 * Math.random()) / (shades - 1);
+		double darken = (0.3 + 0.2 * random.nextDouble()) / (shades - 1);
 		for (int i = 0; i < shades; i++) {
 			ret[i] = transcol;
 			ret[i + shades] = black;
@@ -70,14 +76,14 @@ public class ColorSchemeGen {
 		}
 		double hshift, svshift, s, h;
 		do { // find good combination
-			if (Math.random() > 0.5) {
-				hshift = Math.random(); // random colours
+			if (random.nextDouble() > 0.5) {
+				hshift = random.nextDouble(); // random colours
 			} else {
-				hshift = 0.1 * Math.random(); // tight colour key
+				hshift = 0.1 * random.nextDouble(); // tight colour key
 			}
-			svshift = 0.5 * Math.random();
-			s = 0.5 + 0.5 * Math.random();
-			h = Math.random();
+			svshift = 0.5 * random.nextDouble();
+			s = 0.5 + 0.5 * random.nextDouble();
+			h = random.nextDouble();
 			// we want either big hshift or big svshift
 			if ((hshift < 0.2 || hshift > 0.8) && svshift < 0.2)
 				continue;
@@ -87,11 +93,11 @@ public class ColorSchemeGen {
 				continue;
 			// reject some pervasive greens
 			if (h >= 0.1666667 && h <= 0.4 && (hshift < 0.1 || hshift > 0.9)
-					&& Math.random() > 0.5)
+					&& random.nextDouble() > 0.5)
 				continue;
 		} while (false);
 		svshift /= (shades - 1); // normalise over shades
-		double shadeshift = (0.4 + 0.3 * Math.random()) / (shades - 1);
+		double shadeshift = (0.4 + 0.3 * random.nextDouble()) / (shades - 1);
 		double v = 1;
 		for (int c = 2; c < colors + 2; c++) {
 			double ssh = s, vsh = v;

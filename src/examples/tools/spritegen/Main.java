@@ -4,9 +4,14 @@ import jgame.*;
 import jgame.platform.*;
 import java.io.File;
 import java.net.URLDecoder;
+import java.util.Random;
 
 /** Minimal shooter for jgame skeletons. */
 public class Main extends JGEngine {
+	static Random random = new Random();
+	public static void fixRandom(int seed){
+		random = new Random(seed);
+	}
 	public static void main(String[] args) {
 		// new Main(new JGPoint(512,384));
 		new Main(new JGPoint(1024, 768));
@@ -150,14 +155,14 @@ public class Main extends JGEngine {
 				}
 			}
 			// PixelArtGen.coltables = coltables;
-			int shapetype = (int) (Math.random() * PixelArtGen.shapes2.length);
-			int[] coltable = coltables[(int) (Math.random() * coltables.length)];
+			int shapetype = (int) (random.nextDouble() * PixelArtGen.shapes2.length);
+			int[] coltable = coltables[(int) (random.nextDouble() * coltables.length)];
 			PixelArtGen shape = PixelArtGen.shapes2[shapetype];
 			if (selspr != null) {
 				shape = selspr.gen;
 			} else {
-				shape.shading = random(0, 1) < 0.75 ? 0
-						: random(0, 1) < 0.5 ? 1 : 2;
+				shape.shading = random.nextDouble() < 0.75 ? 0
+						: random.nextDouble() < 0.5 ? 1 : 2;
 				shape.highlight_prob = shape.shading == 0 ? 0.4 : 0;
 			}
 			Sprite sprt = shape.createSprite(coltable);
@@ -199,7 +204,7 @@ public class Main extends JGEngine {
 							"", -1, -1, -1, 1);
 				}
 				// XXX animations not undefined: memory leak
-				defineAnimation("rand" + i, frames, random(0.2, 0.5));
+				defineAnimation("rand" + i, frames, random.nextDouble()*0.3+0.2);
 				new JGObject("rand", true, 10 + x * SPRX, 10 + y * SPRY, 0,
 						"rand" + i);
 				x++;
