@@ -3,7 +3,7 @@ package examples.tools.spritegen;
 import java.io.*;
 import java.util.Random;
 
-public class PixelArtGen {
+public class SpriteGenerator {
 
 	static int transcolor = 0x010101;
 
@@ -1128,65 +1128,65 @@ public class PixelArtGen {
 	// balance between taking horizontal versus vertical neighbours
 	double color_smoothing_horiz_bias = 0.5;
 
-	public static PixelArtGen[] shapes = new PixelArtGen[] {
-			new PixelArtGen(16, 16, shipfilltable, null, true, false, 1, 1,
+	public static SpriteGenerator[] shapes = new SpriteGenerator[] {
+			new SpriteGenerator(16, 16, shipfilltable, null, true, false, 1, 1,
 					0.5, 0.6, 0.5, 0.3, 0.4, 0.6, 0.5),
-			new PixelArtGen(18, 18, butterflyfilltable18, birdanimtable18,
+			new SpriteGenerator(18, 18, butterflyfilltable18, birdanimtable18,
 					true, false, 1, 1, 0.5, 0.7, 0.5, 0.3, 0.4, 0.6, 0.5),
-			new PixelArtGen(18, 18, manfilltable18, mananimtable18, true,
+			new SpriteGenerator(18, 18, manfilltable18, mananimtable18, true,
 					false, 1, 1, 0.5, 0.6, 0.5, 0.3, 0.4, 0.6, 0.5),
-			new PixelArtGen(18, 18, ufofilltable18, null, true, true, 1, 1,
+			new SpriteGenerator(18, 18, ufofilltable18, null, true, true, 1, 1,
 					0.5, 0.75, 0.5, 0.3, 0.4, 0.8, 0.5) };
 
-	public static PixelArtGen[] shapes2 = new PixelArtGen[] {
-			new PixelArtGen(12, 12, rand12filltable, rand12walkanimtable, true,
+	public static SpriteGenerator[] shapes2 = new SpriteGenerator[] {
+			new SpriteGenerator(12, 12, rand12filltable, rand12walkanimtable, true,
 					false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12filltable, rand12flyanimtable, true,
+			new SpriteGenerator(12, 12, rand12filltable, rand12flyanimtable, true,
 					false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12filltable, rand12rcrawlanimtable,
+			new SpriteGenerator(12, 12, rand12filltable, rand12rcrawlanimtable,
 					true, false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12filltable, rand12crawlanimtable,
+			new SpriteGenerator(12, 12, rand12filltable, rand12crawlanimtable,
 					true, false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12filltable, rand12bendanimtable, true,
+			new SpriteGenerator(12, 12, rand12filltable, rand12bendanimtable, true,
 					false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12filltable, rand12bubbleanimtable,
+			new SpriteGenerator(12, 12, rand12filltable, rand12bubbleanimtable,
 					true, false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12filltable, rand12pokeanimtable, true,
+			new SpriteGenerator(12, 12, rand12filltable, rand12pokeanimtable, true,
 					false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12yfilltable, rand12rwalkanimtable,
+			new SpriteGenerator(12, 12, rand12yfilltable, rand12rwalkanimtable,
 					false, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12yfilltable, rand12crawlanimtable,
+			new SpriteGenerator(12, 12, rand12yfilltable, rand12crawlanimtable,
 					false, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12yfilltable, rand12bendanimtable,
+			new SpriteGenerator(12, 12, rand12yfilltable, rand12bendanimtable,
 					false, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12yfilltable, rand12bubbleanimtable,
+			new SpriteGenerator(12, 12, rand12yfilltable, rand12bubbleanimtable,
 					false, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12yfilltable, rand12pokeanimtable,
+			new SpriteGenerator(12, 12, rand12yfilltable, rand12pokeanimtable,
 					false, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12dfilltable, rand12turnanimtable,
+			new SpriteGenerator(12, 12, rand12dfilltable, rand12turnanimtable,
 					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12dfilltable, rand12bendanimtable,
+			new SpriteGenerator(12, 12, rand12dfilltable, rand12bendanimtable,
 					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12dfilltable, rand12crawlanimtable,
+			new SpriteGenerator(12, 12, rand12dfilltable, rand12crawlanimtable,
 					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12dfilltable, rand12bubbleanimtable,
+			new SpriteGenerator(12, 12, rand12dfilltable, rand12bubbleanimtable,
 					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12dfilltable, rand12pokeanimtable,
+			new SpriteGenerator(12, 12, rand12dfilltable, rand12pokeanimtable,
 					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12filltable, rand12wiggleanimtable,
+			new SpriteGenerator(12, 12, rand12filltable, rand12wiggleanimtable,
 					true, false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12yfilltable, rand12rwiggleanimtable,
+			new SpriteGenerator(12, 12, rand12yfilltable, rand12rwiggleanimtable,
 					false, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12filltable, rand12bounceanimtable,
+			new SpriteGenerator(12, 12, rand12filltable, rand12bounceanimtable,
 					true, false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12dfilltable, rand12bounceanimtable,
+			new SpriteGenerator(12, 12, rand12dfilltable, rand12bounceanimtable,
 					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12filltable, rand12nullanimtable, true,
+			new SpriteGenerator(12, 12, rand12filltable, rand12nullanimtable, true,
 					false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new PixelArtGen(12, 12, rand12dfilltable, rand12nullanimtable,
+			new SpriteGenerator(12, 12, rand12dfilltable, rand12nullanimtable,
 					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5), };
 
-	public PixelArtGen(int xsize, int ysize, int[][] filltable,
+	public SpriteGenerator(int xsize, int ysize, int[][] filltable,
 			int[][][] animtable, boolean flipx, boolean flipy, int xshadingfac,
 			int yshadingfac, double fill_prob, double fill_smoothing,
 			double fill_smoothing_horiz_bias, double black_prob,
@@ -1221,9 +1221,9 @@ public class PixelArtGen {
 		while (true) {
 			int shapetype = (int) (random.nextDouble() * shapes.length);
 			int[] coltable = coltables[(int) (random.nextDouble() * coltables.length)];
-			PixelArtGen shape = shapes[shapetype];
+			SpriteGenerator shape = shapes[shapetype];
 			Sprite sprite1 = shape.createSprite(coltable);
-			ImageTools.writePPM("a.ppm", sprite1.pixels, sprite1.pixels.length,
+			ImageUtils.writePPM("a.ppm", sprite1.pixels, sprite1.pixels.length,
 					sprite1.pixels[0].length);
 			Sprite[] mutant = new Sprite[20];
 			BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -1234,7 +1234,7 @@ public class PixelArtGen {
 					// writePPM("a"+i+".ppm",
 					// sprite2.pixels,sprite2.pixels.length,sprite2.pixels[0].length);
 					mutant[i] = shape.mergeSprites(sprite1, sprite2, 0.8);
-					ImageTools
+					ImageUtils
 							.writePPM("a" + i + ".ppm", mutant[i].pixels,
 									mutant[i].pixels.length,
 									mutant[i].pixels[0].length);

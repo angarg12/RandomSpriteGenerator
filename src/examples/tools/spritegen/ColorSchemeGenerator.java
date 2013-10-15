@@ -2,7 +2,7 @@ package examples.tools.spritegen;
 
 import java.util.Random;
 
-public class ColorSchemeGen {
+public class ColorSchemeGenerator {
 	// https://lotsacode.wordpress.com/2010/03/11/hsvtorgb-and-rgbtohsv-in-c/
 	static Random random = new Random();
 	public static void fixRandom(int seed){

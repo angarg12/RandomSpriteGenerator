@@ -5,11 +5,11 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import examples.tools.spritegen.PixelArtGen;
+import examples.tools.spritegen.SpriteGenerator;
 import examples.tools.spritegen.Sprite;
 
 public class PixelArtGenTest {	
-	PixelArtGen generator1;
+	SpriteGenerator generator1;
 	int[] colorTable1;
 	Sprite baseSprite1;
 	Sprite animatedSprite1;
@@ -17,7 +17,7 @@ public class PixelArtGenTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		generator1 = PixelArtGen.shapes2[0];
+		generator1 = SpriteGenerator.shapes2[0];
 		colorTable1 = new int[]	{
 				0x010101, 0x010101, 0x010101, // trans
 				0x000000, 0x000000, 0x000000,     // outline
@@ -222,21 +222,21 @@ public class PixelArtGenTest {
 		mergeSpriteTest(generator1,animatedSprite1,animatedSprite2,0.8);
 	}
 	
-	private void createSpriteTest(PixelArtGen gen, int[] coltable) throws Exception {
-		PixelArtGen.fixRandom(1000);
+	private void createSpriteTest(SpriteGenerator gen, int[] coltable) throws Exception {
+		SpriteGenerator.fixRandom(1000);
 		Sprite spr = gen.createSprite(coltable);
 		assertArrayEquals("Created sprite does not match the expected.", getCreateSpriteTable(gen, coltable), spr.pixels);
 	}
 	
-	private void mergeSpriteTest(PixelArtGen gen, Sprite spr1, Sprite spr2, double weight) throws Exception {
-		PixelArtGen.fixRandom(1000);
+	private void mergeSpriteTest(SpriteGenerator gen, Sprite spr1, Sprite spr2, double weight) throws Exception {
+		SpriteGenerator.fixRandom(1000);
 		Sprite spr = gen.mergeSprites(spr1, spr2, weight);
 		assertArrayEquals("Merged sprite does not match the expected.", getMergeSpriteTable(gen, spr1, spr2, weight), spr.pixels);
 	}
 	
 	//mergeSprites
 	// need their own function
-	private void spriteFunctionsTest(PixelArtGen gen, int[] coltable, Sprite spr) throws Exception {
+	private void spriteFunctionsTest(SpriteGenerator gen, int[] coltable, Sprite spr) throws Exception {
 		colorize(gen,coltable,spr);
 		flipAndShade(gen,coltable,spr);
 		bevelShadeNew(gen,coltable,spr);
@@ -246,89 +246,89 @@ public class PixelArtGenTest {
 		addOutlineRGB(gen,coltable,spr);
 	}
 
-	private void colorize(PixelArtGen gen, int[] coltable, Sprite spr) throws Exception {
+	private void colorize(SpriteGenerator gen, int[] coltable, Sprite spr) throws Exception {
 		Sprite clone = spr.clone();
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
 		assertArrayEquals("Colorized sprite does not match the expected.", getColorizeTable(gen, coltable, spr), clone.colidx);
 	}
 	
-	private void flipAndShade(PixelArtGen gen, int[] coltable, Sprite spr) throws Exception {
+	private void flipAndShade(SpriteGenerator gen, int[] coltable, Sprite spr) throws Exception {
 		Sprite clone = spr.clone();
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.flipAndShade(clone);
 		assertArrayEquals("Flipped sprite does not match the expected.", getFlipTable(gen, coltable, spr), clone.colidx);
 	}
 	
-	private void bevelShadeNew(PixelArtGen gen, int[] coltable, Sprite spr) throws Exception {
+	private void bevelShadeNew(SpriteGenerator gen, int[] coltable, Sprite spr) throws Exception {
 		Sprite clone = spr.clone();
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.flipAndShade(clone);
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.bevelShadeNew(clone);
 		assertArrayEquals("Bevel shaded sprite does not match the expected.", getBevelShadeTable(gen, coltable, spr), clone.colidx);
 	}
 
-	private void gouraudShade(PixelArtGen gen, int[] coltable, Sprite spr) throws Exception {
+	private void gouraudShade(SpriteGenerator gen, int[] coltable, Sprite spr) throws Exception {
 		Sprite clone = spr.clone();
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.flipAndShade(clone);
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.gouraudShade(clone);
 		assertArrayEquals("Gouraud shaded sprite does not match the expected.", getGouraudShadeTable(gen, coltable, spr), clone.colidx);
 	}
 
-	private void indexToRGB(PixelArtGen gen, int[] coltable, Sprite spr) throws Exception {
+	private void indexToRGB(SpriteGenerator gen, int[] coltable, Sprite spr) throws Exception {
 		Sprite clone = spr.clone();
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.flipAndShade(clone);
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.bevelShadeNew(clone);
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.indexToRGB(clone);
 		assertArrayEquals("Colored sprite does not match the expected.", getIndexToRGBTable(gen, coltable, spr), clone.pixels);
 	}
 
-	private void animate(PixelArtGen gen, int[] coltable, Sprite spr) throws Exception {
+	private void animate(SpriteGenerator gen, int[] coltable, Sprite spr) throws Exception {
 		Sprite clone = spr.clone();
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.flipAndShade(clone);
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.bevelShadeNew(clone);
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.indexToRGB(clone);
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.animate(clone);
 		assertArrayEquals("Animated sprite does not match the expected.", getAnimateTable(gen, coltable, spr), clone.pixels);
 	}
 
-	private void addOutlineRGB(PixelArtGen gen, int[] coltable, Sprite spr) throws Exception {
+	private void addOutlineRGB(SpriteGenerator gen, int[] coltable, Sprite spr) throws Exception {
 		Sprite clone = spr.clone();
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.flipAndShade(clone);
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.bevelShadeNew(clone);
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.indexToRGB(clone);
-		PixelArtGen.fixRandom(1000);
+		SpriteGenerator.fixRandom(1000);
 		gen.animate(clone);
-		PixelArtGen.addOutlineRGB(clone.pixels);
+		SpriteGenerator.addOutlineRGB(clone.pixels);
 		assertArrayEquals("Outline RGB sprite does not match the expected.", getAddOutlineRGBTable(gen, coltable, spr), clone.pixels);
 	}
 	
-	private int[][] getColorizeTable(PixelArtGen gen, 
+	private int[][] getColorizeTable(SpriteGenerator gen, 
 			int[] coltable, 
 			Sprite spr) throws Exception { 
 		if(coltable == colorTable1 && gen == generator1 && spr == baseSprite1){
@@ -348,7 +348,7 @@ public class PixelArtGenTest {
 		throw new Exception("Values not tabulated: "+gen+" "+coltable+" "+spr);
 	}
 	
-	private int[][] getFlipTable(PixelArtGen gen, 
+	private int[][] getFlipTable(SpriteGenerator gen, 
 			int[] coltable, 
 			Sprite spr) throws Exception { 
 		if(coltable == colorTable1 && gen == generator1 && spr == baseSprite1){
@@ -368,7 +368,7 @@ public class PixelArtGenTest {
 		throw new Exception("Values not tabulated: "+gen+" "+coltable+" "+spr);
 	}
 	
-	private int[][] getBevelShadeTable(PixelArtGen gen, 
+	private int[][] getBevelShadeTable(SpriteGenerator gen, 
 			int[] coltable, 
 			Sprite spr) throws Exception { 
 		if(coltable == colorTable1 && gen == generator1 && spr == baseSprite1){
@@ -388,7 +388,7 @@ public class PixelArtGenTest {
 		throw new Exception("Values not tabulated: "+gen+" "+coltable+" "+spr);
 	}
 	
-	private int[][] getGouraudShadeTable(PixelArtGen gen, 
+	private int[][] getGouraudShadeTable(SpriteGenerator gen, 
 			int[] coltable, 
 			Sprite spr) throws Exception { 
 		if(coltable == colorTable1 && gen == generator1 && spr == baseSprite1){
@@ -408,7 +408,7 @@ public class PixelArtGenTest {
 		throw new Exception("Values not tabulated: "+gen+" "+coltable+" "+spr);
 	}
 	
-	private int[][] getIndexToRGBTable(PixelArtGen gen, 
+	private int[][] getIndexToRGBTable(SpriteGenerator gen, 
 			int[] coltable, 
 			Sprite spr) throws Exception { 
 		if(coltable == colorTable1 && gen == generator1 && spr == baseSprite1){
@@ -452,7 +452,7 @@ public class PixelArtGenTest {
 		throw new Exception("Values not tabulated: "+gen+" "+coltable+" "+spr);
 	}
 	
-	private int[][] getAnimateTable(PixelArtGen gen, 
+	private int[][] getAnimateTable(SpriteGenerator gen, 
 			int[] coltable, 
 			Sprite spr) throws Exception { 
 		if(coltable == colorTable1 && gen == generator1 && spr == baseSprite1){
@@ -496,7 +496,7 @@ public class PixelArtGenTest {
 		throw new Exception("Values not tabulated: "+gen+" "+coltable+" "+spr);
 	}
 	
-	private int[][] getAddOutlineRGBTable(PixelArtGen gen, 
+	private int[][] getAddOutlineRGBTable(SpriteGenerator gen, 
 			int[] coltable, 
 			Sprite spr) throws Exception { 
 		if(coltable == colorTable1 && gen == generator1 && spr == baseSprite1){
@@ -540,7 +540,7 @@ public class PixelArtGenTest {
 		throw new Exception("Values not tabulated: "+gen+" "+coltable+" "+spr);
 	}
 	
-	private int[][] getCreateSpriteTable(PixelArtGen gen, 
+	private int[][] getCreateSpriteTable(SpriteGenerator gen, 
 			int[] coltable) throws Exception { 
 		if(coltable == colorTable1 && gen == generator1){
 			return new int[][]{{65793,65793,0,65793,65793,0,65793,0,0,0,0,65793},
@@ -583,7 +583,7 @@ public class PixelArtGenTest {
 		throw new Exception("Values not tabulated: "+gen+" "+coltable);
 	}
 	
-	private int[][] getMergeSpriteTable(PixelArtGen gen, 
+	private int[][] getMergeSpriteTable(SpriteGenerator gen, 
 			Sprite spr1,
 			Sprite spr2,
 			double mergeRatio) throws Exception { 

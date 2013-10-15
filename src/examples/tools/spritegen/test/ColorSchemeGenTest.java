@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import examples.tools.spritegen.ColorSchemeGen;
+import examples.tools.spritegen.ColorSchemeGenerator;
 
 public class ColorSchemeGenTest {	
 	@Test
@@ -16,8 +16,8 @@ public class ColorSchemeGenTest {
 	}
 	
 	private void genSpriteColorSchemeTest(int transparentColor, int blackColor, int colorCount, int shadesCount){
-		ColorSchemeGen.fixRandom(1000);
-		int[] colorScheme = ColorSchemeGen.genSpriteColorScheme(transparentColor,blackColor,colorCount,shadesCount);
+		ColorSchemeGenerator.fixRandom(1000);
+		int[] colorScheme = ColorSchemeGenerator.genSpriteColorScheme(transparentColor,blackColor,colorCount,shadesCount);
 		int[] testScheme = genSpriteColorSchemeTable(transparentColor,blackColor,colorCount,shadesCount);
 		assertArrayEquals("Color array does not match the expected.", colorScheme, testScheme);
 	}

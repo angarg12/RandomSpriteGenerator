@@ -3,7 +3,7 @@ package examples.tools.spritegen;
 public class Sprite {
 	// render parameters as part of instance
 	public int[] coltable;
-	PixelArtGen gen;
+	SpriteGenerator gen;
 	// output
 	// xsize*ysize fill types
 	public int[][] hull;
@@ -14,13 +14,13 @@ public class Sprite {
 	// xsize*animsize*ysize colours
 	public int[][] pixels;
 
-	public Sprite(int[] coltable, PixelArtGen gen, int xsize, int totalxsize,
+	public Sprite(int[] coltable, SpriteGenerator gen, int xsize, int totalxsize,
 			int ysize) {
 		this.coltable = coltable;
 		this.gen = gen;
 		hull = new int[xsize][ysize];
 		colidx = new int[xsize][ysize];
-		pixels = PixelArtGen.createTransparentBitmap(totalxsize, ysize);
+		pixels = SpriteGenerator.createTransparentBitmap(totalxsize, ysize);
 	}
 
 	public int getWidth() {
@@ -48,7 +48,7 @@ public class Sprite {
 			int[] pixcol = pixels[width * frame + x];
 			for (int y = 0; y < pixcol.length; y++) {
 				int idx = x + width * y;
-				if (pixcol[y] == PixelArtGen.transcolor) {
+				if (pixcol[y] == SpriteGenerator.transcolor) {
 					ret[idx++] = 0;
 				} else {
 					ret[idx++] = 0xff000000 | pixcol[y];

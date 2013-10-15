@@ -132,9 +132,9 @@ public class Main extends JGEngine {
 					String filename = "spr" + rest + "-" + formatString(2, min)
 							+ "-" + formatString(2, sec) + "."
 							+ formatString(3, msec);
-					ImageTools.writePNG(mypath + File.separator + filename
+					ImageUtils.writePNG(mypath + File.separator + filename
 							+ ".png", selspr.pixels, selspr.pixels.length,
-							selspr.pixels[0].length, PixelArtGen.transcolor);
+							selspr.pixels[0].length, SpriteGenerator.transcolor);
 				} else {
 					regen = true;
 				}
@@ -147,17 +147,17 @@ public class Main extends JGEngine {
 			// generate new color tables. Part handpicked, part random
 			int[][] coltables = new int[64][];
 			for (int i = 0; i < coltables.length; i++) {
-				if (i < PixelArtGen.coltables.length) {
-					coltables[i] = PixelArtGen.coltables[i];
+				if (i < SpriteGenerator.coltables.length) {
+					coltables[i] = SpriteGenerator.coltables[i];
 				} else {
-					coltables[i] = ColorSchemeGen.genSpriteColorScheme(
-							PixelArtGen.transcolor, 0, 3, 3);
+					coltables[i] = ColorSchemeGenerator.genSpriteColorScheme(
+							SpriteGenerator.transcolor, 0, 3, 3);
 				}
 			}
 			// PixelArtGen.coltables = coltables;
-			int shapetype = (int) (random.nextDouble() * PixelArtGen.shapes2.length);
+			int shapetype = (int) (random.nextDouble() * SpriteGenerator.shapes2.length);
 			int[] coltable = coltables[(int) (random.nextDouble() * coltables.length)];
-			PixelArtGen shape = PixelArtGen.shapes2[shapetype];
+			SpriteGenerator shape = SpriteGenerator.shapes2[shapetype];
 			if (selspr != null) {
 				shape = selspr.gen;
 			} else {
