@@ -12,22 +12,20 @@ import jgame.platform.JGEngine;
 
 /** Minimal shooter for jgame skeletons. */
 public class Main extends JGEngine {
-	static int NUMBER_SPRITES_HORIZONTAL = 16;
-	static int NUMBER_SPRITES_VERTICAL = 16;
-	static int NUMBER_SPRITES_TOTAL = NUMBER_SPRITES_HORIZONTAL*NUMBER_SPRITES_VERTICAL;
-	static int SEPARATION_HORIZONTAL = 22;
-	static int SEPARATION_VERTICAL = 22;
+	static int NUMBER_SPRITES_X = 16;
+	static int NUMBER_SPRITES_Y = 16;
+	static int SEPARATION_X = 22;
+	static int SEPARATION_Y = 22;
 	static Random random = new Random();
 	private static final long serialVersionUID = 2698073082669353351L;
 
 	// Define sprite coordinates in the sprite matrix
-	int selectedSpriteXCoordinate = 0;
-	int selectedSpriteYCoordinate = 0;
+	int selectedSpriteX = 0;
+	int selectedSpriteY = 0;
 	int selectionBoxTimer = 0;
-	int selectedSpriteIndex = 0;
 
 	Sprite selectedSprite = null;
-	Sprite[] sprites = new Sprite[NUMBER_SPRITES_TOTAL];
+	Sprite[][] sprites = new Sprite[NUMBER_SPRITES_X][NUMBER_SPRITES_Y];
 	
 	public static void fixRandom(int seed) {
 		random = new Random(seed);
@@ -39,12 +37,12 @@ public class Main extends JGEngine {
 
 	public Main() {
 		initEngineApplet();
-		fillSpriteVector();
+		createAndDrawSprites();
 	}
 
 	public Main(JGPoint size) {
 		initEngine(size.x, size.y);
-		fillSpriteVector();
+		createAndDrawSprites();
 	}
 
 	public void initCanvas() {
@@ -97,10 +95,10 @@ public class Main extends JGEngine {
 					selectionBoxTimer / 15.0,
 					selectionBoxTimer / 15.0);
 			setColor(boxColor);
-			drawRect(5 + SEPARATION_HORIZONTAL * selectedSpriteXCoordinate, 
-					5 + SEPARATION_VERTICAL * selectedSpriteYCoordinate, 
-					SEPARATION_HORIZONTAL, 
-					SEPARATION_VERTICAL, 
+			drawRect(5 + SEPARATION_X * selectedSpriteX, 
+					5 + SEPARATION_Y * selectedSpriteY, 
+					SEPARATION_X, 
+					SEPARATION_Y, 
 					false, 
 					false);
 			selectionBoxTimer--;
@@ -115,12 +113,15 @@ public class Main extends JGEngine {
 		clearMouseButton(1);
 		clearMouseButton(3);
 		if (isClickInsideSpriteMatrix()) {
-			selectedSpriteIndex = ((getMouseX() - 10) / SEPARATION_HORIZONTAL) + NUMBER_SPRITES_HORIZONTAL * 
-					((getMouseY() - 10) / SEPARATION_VERTICAL);
-			if (selectedSpriteIndex >= 0 && selectedSpriteIndex < NUMBER_SPRITES_TOTAL) {
-				selectedSprite = sprites[selectedSpriteIndex];
-				selectedSpriteXCoordinate = selectedSpriteIndex % NUMBER_SPRITES_HORIZONTAL;
-				selectedSpriteYCoordinate = selectedSpriteIndex / NUMBER_SPRITES_HORIZONTAL;
+			selectedSpriteX = ((getMouseX() - 10) / SEPARATION_X);
+			selectedSpriteY = ((getMouseY() - 10) / SEPARATION_Y);
+
+			if (selectedSpriteX >= 0 && 
+					selectedSpriteX < NUMBER_SPRITES_X &&
+					selectedSpriteX >= 0 &&
+					selectedSpriteX < NUMBER_SPRITES_Y) {
+				selectedSprite = sprites[selectedSpriteX][selectedSpriteY];
+				
 				selectionBoxTimer = 15;
 
 				String filename = getSavefileName();
@@ -131,10 +132,10 @@ public class Main extends JGEngine {
 						selectedSprite.pixels[0].length,
 						SpriteGenerator.transcolor);
 			} else {
-				fillSpriteVector();
+				createAndDrawSprites();
 			}
 		} else {
-			fillSpriteVector();
+			createAndDrawSprites();
 		}
 	}
 	
@@ -182,14 +183,15 @@ public class Main extends JGEngine {
 	 */
 	private boolean isClickInsideSpriteMatrix(){
 		return getMouseX() >= 10 && 
-				getMouseX() < 10 + NUMBER_SPRITES_HORIZONTAL * SEPARATION_HORIZONTAL && 
+				getMouseX() < 10 + NUMBER_SPRITES_X * SEPARATION_X && 
 				getMouseY() >= 10 && 
-				getMouseY() < 10 + NUMBER_SPRITES_VERTICAL * SEPARATION_VERTICAL;
+				getMouseY() < 10 + NUMBER_SPRITES_Y * SEPARATION_Y;
 	}
 	
-	private void fillSpriteVector(){
-		int x = 0;
-		int y = 0;
+	/**
+	 * Fills the sprite data structure with sprites and draws them.
+	 */
+	private void createAndDrawSprites(){
 		removeObjects(null, 0);
 		// generate new color tables. Part handpicked, part random
 		int[][] coltables = new int[64][];
@@ -204,60 +206,61 @@ public class Main extends JGEngine {
 		SpriteGenerator.coltables = coltables;
 
 		//Sprite sprt = shape.createSprite(coltable);
-		for (int i = 0; i < NUMBER_SPRITES_TOTAL; i++) {
-			int shapetype = (int) (random.nextDouble() * SpriteGenerator.shapes2.length);
-			int[] coltable = coltables[(int) (random.nextDouble() * coltables.length)];
-			SpriteGenerator shape = SpriteGenerator.shapes2[shapetype];
-			if (selectedSprite != null) {
-				shape = selectedSprite.gen;
-			} else {
-				shape.shading = random.nextDouble() < 0.75 ? 0 : random
-						.nextDouble() < 0.5 ? 1 : 2;
-				shape.highlight_prob = shape.shading == 0 ? 0.4 : 0;
-			}
-			sprites[i] = shape.createSprite(coltable);
-			//sprites[i] = shape.mergeSprites(sprt,
-			//		shape.createSprite(coltable), 0.9);
-			if (selectedSprite != null) {
-				if (selectedSpriteIndex == i) {
-					sprites[i] = selectedSprite;
+		for (int i = 0; i < NUMBER_SPRITES_X; i++) {
+			for (int j = 0; j < NUMBER_SPRITES_Y; j++) {
+				int shapetype = (int) (random.nextDouble() * SpriteGenerator.shapes2.length);
+				int[] coltable = coltables[(int) (random.nextDouble() * coltables.length)];
+				SpriteGenerator shape = SpriteGenerator.shapes2[shapetype];
+				if (selectedSprite != null) {
+					shape = selectedSprite.gen;
 				} else {
-					sprites[i] = shape.mergeSprites(
-							selectedSprite, 
-							sprites[i], 
-							0.7);
+					shape.shading = random.nextDouble() < 0.75 ? 0 : random
+							.nextDouble() < 0.5 ? 1 : 2;
+					shape.highlight_prob = shape.shading == 0 ? 0.4 : 0;
 				}
-			}
-			int startframe = 0;
-			int nrframes = 1;
-			if (sprites[i].getNrFrames() > 1) {
-				startframe = 1;
-				nrframes = sprites[i].getNrFrames() - 1;
-			}
-			String[] frames = new String[nrframes];
-			for (int f = startframe; f < sprites[i].getNrFrames(); f++) {
-				frames[f - startframe] = "rand" + i + "f" + f;
-
-				defineImageFromData(frames[f - startframe], "-", 0,
-						sprites[i].getWidth() / sprites[i].getNrFrames(),
-						sprites[i].getHeight(), sprites[i].getData(f), 0,
-						sprites[i].getWidth() / sprites[i].getNrFrames(),
-						"", -1, -1, -1, 1);
-			}
-			// XXX animations not undefined: memory leak
-			defineAnimation("rand" + i, 
-					frames,
-					random.nextDouble() * 0.3 + 0.2);
-			new JGObject("rand", 
-					true, 
-					10 + x * SEPARATION_HORIZONTAL, 
-					10 + y * SEPARATION_VERTICAL, 
-					0,
-					"rand" + i);
-			x++;
-			if (x >= NUMBER_SPRITES_HORIZONTAL) {
-				x = 0;
-				y++;
+				sprites[i][j] = shape.createSprite(coltable);
+				//sprites[i] = shape.mergeSprites(sprt,
+				//		shape.createSprite(coltable), 0.9);
+				if (selectedSprite != null) {
+					if (selectedSpriteX == i && selectedSpriteX == j) {
+						sprites[i][j] = selectedSprite;
+					} else {
+						sprites[i][j] = shape.mergeSprites(
+								selectedSprite, 
+								sprites[i][j], 
+								0.7);
+					}
+				}
+				int startframe = 0;
+				int nrframes = 1;
+				if (sprites[i][j].getNrFrames() > 1) {
+					startframe = 1;
+					nrframes = sprites[i][j].getNrFrames() - 1;
+				}
+				String spriteId = "rand"+(i+j*NUMBER_SPRITES_Y);
+				String[] frames = new String[nrframes];
+				for (int f = startframe; f < sprites[i][j].getNrFrames(); f++) {
+					frames[f - startframe] = spriteId + "f" + f;
+	
+					defineImageFromData(frames[f - startframe], "-", 0,
+							sprites[i][j].getWidth() / sprites[i][j].getNrFrames(),
+							sprites[i][j].getHeight(), 
+							sprites[i][j].getData(f), 
+							0,
+							sprites[i][j].getWidth() / sprites[i][j].getNrFrames(),
+							"", -1, -1, -1, 1);
+				}
+				// XXX animations not undefined: memory leak
+				defineAnimation(spriteId, 
+						frames,
+						random.nextDouble() * 0.3 + 0.2);
+				
+				new JGObject(spriteId, 
+						true, 
+						10 + i * SEPARATION_X, 
+						10 + j * SEPARATION_Y, 
+						0,
+						spriteId);						
 			}
 		}
 	}
