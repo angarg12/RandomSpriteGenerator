@@ -57,15 +57,6 @@ public class Sprite {
 		}
 		return ret;
 	}
-
-	public int[] getHq2xData(int frame) {
-		int[] inArr = getData(frame);
-		int totalwidth = getWidth();
-		int nrframes = getNrFrames();
-		int width = totalwidth / nrframes;
-		int[] outArr = Hq2x.Parse(inArr, width, getHeight());
-		return outArr;
-	}
 	
 	public Sprite clone(){
 		Sprite spr = new Sprite(null,gen,0,0,0);
