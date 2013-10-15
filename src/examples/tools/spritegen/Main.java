@@ -110,30 +110,21 @@ public class Main extends JGEngine {
 	}
 	
 	private void processMouseClick(){
-		clearMouseButton(1);
-		clearMouseButton(3);
 		if (isClickInsideSpriteMatrix()) {
 			selectedSpriteX = ((getMouseX() - 10) / SEPARATION_X);
 			selectedSpriteY = ((getMouseY() - 10) / SEPARATION_Y);
+			selectedSprite = sprites[selectedSpriteX][selectedSpriteY];
+			
+			selectionBoxTimer = 15;
 
-			if (selectedSpriteX >= 0 && 
-					selectedSpriteX < NUMBER_SPRITES_X &&
-					selectedSpriteX >= 0 &&
-					selectedSpriteX < NUMBER_SPRITES_Y) {
-				selectedSprite = sprites[selectedSpriteX][selectedSpriteY];
-				
-				selectionBoxTimer = 15;
-
-				String filename = getSavefileName();
-				
-				ImageUtils.writePNG("."+File.separator + filename+".png",
-						selectedSprite.pixels,
-						selectedSprite.pixels.length,
-						selectedSprite.pixels[0].length,
-						SpriteGenerator.transcolor);
-			} else {
+			if(getMouseButton(1)){
+				clearMouseButton(1);
+				saveSprite();
+			}else if(getMouseButton(3)){
+				clearMouseButton(3);
 				createAndDrawSprites();
 			}
+			selectedSprite = null;
 		} else {
 			createAndDrawSprites();
 		}
@@ -154,6 +145,18 @@ public class Main extends JGEngine {
 		return ret;
 	}
 
+	/**
+	 * Saves a sprite to a .png file.
+	 */
+	private void saveSprite(){
+		String filename = getSavefileName();
+		ImageUtils.writePNG("."+File.separator + filename+".png",
+				selectedSprite.pixels,
+				selectedSprite.pixels.length,
+				selectedSprite.pixels[0].length,
+				SpriteGenerator.transcolor);
+	}
+	
 	/**
 	 * Returns the filename of the sprite to be saved properly formated.
 	 * 
