@@ -1219,8 +1219,8 @@ public class PixelArtGen {
 
 	public static void main(String[] args) throws IOException {
 		while (true) {
-			int shapetype = (int) (Math.random() * shapes.length);
-			int[] coltable = coltables[(int) (Math.random() * coltables.length)];
+			int shapetype = (int) (random.nextDouble() * shapes.length);
+			int[] coltable = coltables[(int) (random.nextDouble() * coltables.length)];
 			PixelArtGen shape = shapes[shapetype];
 			Sprite sprite1 = shape.createSprite(coltable);
 			ImageTools.writePPM("a.ppm", sprite1.pixels, sprite1.pixels.length,
@@ -1327,7 +1327,7 @@ public class PixelArtGen {
 		int ymax = flipy ? ysize / 2 : ysize;
 		for (int y = 0; y < ymax; y++) {
 			for (int x = 0; x < xmax; x++) {
-				if (Math.random() > weight) {
+				if (random.nextDouble() > weight) {
 					spr.colidx[x][y] = spr2.colidx[x][y];
 				} else {
 					spr.colidx[x][y] = spr1.colidx[x][y];
@@ -1357,7 +1357,7 @@ public class PixelArtGen {
 				int filltype_fill = ((filltype & 12) | 2);
 				if (filltype_main == 1) {
 					// smooth = get colour from neighbouring pixel
-					if (Math.random() < fill_smoothing) {
+					if (random.nextDouble() < fill_smoothing) {
 						int above = 0, left = 0, chosen = 0;
 						if (x > 0)
 							left = (spr.hull[x - 1][y] & 3) == 2 ? 1 : 0;
@@ -1370,7 +1370,7 @@ public class PixelArtGen {
 						} else if (above == 0 && left != 0) {
 							chosen = left;
 						} else if (above != 0 && left != 0) {
-							if (Math.random() > fill_smoothing_horiz_bias) {
+							if (random.nextDouble() > fill_smoothing_horiz_bias) {
 								chosen = above;
 							} else {
 								chosen = left;
@@ -1379,7 +1379,7 @@ public class PixelArtGen {
 						if (chosen != 0)
 							spr.hull[x][y] = filltype_fill;
 					} else {
-						if (Math.random() > fill_prob)
+						if (random.nextDouble() > fill_prob)
 							spr.hull[x][y] = filltype_fill;
 					}
 				} else if (filltype_main == 2) {
@@ -1416,36 +1416,36 @@ public class PixelArtGen {
 					colnr = 1;
 				} else if ((filltype & 3) == 2) { // normal fill
 					if ((filltype & 4) == 4) { // black enabled
-						if (Math.random() < black_prob) {
+						if (random.nextDouble() < black_prob) {
 							colnr = 1; // black
 						} else {
 							if ((filltype & 8) == 8) { // highlight enabled
-								if (Math.random() < highlight_prob) {
+								if (random.nextDouble() < highlight_prob) {
 									colnr = white;
 								} else {
 									// any colour except black and highlight
-									colnr = (int) (2 + Math.random()
+									colnr = (int) (2 + random.nextDouble()
 											* (spr.coltable.length / 3 - 3));
 								}
 							}
 						}
 					} else if ((filltype & 8) == 8) { // highlight enabled
-						if (Math.random() < highlight_prob) {
+						if (random.nextDouble() < highlight_prob) {
 							colnr = white;
 						} else {
 							// any colour except black and highlight
-							colnr = (int) (2 + Math.random()
+							colnr = (int) (2 + random.nextDouble()
 									* (spr.coltable.length / 3 - 3));
 						}
 					} else { // any colour except black and highlight
 						// NOTE: previously highlight was also enabled but with
 						// normal probability
-						colnr = (int) (2 + Math.random()
+						colnr = (int) (2 + random.nextDouble()
 								* (spr.coltable.length / 3 - 3));
 					}
 					// XXX both black and highlight not supported
 					// smooth = get colour from neighbouring pixel
-					if (colnr > 1 && Math.random() < color_smoothing) {
+					if (colnr > 1 && random.nextDouble() < color_smoothing) {
 						int above = 0, left = 0, chosen = 0;
 						if (x > 0)
 							left = spr.colidx[x - 1][y] / 3;
@@ -1458,7 +1458,7 @@ public class PixelArtGen {
 						} else if (above == 0 && left != 0) {
 							chosen = left;
 						} else if (above != 0 && left != 0) {
-							if (Math.random() > color_smoothing_horiz_bias) {
+							if (random.nextDouble() > color_smoothing_horiz_bias) {
 								chosen = above;
 							} else {
 								chosen = left;
@@ -1533,7 +1533,7 @@ public class PixelArtGen {
 					// if (brdist == 1 && bright <= 2) bright += 2;
 					// if (brdist == 2 && bright <= 3) bright += 1;
 					// any colour except black
-					// colnr = (int)(2+ Math.random()*
+					// colnr = (int)(2+ random.nextDouble()*
 					// (spr.coltable.length/3-2));
 					if (bright >= 0) {
 						boolean dither = (bright & 1) == 1
@@ -1610,13 +1610,13 @@ public class PixelArtGen {
 	}
 
 	public void gouraudShade(Sprite spr) {
-		int cenx = xsize / 4 + (int) (Math.random() * 2.999);
-		int ceny = ysize / 4 + (int) (Math.random() * 2.999);
+		int cenx = xsize / 4 + (int) (random.nextDouble() * 2.999);
+		int ceny = ysize / 4 + (int) (random.nextDouble() * 2.999);
 		int maxdist = xsize - cenx - 1;
-		int hlt_rx = (int) (Math.random() * 2.9999);
-		int hlt_ry = (int) (Math.random() * 2.9999);
-		int inner_r = 7 + (int) (Math.random() * 16);
-		int outer_r = 7 + (int) (Math.random() * 16);
+		int hlt_rx = (int) (random.nextDouble() * 2.9999);
+		int hlt_ry = (int) (random.nextDouble() * 2.9999);
+		int inner_r = 7 + (int) (random.nextDouble() * 16);
+		int outer_r = 7 + (int) (random.nextDouble() * 16);
 		for (int y = 0; y < ysize; y++) {
 			int dy = Math.abs(y - ceny);
 			for (int x = 0; x < xsize; x++) {
