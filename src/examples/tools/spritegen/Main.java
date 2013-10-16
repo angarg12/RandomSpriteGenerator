@@ -70,7 +70,6 @@ public class Main extends JGEngine {
 	public void paintFrame() {
 		drawInfo();
 		drawSelectionBoxFlash();
-		// Move the sprites to their position on the screen.
 		moveObjects(null, 0);
 		if (isMouseClicked()) {
 			processMouseClick();

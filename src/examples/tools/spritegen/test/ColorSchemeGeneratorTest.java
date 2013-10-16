@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import examples.tools.spritegen.ColorSchemeGenerator;
 
-public class ColorSchemeGenTest {	
+public class ColorSchemeGeneratorTest {	
 	@Test
 	public void test() {
 		genSpriteColorSchemeTest(999,0,3,3);

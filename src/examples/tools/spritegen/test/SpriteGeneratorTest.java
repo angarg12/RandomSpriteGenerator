@@ -8,7 +8,7 @@ import org.junit.Test;
 import examples.tools.spritegen.SpriteGenerator;
 import examples.tools.spritegen.Sprite;
 
-public class PixelArtGenTest {	
+public class SpriteGeneratorTest {	
 	SpriteGenerator generator1;
 	int[] colorTable1;
 	Sprite baseSprite1;

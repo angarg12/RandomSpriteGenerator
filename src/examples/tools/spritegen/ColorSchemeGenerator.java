@@ -61,21 +61,33 @@ public class ColorSchemeGenerator {
 	}
 
 	/**
-	 * generate a colors+3 x shades array of colours. 0th subarray is
-	 * transparent 1st subarray is black 2nd ... n+1th subarray are the colours
-	 * n+2th subarray is white each subarray is shades long
+	 * generate a colors+3 x shades array of colours. 
+	 * 0th subarray is transparent 
+	 * 1st subarray is black 
+	 * 2nd ... n+1th subarray are the colours
+	 * n+2th subarray is white 
+	 * each subarray is shades long
 	 */
-	public static int[] genSpriteColorScheme(int transcol, int black,
-			int colors, int shades) {
-		int[] ret = new int[(colors + 3) * shades];
+	public static int[] genSpriteColorScheme(
+			int transparent, 
+			int black,
+			int colors, 
+			int shades) {
+		int[] colorScheme = new int[(colors + 3) * shades];
 		double darken = (0.3 + 0.2 * random.nextDouble()) / (shades - 1);
 		for (int i = 0; i < shades; i++) {
-			ret[i] = transcol;
-			ret[i + shades] = black;
-			HSVtoRGB(0, 0, 1.0 - darken * i, ret, i + shades * (colors + 2));
+			colorScheme[i] = transparent;
+			colorScheme[i + shades] = black;
+			// generates shades of gray starting from white
+			HSVtoRGB(0, 0, 1.0 - darken * i, colorScheme, i + shades * (colors + 2));
 		}
-		double hshift, svshift, s, h;
-		do { // find good combination
+		double hshift=0;
+		double svshift=0; 
+		double s=0; 
+		double h=0;
+		boolean goodCombinationFound = false;
+		while (goodCombinationFound == false) { // find good combination
+
 			if (random.nextDouble() > 0.5) {
 				hshift = random.nextDouble(); // random colours
 			} else {
@@ -87,22 +99,27 @@ public class ColorSchemeGenerator {
 			// we want either big hshift or big svshift
 			if ((hshift < 0.2 || hshift > 0.8) && svshift < 0.2)
 				continue;
+
 			// if we have low s, we want svshift to be high enough to
 			// shift it to 1
 			if (s + svshift < 1)
 				continue;
+
 			// reject some pervasive greens
 			if (h >= 0.1666667 && h <= 0.4 && (hshift < 0.1 || hshift > 0.9)
 					&& random.nextDouble() > 0.5)
 				continue;
-		} while (false);
+
+			goodCombinationFound = true;
+		}
+		
 		svshift /= (shades - 1); // normalise over shades
 		double shadeshift = (0.4 + 0.3 * random.nextDouble()) / (shades - 1);
 		double v = 1;
 		for (int c = 2; c < colors + 2; c++) {
 			double ssh = s, vsh = v;
 			for (int i = 0; i < shades; i++) {
-				HSVtoRGB(h, ssh, vsh, ret, i + shades * c);
+				HSVtoRGB(h, ssh, vsh, colorScheme, i + shades * c);
 				if (ssh < 1) {
 					ssh += shadeshift;
 					if (ssh > 1) {
@@ -126,7 +143,7 @@ public class ColorSchemeGenerator {
 				v -= svshift;
 			}
 		}
-		return ret;
+		return colorScheme;
 	}
 
 }
