@@ -2,9 +2,16 @@ package examples.tools.spritegen;
 
 import java.io.*;
 
-//import java.util.zip.CRC32;
-
 public class ImageUtils {
+
+	// http://stackoverflow.com/questions/11590075/crc32-calculation-with-pycrc-and-php-code-doesnt-match-expected-result
+	// http://stackoverflow.com/questions/2587766/how-is-a-crc32-checksum-calculated
+
+	/* Table of CRCs of all 8-bit messages. */
+	private static long[] crc_table = new long[256];
+
+	/* Flag: has the table been computed? Initially false. */
+	private static boolean crc_table_computed = false;
 
 	private static byte[] pngHeader = new byte[] { (byte) 137, (byte) 80,
 			(byte) 78, (byte) 71, (byte) 13, (byte) 10, (byte) 26, (byte) 10 };
@@ -22,7 +29,6 @@ public class ImageUtils {
 			FileOutputStream out = new FileOutputStream(filename);
 			out.write(pngHeader);
 			int ofs = 0;
-			// ofs=writeInt(buf,ofs,0x0d);
 			ofs = writeBytes(buf, ofs, pngIHDR);
 			ofs = writeInt(buf, ofs, width);
 			ofs = writeInt(buf, ofs, height);
@@ -33,8 +39,6 @@ public class ImageUtils {
 			ofs = writeByte(buf, ofs, 0); // interlace: no
 			writePNGChunk(out, buf, ofs);
 			ofs = 0;
-			// ofs=writeInt(buf,ofs,width*height*4 + /*zlibhdr*/3 +
-			// /*zlibcrc*/4);
 			ofs = writeBytes(buf, ofs, pngIDAT);
 			// ZLIB header
 			int tmp = 8;
@@ -51,8 +55,6 @@ public class ImageUtils {
 			ofs = writeByte(buf, ofs, (~len & 0xFF)); // ~length
 			ofs = writeByte(buf, ofs, ((~len & 0xFF00) >> 8)); // ~length
 			int zlibofs = ofs;
-			// ofs=writeShortLE(buf,ofs,width*height*4);
-			// ofs=writeShortLE(buf,ofs,0xffff ^ (width*height*4) );
 			for (int y = 0; y < height; y++) {
 				ofs = writeByte(buf, ofs, 0); // filter for scanline: none
 				for (int x = 0; x < width; x++) {
@@ -61,15 +63,11 @@ public class ImageUtils {
 					ofs = writeByte(buf, ofs, (pix[x][y]) & 0xff);
 					ofs = writeByte(buf, ofs,
 							(pix[x][y] & 0xffffff) == transcolor ? 0 : 0xff);
-					// ofs=writeByte(buf,ofs, (pix[x][y]>>24)&0xff); // alpha
-					// ofs=writeInt(buf,ofs,pix[x][y]|0xff000000);
-					// ofs=writeInt(buf,ofs,0xffffffff);
 				}
 			}
 			// ZLIB CRC
 			ofs = writeInt(buf, ofs, calcADLER32(buf, zlibofs, ofs - zlibofs));
 			// PNG chunck CRC
-			// ofs=writeInt(buf,ofs,calcCRC(buf,ofs-width*height*4,width*height*4));
 			writePNGChunk(out, buf, ofs);
 			ofs = 0;
 			ofs = writeBytes(buf, ofs, pngIEND);
@@ -105,12 +103,6 @@ public class ImageUtils {
 		return ofs;
 	}
 
-	private static int writeShortLE(byte[] buf, int ofs, int val) {
-		buf[ofs++] = (byte) (val & 0xff);
-		buf[ofs++] = (byte) ((val >> 8) & 0xff);
-		return ofs;
-	}
-
 	private static int writeByte(byte[] buf, int ofs, int val) {
 		buf[ofs++] = (byte) (val & 0xff);
 		return ofs;
@@ -127,15 +119,6 @@ public class ImageUtils {
 		return (s2 << 16) + s1;
 	}
 
-	// http://stackoverflow.com/questions/11590075/crc32-calculation-with-pycrc-and-php-code-doesnt-match-expected-result
-	// http://stackoverflow.com/questions/2587766/how-is-a-crc32-checksum-calculated
-
-	/* Table of CRCs of all 8-bit messages. */
-	static private long[] crc_table = new long[256];
-
-	/* Flag: has the table been computed? Initially false. */
-	static private boolean crc_table_computed = false;
-
 	// table appears correct, see:
 	// http://docs.factorcode.org/content/word-crc32-table,checksums.crc32.html
 	/** Make a table for a fast CRC. */
@@ -150,7 +133,6 @@ public class ImageUtils {
 					c = c >> 1;
 			}
 			crc_table[n] = c;
-			// System.out.println(Integer.toHexString((int)c));
 
 		}
 		crc_table_computed = true;
@@ -161,7 +143,7 @@ public class ImageUtils {
 	 * be initialized to all 1's, and the transmitted value is the 1's
 	 * complement of the final running CRC (see the crc() routine below).
 	 * */
-	public static int updateCRC(int crc, byte[] buf, int ofs, int len) {
+	private static int updateCRC(int crc, byte[] buf, int ofs, int len) {
 		long c = crc;
 		c &= 0xffffffffL; // ensure value remains unsigned
 		if (!crc_table_computed)
@@ -173,17 +155,9 @@ public class ImageUtils {
 	}
 
 	/** Return the CRC of the bytes buf[ofs..ofs+len-1]. */
-	public static int calcCRC(byte[] buf, int ofs, int len) {
+	private static int calcCRC(byte[] buf, int ofs, int len) {
 		return updateCRC(0xffffffff, buf, ofs, len) ^ 0xffffffff;
 	}
-
-	/*
-	 * public static int calcCRC2(byte [] buf, int ofs,int len) { CRC32 crc =
-	 * new CRC32(); crc.update(buf,ofs,len); int otherv = calcCRC(buf,ofs,len);
-	 * int thisv = (int)crc.getValue();
-	 * System.out.println(Integer.toHexString(thisv));
-	 * System.out.println(Integer.toHexString(otherv)); return thisv; }
-	 */
 
 	public static void writePPM(String filename, int[][] pix, int width,
 			int height) {
