@@ -24,7 +24,6 @@ public class Main extends JGEngine {
 	int selectedSpriteY = 0;
 	int selectionBoxTimer = 0;
 
-	Sprite selectedSprite = null;
 	Sprite[][] sprites = new Sprite[NUMBER_SPRITES_X][NUMBER_SPRITES_Y];
 	
 	public static void fixRandom(int seed) {
@@ -37,12 +36,17 @@ public class Main extends JGEngine {
 
 	public Main() {
 		initEngineApplet();
-		createAndDrawSprites();
+		createSprites();
+		drawSprites();
 	}
 
 	public Main(JGPoint size) {
 		initEngine(size.x, size.y);
-		createAndDrawSprites();
+		SpriteGenerator.fixRandom(1000);
+		ColorSchemeGenerator.fixRandom(1000);
+		Main.fixRandom(1000);
+		createSprites();
+		drawSprites();
 	}
 
 	public void initCanvas() {
@@ -113,20 +117,21 @@ public class Main extends JGEngine {
 		if (isClickInsideSpriteMatrix()) {
 			selectedSpriteX = ((getMouseX() - 10) / SEPARATION_X);
 			selectedSpriteY = ((getMouseY() - 10) / SEPARATION_Y);
-			selectedSprite = sprites[selectedSpriteX][selectedSpriteY];
+			Sprite sprite = sprites[selectedSpriteX][selectedSpriteY];
 			
 			selectionBoxTimer = 15;
 
 			if(getMouseButton(1)){
 				clearMouseButton(1);
-				saveSprite();
+				saveSprite(sprite);
 			}else if(getMouseButton(3)){
 				clearMouseButton(3);
-				createAndDrawSprites();
+				createMutations(sprite);
+				drawSprites();
 			}
-			selectedSprite = null;
 		} else {
-			createAndDrawSprites();
+			createSprites();
+			drawSprites();
 		}
 	}
 	
@@ -148,12 +153,12 @@ public class Main extends JGEngine {
 	/**
 	 * Saves a sprite to a .png file.
 	 */
-	private void saveSprite(){
+	private void saveSprite(Sprite sprite){
 		String filename = getSavefileName();
 		ImageUtils.writePNG("."+File.separator + filename+".png",
-				selectedSprite.pixels,
-				selectedSprite.pixels.length,
-				selectedSprite.pixels[0].length,
+				sprite.pixels,
+				sprite.pixels.length,
+				sprite.pixels[0].length,
 				SpriteGenerator.transcolor);
 	}
 	
@@ -192,72 +197,136 @@ public class Main extends JGEngine {
 	}
 	
 	/**
-	 * Fills the sprite data structure with sprites and draws them.
+	 * Fills the sprite data structure with sprites.
 	 */
-	private void createAndDrawSprites(){
-		removeObjects(null, 0);
+	private void createSprites(){
+		int[][] colorSchemes = generateColorSchemes();
+
+		for (int i = 0; i < NUMBER_SPRITES_X; i++) {
+			for (int j = 0; j < NUMBER_SPRITES_Y; j++) {
+				int[] colorScheme = colorSchemes[(int) (random.nextDouble() * colorSchemes.length)];
+				SpriteGenerator generator = randomizedGenerator();
+				sprites[i][j] = generator.createSprite(colorScheme);			
+			}
+		}
+	}
+	
+	/**
+	 * Randomizes a new SpriteGenerator
+	 * @return
+	 */
+	private SpriteGenerator randomizedGenerator(){
+		final double NO_SHADE_PROB = 0.75;
+		final double BEVEL_SHADE_PROB = 0.125;
+		// The rest up to 1 is the Gouraud prob
+		final double HIGHLIGHT_PROB = 0.4;
+		
+		// Choose a random shape
+		SpriteGenerator generator = SpriteGenerator.shapes2[(int) (random.nextDouble() * SpriteGenerator.shapes2.length)];
+		// Defines the probabilities of sprite features
+		double randomRoll = random.nextDouble();
+		// NO_SHADE_PROB of time the sprite doesn't have a shadow
+		if(randomRoll < NO_SHADE_PROB){
+			generator.shading = SpriteGenerator.NONE;
+		// BEVEL_SHADE_PROB of time it has Bevel shadow
+		}else if((randomRoll-NO_SHADE_PROB) < BEVEL_SHADE_PROB){
+			generator.shading = SpriteGenerator.BEVEL;
+		// the rest of the time it has Gouraud shadow
+		}else{
+			generator.shading = SpriteGenerator.GOURAUD;
+		}
+		
+		// If it doesn't have a shadow, it has a HIGHLIGHT_PROB chance of highlight
+		if(generator.shading == 0){
+			generator.highlight_prob = HIGHLIGHT_PROB;
+		}else{
+			generator.highlight_prob = 0;
+		}
+		return generator;
+	}
+	
+	/**
+	 * Fills the sprite data structure with mutations of a sprite.
+	 */
+	private void createMutations(Sprite origin){
+		final double SAMENESS_FACTOR = 0.8;
+		int[][] colorSchemes = generateColorSchemes();
+
+		for (int i = 0; i < NUMBER_SPRITES_X; i++) {
+			for (int j = 0; j < NUMBER_SPRITES_Y; j++) {
+				int[] colorScheme = colorSchemes[(int) (random.nextDouble() * colorSchemes.length)];
+				SpriteGenerator generator = origin.gen;
+				// Create a mutant of the origin sprite
+				Sprite mutant = generator.mergeSprites(
+						origin,
+						generator.createSprite(colorScheme), 
+						SAMENESS_FACTOR);
+				// A mere formality to not override the origin sprite. 
+				if (sprites[i][j] != origin) {
+					sprites[i][j] = mutant;
+				}		
+			}
+		}
+	}
+	
+	/**
+	 * Generates an array of color schemes
+	 * @return
+	 */
+	private int[][] generateColorSchemes(){
+		final int COLOR_SCHEMES_COUNT = 64;
 		// generate new color tables. Part handpicked, part random
-		int[][] coltables = new int[64][];
-		for (int i = 0; i < coltables.length; i++) {
+		int[][] colorSchemes = new int[COLOR_SCHEMES_COUNT][];
+		for (int i = 0; i < colorSchemes.length; i++) {
 			if (i < SpriteGenerator.coltables.length) {
-				coltables[i] = SpriteGenerator.coltables[i];
+				colorSchemes[i] = SpriteGenerator.coltables[i];
 			} else {
-				coltables[i] = ColorSchemeGenerator.genSpriteColorScheme(
+				colorSchemes[i] = ColorSchemeGenerator.genSpriteColorScheme(
 						SpriteGenerator.transcolor, 0, 3, 3);
 			}
 		}
-		SpriteGenerator.coltables = coltables;
-
-		//Sprite sprt = shape.createSprite(coltable);
+		return colorSchemes;
+	}
+	
+	/**
+	 * Draw the sprites in the sprite data structure.
+	 */
+	private void drawSprites(){
+		removeObjects(null, 0);
 		for (int i = 0; i < NUMBER_SPRITES_X; i++) {
 			for (int j = 0; j < NUMBER_SPRITES_Y; j++) {
-				int shapetype = (int) (random.nextDouble() * SpriteGenerator.shapes2.length);
-				int[] coltable = coltables[(int) (random.nextDouble() * coltables.length)];
-				SpriteGenerator shape = SpriteGenerator.shapes2[shapetype];
-				if (selectedSprite != null) {
-					shape = selectedSprite.gen;
-				} else {
-					shape.shading = random.nextDouble() < 0.75 ? 0 : random
-							.nextDouble() < 0.5 ? 1 : 2;
-					shape.highlight_prob = shape.shading == 0 ? 0.4 : 0;
-				}
-				sprites[i][j] = shape.createSprite(coltable);
-				//sprites[i] = shape.mergeSprites(sprt,
-				//		shape.createSprite(coltable), 0.9);
-				if (selectedSprite != null) {
-					if (selectedSpriteX == i && selectedSpriteX == j) {
-						sprites[i][j] = selectedSprite;
-					} else {
-						sprites[i][j] = shape.mergeSprites(
-								selectedSprite, 
-								sprites[i][j], 
-								0.7);
-					}
-				}
-				int startframe = 0;
-				int nrframes = 1;
+				int framesStart = 0;
+				int framesCount = 1;
+				
+				// Index adjustment, since if the sprite is animated the first frame
+				// (the standing frame) must be ommited.
 				if (sprites[i][j].getNrFrames() > 1) {
-					startframe = 1;
-					nrframes = sprites[i][j].getNrFrames() - 1;
+					framesStart = 1;
+					framesCount = sprites[i][j].getNrFrames() - 1;
 				}
+				
+				// Generates a new unique id for each sprite.
 				String spriteId = "rand"+(i+j*NUMBER_SPRITES_Y);
-				String[] frames = new String[nrframes];
-				for (int f = startframe; f < sprites[i][j].getNrFrames(); f++) {
-					frames[f - startframe] = spriteId + "f" + f;
-	
-					defineImageFromData(frames[f - startframe], "-", 0,
+				
+				String[] frames = new String[framesCount];
+				for (int f = 0; f < framesCount; f++) {
+					frames[f] = spriteId + "f" + f;
+					// Defines a new image for each frame.
+					defineImageFromData(frames[f], "-", 0,
 							sprites[i][j].getWidth() / sprites[i][j].getNrFrames(),
 							sprites[i][j].getHeight(), 
-							sprites[i][j].getData(f), 
+							sprites[i][j].getData(f+framesStart), 
 							0,
 							sprites[i][j].getWidth() / sprites[i][j].getNrFrames(),
 							"", -1, -1, -1, 1);
 				}
+				// Defines a new animation from each frame.
 				// XXX animations not undefined: memory leak
 				defineAnimation(spriteId, 
 						frames,
 						random.nextDouble() * 0.3 + 0.2);
 				
+				// Create a new JGObject, the ones that are rendered by the engine
 				new JGObject(spriteId, 
 						true, 
 						10 + i * SEPARATION_X, 
