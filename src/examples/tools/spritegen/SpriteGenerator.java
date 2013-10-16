@@ -1319,7 +1319,7 @@ public class SpriteGenerator {
 		}
 	}
 
-	/** Weight is probability of using sprite 1. Store results in spr1. */
+	/** Weight is probability of using sprite 1. */
 	public Sprite mergeSprites(Sprite spr1, Sprite spr2, double weight) {
 		Sprite spr = new Sprite(spr1.coltable, spr1.gen, xsize,
 				spr1.pixels.length, ysize);
