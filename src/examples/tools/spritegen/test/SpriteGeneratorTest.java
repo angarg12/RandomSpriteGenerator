@@ -258,7 +258,7 @@ public class SpriteGeneratorTest {
 		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
 		SpriteGenerator.fixRandom(1000);
-		gen.flipAndShade(clone);
+		gen.flip(clone);
 		assertArrayEquals("Flipped sprite does not match the expected.", getFlipTable(gen, coltable, spr), clone.colidx);
 	}
 	
@@ -267,9 +267,9 @@ public class SpriteGeneratorTest {
 		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
 		SpriteGenerator.fixRandom(1000);
-		gen.flipAndShade(clone);
+		gen.flip(clone);
 		SpriteGenerator.fixRandom(1000);
-		gen.bevelShadeNew(clone);
+		gen.bevelShade(clone);
 		assertArrayEquals("Bevel shaded sprite does not match the expected.", getBevelShadeTable(gen, coltable, spr), clone.colidx);
 	}
 
@@ -278,7 +278,7 @@ public class SpriteGeneratorTest {
 		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
 		SpriteGenerator.fixRandom(1000);
-		gen.flipAndShade(clone);
+		gen.flip(clone);
 		SpriteGenerator.fixRandom(1000);
 		gen.gouraudShade(clone);
 		assertArrayEquals("Gouraud shaded sprite does not match the expected.", getGouraudShadeTable(gen, coltable, spr), clone.colidx);
@@ -289,9 +289,9 @@ public class SpriteGeneratorTest {
 		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
 		SpriteGenerator.fixRandom(1000);
-		gen.flipAndShade(clone);
+		gen.flip(clone);
 		SpriteGenerator.fixRandom(1000);
-		gen.bevelShadeNew(clone);
+		gen.bevelShade(clone);
 		SpriteGenerator.fixRandom(1000);
 		gen.indexToRGB(clone);
 		assertArrayEquals("Colored sprite does not match the expected.", getIndexToRGBTable(gen, coltable, spr), clone.pixels);
@@ -302,9 +302,9 @@ public class SpriteGeneratorTest {
 		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
 		SpriteGenerator.fixRandom(1000);
-		gen.flipAndShade(clone);
+		gen.flip(clone);
 		SpriteGenerator.fixRandom(1000);
-		gen.bevelShadeNew(clone);
+		gen.bevelShade(clone);
 		SpriteGenerator.fixRandom(1000);
 		gen.indexToRGB(clone);
 		SpriteGenerator.fixRandom(1000);
@@ -317,9 +317,9 @@ public class SpriteGeneratorTest {
 		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
 		SpriteGenerator.fixRandom(1000);
-		gen.flipAndShade(clone);
+		gen.flip(clone);
 		SpriteGenerator.fixRandom(1000);
-		gen.bevelShadeNew(clone);
+		gen.bevelShade(clone);
 		SpriteGenerator.fixRandom(1000);
 		gen.indexToRGB(clone);
 		SpriteGenerator.fixRandom(1000);

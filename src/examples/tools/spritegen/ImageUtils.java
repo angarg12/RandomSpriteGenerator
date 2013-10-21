@@ -2,6 +2,8 @@ package examples.tools.spritegen;
 
 import java.io.*;
 
+import examples.tools.spritegen.color.ColorScheme;
+
 public class ImageUtils {
 
 	// http://stackoverflow.com/questions/11590075/crc32-calculation-with-pycrc-and-php-code-doesnt-match-expected-result
@@ -219,5 +221,14 @@ public class ImageUtils {
 			System.err.println("Error: " + e.getMessage());
 		}
 	}
-
+	
+	public static int[][] createTransparentBitmap(int xsize, int ysize) {
+		int[][] pixels = new int[xsize][ysize];
+		for (int i = 0; i < xsize; i++) {
+			for (int j = 0; j < ysize; j++) {
+				pixels[i][j] = ColorScheme.TRANSPARENT;
+			}
+		}
+		return pixels;
+	}
 }

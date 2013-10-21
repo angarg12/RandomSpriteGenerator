@@ -22,7 +22,7 @@ public class Sprite {
 		this.gen = gen;
 		hull = new int[xsize][ysize];
 		colidx = new int[xsize][ysize];
-		pixels = SpriteGenerator.createTransparentBitmap(totalxsize, ysize);
+		pixels = ImageUtils.createTransparentBitmap(totalxsize, ysize);
 	}
 
 	public int getWidth() {

@@ -9,7 +9,6 @@ public class SpriteGenerator {
 	/**
 	 * TODO: Encapsulate filling tables, animation tables and generation parameters in some kind of pattern (factory, strategy?)
 	 */
-	
 	static Random random = new Random();
 	public static void fixRandom(int seed){
 		random = new Random(seed);
@@ -148,86 +147,6 @@ public class SpriteGenerator {
 		}
 	}
 
-	public static void main(String[] args) throws IOException {
-		while (true) {
-			int shapetype = (int) (random.nextDouble() * shapes.length);
-			int[] coltable = ColorScheme.colorSchemes()[(int) (random.nextDouble() * ColorScheme.colorSchemes().length)];
-			SpriteGenerator shape = shapes[shapetype];
-			Sprite sprite1 = shape.createSprite(coltable);
-			ImageUtils.writePPM("a.ppm", sprite1.pixels, sprite1.pixels.length,
-					sprite1.pixels[0].length);
-			Sprite[] mutant = new Sprite[20];
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					System.in));
-			while (true) {
-				for (int i = 0; i < mutant.length; i++) {
-					Sprite sprite2 = shape.createSprite(coltable);
-					// writePPM("a"+i+".ppm",
-					// sprite2.pixels,sprite2.pixels.length,sprite2.pixels[0].length);
-					mutant[i] = shape.mergeSprites(sprite1, sprite2, 0.8);
-					ImageUtils
-							.writePPM("a" + i + ".ppm", mutant[i].pixels,
-									mutant[i].pixels.length,
-									mutant[i].pixels[0].length);
-					execNoShit("pnmtopng -transparent rgb:01/01/01 <a" + i
-							+ ".ppm " + ">a" + i + ".png; rm a" + i + ".ppm");
-				}
-				int nr = -1;
-				try {
-					nr = Integer.parseInt(in.readLine());
-				} catch (Exception e) {
-					System.out.println("Re-run");
-					continue;
-				}
-				if (nr < 0) {
-					System.out.println("New sprite");
-					break;
-				}
-				System.out.println("Mutating: " + nr);
-				sprite1 = mutant[nr];
-			}
-		}
-	}
-
-	static int execNoShit(String cmd) {
-		try {
-			String[] shc = new String[] { "sh", "-c", cmd };
-			Runtime rt = Runtime.getRuntime();
-			Process ps = rt.exec(shc);
-			ps.waitFor();
-			return ps.exitValue();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return -1;
-		}
-	}
-
-	public static int[][] createTransparentBitmap(int xsize, int ysize) {
-		int[][] pixels = new int[xsize][ysize];
-		for (int i = 0; i < xsize; i++) {
-			for (int j = 0; j < ysize; j++) {
-				pixels[i][j] = ColorScheme.TRANSPARENT;
-			}
-		}
-		return pixels;
-	}
-
-	public static void addOutline(int[][] hull) {
-		for (int x = 0; x < hull.length; x++) {
-			for (int y = 0; y < hull[x].length; y++) {
-				boolean neigh = false;
-				neigh = neigh || x > 0 && (hull[x - 1][y] & 3) == 2;
-				neigh = neigh || x < hull.length - 1
-						&& (hull[x + 1][y] & 3) == 2;
-				neigh = neigh || y > 0 && (hull[x][y - 1] & 3) == 2;
-				neigh = neigh || y < hull[x].length - 1
-						&& (hull[x][y + 1] & 3) == 2;
-				if (neigh && hull[x][y] == 0)
-					hull[x][y] = 3;
-			}
-		}
-	}
-
 	public static void addOutlineRGB(int[][] pixels) {
 		for (int x = 0; x < pixels.length; x++) {
 			for (int y = 0; y < pixels[x].length; y++) {
@@ -265,7 +184,7 @@ public class SpriteGenerator {
 				}
 			}
 		}
-		flipAndShade(spr);
+		flip(spr);
 		indexToRGB(spr);
 		animate(spr);
 		addOutlineRGB(spr.pixels);
@@ -323,9 +242,9 @@ public class SpriteGenerator {
 		// addOutline(spr.hull);
 		// colour fill type is handled by colorize
 		colorize(spr);
-		flipAndShade(spr);
+		flip(spr);
 		if (shading == BEVEL)
-			bevelShadeNew(spr);
+			bevelShade(spr);
 		if (shading == GOURAUD)
 			gouraudShade(spr);
 		indexToRGB(spr);
@@ -405,7 +324,7 @@ public class SpriteGenerator {
 	}
 
 	/** flip according to symmetry axes and shade */
-	public void flipAndShade(Sprite spr) {
+	public void flip(Sprite spr) {
 		for (int y = 0; y < ysize; y++) {
 			for (int x = 0; x < xsize; x++) {
 				int colnr = spr.colidx[x][y];
@@ -421,7 +340,6 @@ public class SpriteGenerator {
 				}
 			}
 		}
-		// if (shading==BEVEL) colorizeShadeAdd(spr);
 	}
 
 	public void indexToRGB(Sprite spr) {
@@ -432,76 +350,15 @@ public class SpriteGenerator {
 		}
 	}
 
-	public void colorizeShadeAdd(Sprite spr) {
-		// shade given colours
-		for (int y = 0; y < ysize; y++) {
-			for (int x = 0; x < xsize; x++) {
-				int col = spr.colidx[x][y];
-				if (col != 0 && col != ColorScheme.TRANSPARENT) {
-					int tldist = findOutlineDist(spr, x, y, -1, -1, 5);
-					int brdist = findOutlineDist(spr, x, y, 1, 1, 5);
-					// System.err.println(" "+tldist+" "+brdist);
-					// 0=brightest .. 4=darkest
-					// 0 / 2 / 4
-					int bright = 4;
-					if (tldist < brdist * 2)
-						bright = 3;
-					if (tldist < brdist)
-						bright = 2;
-					if (tldist < brdist / 2)
-						bright = 1;
-					if (tldist == 1 && brdist > 1)
-						bright = 2;
-					if (tldist == 2 && brdist > 2)
-						bright = -1;
-					if (tldist == 3 && brdist > 2)
-						bright = 0;
-					// special cases: thin areas
-					if (tldist == 1 && brdist == 2)
-						bright = 1;
-					if (tldist == 2 && brdist == 1)
-						bright = 3;
-					// if (brdist == 1 && bright <= 2) bright += 2;
-					// if (brdist == 2 && bright <= 3) bright += 1;
-					// any colour except black
-					// colnr = (int)(2+ random.nextDouble()*
-					// (spr.coltable.length/3-2));
-					if (bright >= 0) {
-						boolean dither = (bright & 1) == 1
-								&& ((x + y) & 1) == 1;
-						bright = bright / 2 + (dither ? 1 : 0);
-						spr.colidx[x][y] += bright;
-					} else {
-						if (((x + y) & 1) == 1)
-							spr.colidx[x][y] = 5 * 3;
-					}
-				}
-			}
-		}
-	}
-
-	public int findOutlineDist(Sprite spr, int x, int y, int dx, int dy,
-			int depth) {
-		if (x < 0 || x >= xsize || y < 0 || y >= ysize)
-			return 0;
-		if (spr.pixels[x][y] >= 0 && spr.pixels[x][y] <= 5)
-			return 0;
-		if (depth <= 0)
-			return 7;
-		int xdist = findOutlineDist(spr, x + dx, y, dx, dy, depth - 1);
-		int ydist = findOutlineDist(spr, x, y + dy, dx, dy, depth - 1);
-		return xdist < ydist ? xdist + 1 : ydist + 1;
-	}
-
-	public void bevelShadeNew(Sprite spr) {
+	public void bevelShade(Sprite spr) {
 		// shade given colours
 		for (int y = 0; y < ysize; y++) {
 			for (int x = 0; x < xsize; x++) {
 				int idx = spr.colidx[x][y];
 				// if (idx >= 15) idx -= 3; // remove highlights
 				if (idx >= 6) {
-					int tldist = findOutlineDistNew(spr, x, y, -1, -1, 2);
-					int brdist = findOutlineDistNew(spr, x, y, 1, 1, 2);
+					int tldist = findOutlineDist(spr, x, y, -1, -1, 2);
+					int brdist = findOutlineDist(spr, x, y, 1, 1, 2);
 					// System.err.println(" "+tldist+" "+brdist);
 					// 0=darkest ... 4=brightest. Odd numbers will dither.
 					int bright = 2;
@@ -527,7 +384,7 @@ public class SpriteGenerator {
 		}
 	}
 
-	public int findOutlineDistNew(Sprite spr, int x, int y, int dx, int dy,
+	public int findOutlineDist(Sprite spr, int x, int y, int dx, int dy,
 			int depth) {
 		if (x < 0 || x >= xsize || y < 0 || y >= ysize)
 			return 0;
@@ -535,8 +392,8 @@ public class SpriteGenerator {
 			return 0;
 		if (spr.colidx[x][y] <= 5)
 			return 0;
-		int xdist = findOutlineDistNew(spr, x + dx, y, dx, dy, depth - 1);
-		int ydist = findOutlineDistNew(spr, x, y + dy, dx, dy, depth - 1);
+		int xdist = findOutlineDist(spr, x + dx, y, dx, dy, depth - 1);
+		int ydist = findOutlineDist(spr, x, y + dy, dx, dy, depth - 1);
 		return xdist < ydist ? xdist + 1 : ydist + 1;
 	}
 
