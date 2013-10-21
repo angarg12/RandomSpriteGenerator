@@ -3,39 +3,13 @@ package examples.tools.spritegen;
 import java.io.*;
 import java.util.Random;
 
+import examples.tools.spritegen.color.ColorScheme;
+
 public class SpriteGenerator {
-
-
-	// filltable values:
-	// bit 0-1:
-	// 00 = leave blank
-	// 01 = randomly fill or leave blank
-	// 10 = always fill
-	// 11 = outline (always black)
-	// bit 2:
-	// 0 = disable black
-	// 1 = enable black
-	// bit 3:
-	// 0 = disable extra highlights
-	// 1 = enable extra highlights
-	// So:
-	// 0 = transparent
-	// 1 = transparent or any colour except black
-	// 2 = any colour except black
-	// 3 = always black
-	// 4 = N/A (transparent)
-	// 5 = transparent or any colour + black
-	// 6 = any colour + black
-	// 7 = N/A (always black)
-	// 8 = N/A (transparent)
-	// 9 = transparent or colour with highlights, no black
-	// A = colour with highlights, no black 1010
-	// B = N/A (always black)
-	// C = N/A (transparent)
-	// D = transparent or colour with highlights + black
-	// E = colour with highlights + black
-	// F = N/A (always black)
-
+	/**
+	 * TODO: Encapsulate filling tables, animation tables and generation parameters in some kind of pattern (factory, strategy?)
+	 */
+	
 	static final int A = 10;
 	static final int B = 11;
 	static final int C = 12;
@@ -43,59 +17,6 @@ public class SpriteGenerator {
 	static final int E = 14;
 	static final int F = 15;
 	static final int G = 16;
-
-	static int[][] shipfilltable = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 0, 0, 0, 0, 0, 0, 1, 2 }, { 0, 0, 0, 0, 0, 0, 1, 2 },
-			{ 0, 0, 0, 0, 0, 0, 1, 2 }, { 0, 0, 0, 0, 0, 1, 2, 2 },
-			{ 0, 0, 0, 0, 0, 1, 2, A }, { 0, 0, 0, 0, 1, 2, 2, A },
-			{ 0, 0, 0, 0, 2, 2, A, A }, { 0, 1, 9, 2, 2, 2, A, A },
-			{ 0, 9, A, 2, 2, 2, A, A }, { 0, 9, A, 2, 2, A, A, A },
-			{ 0, 9, A, 2, 2, A, A, A }, { 0, 9, A, 1, 1, 2, A, A },
-			{ 0, 9, A, 1, 2, 2, 9, 9 }, { 0, 9, 9, 1, 1, 1, 9, 9 },
-			{ 0, 0, 0, 0, 0, 0, 0, 0 }, };
-
-	static int[][] ship2filltable = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 0, 1, 1, 0, 0, 0, 0, 0 }, { 0, 1, 1, 0, 0, 0, 1, 1 },
-			{ 0, 1, 1, 0, 0, 0, 1, 1 }, { 0, 1, 1, 0, 0, 0, 1, 1 },
-			{ 0, 2, 1, 0, 0, 1, 1, 1 }, { 0, A, 9, 0, 1, 1, 2, A },
-			{ 0, A, 9, 1, 2, 2, A, A }, { 0, 9, A, 2, 2, 2, A, A },
-			{ 0, 9, A, 2, 2, 2, A, A }, { 0, 9, A, 2, 2, A, A, A },
-			{ 0, 1, 1, 2, 2, A, A, A }, { 0, 0, 1, 1, 1, 2, A, A },
-			{ 0, 0, 0, 1, 2, 2, 2, 2 }, { 0, 0, 0, 0, 1, 2, 1, 1 },
-			{ 0, 0, 0, 0, 0, 0, 0, 0 }, };
-
-	static int[][] butterflyfilltable = new int[][] {
-			{ 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0, 9, 9, 1 },
-			{ 0, 1, 1, 1, 0, 0, 9, A }, { 0, 1, A, 9, 1, 0, 9, A },
-			{ 0, 1, 9, A, 1, 1, 1, 2 }, { 0, 0, 1, 2, 2, 2, 2, 2 },
-			{ 0, 0, 1, 1, 2, 2, 2, 2 }, { 0, 0, 0, 1, 1, 2, 2, 2 },
-			{ 0, 0, 0, 1, 2, 2, 2, 2 }, { 0, 0, 1, 2, 2, 1, 2, 2 },
-			{ 0, 1, A, A, 1, 1, 9, A }, { 0, 1, A, 9, 1, 0, 9, A },
-			{ 0, 1, 1, 1, 0, 0, 1, A }, { 0, 1, 1, 0, 0, 0, 1, 2 },
-			{ 0, 1, 1, 0, 0, 0, 1, 1 }, { 0, 0, 0, 0, 0, 0, 0, 0 }, };
-
-	static int[][] butterflyfilltable18 = new int[][] {
-			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 1, 1, 0, 0, 9, 9, 1 },
-			{ 0, 1, 1, 2, 1, 0, 0, A, A }, { 0, 1, A, A, 9, 1, 0, 9, A },
-			{ 0, 1, 9, 9, A, 1, 1, 1, 2 }, { 0, 1, 9, 9, A, 1, 1, 1, 2 },
-			{ 0, 0, 1, 1, 2, 2, 2, 2, 2 }, { 0, 0, 1, 1, 1, 2, 2, 2, 2 },
-			{ 0, 0, 0, 0, 0, 1, 2, 2, 2 }, { 0, 0, 0, 1, 1, 2, 2, 2, 2 },
-			{ 0, 0, 1, 1, 2, 2, 1, 2, 2 }, { 0, 1, A, A, A, 1, 1, 9, A },
-			{ 0, 1, A, A, A, 1, 1, 9, A }, { 0, 1, A, A, 9, 1, 0, 9, A },
-			{ 0, 1, 1, 1, 1, 1, 0, 1, A }, { 0, 1, 1, 1, 1, 0, 0, 1, 2 },
-			{ 0, 1, 1, 1, 0, 0, 0, 1, 1 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, };
-
-	static int[][] butterflyfilltable20 = new int[][] {
-			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 1, 1, 1, 0, 0, 1, 9, 1 },
-			{ 0, 1, 1, 2, 1, 1, 0, 0, 9, A }, { 0, 1, A, A, A, A, 0, 0, 9, A },
-			{ 0, 1, A, A, A, A, 1, 1, 1, A }, { 0, 1, 1, 2, 2, 2, 2, 2, 2, 2 },
-			{ 0, 0, 1, 1, 2, 2, 2, 2, 2, 2 }, { 0, 0, 1, 1, 2, 2, 2, 2, 2, 2 },
-			{ 0, 0, 0, 1, 1, 1, 2, 2, 2, 2 }, { 0, 0, 0, 0, 0, 1, 1, 2, 2, 2 },
-			{ 0, 0, 0, 0, 0, 1, 2, 2, 2, 2 }, { 0, 0, 0, 1, 2, 2, 2, 1, 2, 2 },
-			{ 0, 0, 1, 1, 2, 2, 2, 1, 2, 2 }, { 0, 1, A, A, A, A, 1, 1, 9, A },
-			{ 0, 1, A, A, A, A, 1, 1, 9, A }, { 0, 1, A, A, 9, 9, 1, 0, 9, A },
-			{ 0, 1, 1, 2, 1, 1, 0, 0, 1, A }, { 0, 1, 1, 1, 1, 0, 0, 0, 1, 2 },
-			{ 0, 0, 1, 1, 0, 0, 0, 1, 1, 1 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, };
 
 	// 1 = 1x up
 	// 2 = 1x up right
@@ -211,40 +132,6 @@ public class SpriteGenerator {
 					{ 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7, 7 },
 					{ 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7, 7 }, } };
 
-	static int[][] ufofilltable = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 0, 0, 0, 0, 1, 1, 1, 1 }, { 0, 0, 0, 1, 1, 1, 1, 1 },
-			{ 0, 0, 1, 1, 1, 9, 9, 9 }, { 0, 1, 1, 1, 9, 9, 9, 9 },
-			{ 0, 1, 1, 9, 9, 9, A, A }, { 0, 1, 1, 9, 9, A, A, A },
-			{ 0, 1, 1, 9, 9, A, A, A }, };
-
-	static int[][] ufofilltable18 = new int[][] {
-			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 1, 1, 1, 1 },
-			{ 0, 0, 0, 1, 1, 1, 1, 1, 1 }, { 0, 0, 1, 1, 1, 1, 9, 9, 9 },
-			{ 0, 1, 1, 1, 9, 9, 9, 9, 9 }, { 0, 1, 1, 1, 9, 9, 9, 9, 9 },
-			{ 0, 1, 1, 9, 9, 9, 9, 9, 9 }, { 0, 1, 1, 9, 9, 9, 9, 9, 9 },
-			{ 0, 1, 1, 9, 9, 9, 9, 9, 9 }, };
-
-	static int[][] manfilltable = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 0, 0, 0, 1, 1, 1, 2, A }, { 0, 0, 0, 1, 1, 2, A, A },
-			{ 0, 0, 0, 1, 1, 1, 2, 2 }, { 0, 0, 0, 0, 0, 1, 2, 2 },
-			{ 0, 0, 0, 0, 1, A, 2, A }, { 0, 0, 0, 1, A, 2, 2, A },
-			{ 0, 0, 1, A, 2, 1, 2, A }, { 0, 1, 2, 2, 1, 1, 2, A },
-			{ 0, 1, 1, 1, 1, 1, 2, 2 }, { 0, 1, 1, 0, 0, 1, A, 1 },
-			{ 0, 0, 0, 0, 1, A, 2, 1 }, { 0, 0, 0, 1, A, 2, 1, 1 },
-			{ 0, 0, 1, 2, A, 1, 1, 0 }, { 0, 1, 1, 2, 2, 1, 0, 0 },
-			{ 0, 0, 0, 0, 0, 0, 0, 0 }, };
-
-	static int[][] manfilltable18 = new int[][] {
-			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 1, 1, 2, 2, A },
-			{ 0, 0, 0, 1, 1, 1, 2, A, A }, { 0, 0, 0, 0, 1, 1, 1, 2, 2 },
-			{ 0, 0, 0, 0, 0, 1, A, 2, A }, { 0, 0, 0, 0, 1, A, 2, 2, A },
-			{ 0, 0, 0, 1, A, 2, 1, 2, A }, { 0, 0, 2, 2, 2, 1, 1, 2, A },
-			{ 0, 1, 2, 2, 2, 1, 1, 2, A }, { 0, 1, 1, 1, 1, 1, 1, 2, 2 },
-			{ 0, 1, 1, 1, 0, 0, 1, A, 1 }, { 0, 1, 1, 0, 0, 1, A, 2, 1 },
-			{ 0, 0, 0, 0, 1, A, 2, 1, 1 }, { 0, 0, 0, 1, 2, A, 1, 1, 0 },
-			{ 0, 0, 1, 1, 2, A, 1, 1, 0 }, { 0, 1, 1, 1, 2, 2, 1, 0, 0 },
-			{ 0, 1, 1, 2, 2, 2, 1, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, };
-
 	static int[][][] mananimtable = new int[][][] {
 			{ { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -359,96 +246,6 @@ public class SpriteGenerator {
 					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, } };
 
-	static int[][] fishfilltable = new int[][] {
-			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0 },
-			{ 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 1, 1, 1, 2, 9, 0 },
-			{ 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, A, A, 0 },
-			{ 0, 1, 2, 2, A, A, A, A, A, 2, 2, 2, 2, 2, 2, 2, 2, 9, A, 0 },
-			{ 0, 1, 2, A, A, A, A, A, A, A, 2, 2, 1, 1, 1, 1, 1, 9, 9, 0 },
-	// {0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,0},
-	// {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	};
-
-	static int[][] tilefilltable = new int[][] { { 2, 2, 2, 2, 2, 2, 2, 2 },
-			{ 2, 6, 6, 2, 2, 2, 2, 2 }, { 2, 6, 6, 6, 2, 2, 2, 2 },
-			{ 2, 2, 6, 6, 6, 2, 2, 2 }, { 2, 2, 2, 6, E, A, A, A },
-			{ 2, 2, 2, 2, A, E, A, A }, { 2, 2, 2, 2, A, A, E, A },
-			{ 2, 2, 2, 2, A, A, A, A }, };
-
-	static int[][] bubblefilltable = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 0, 0, 0, 0, 2, 2, 2, 2 }, { 0, 0, 0, A, A, 1, 1, 1 },
-			{ 0, 0, A, A, 1, 1, 1, 1 }, { 0, 2, A, 1, 1, 1, 1, 1 },
-			{ 0, 2, 1, 1, 1, 1, 1, 1 }, { 0, 2, 1, 1, 1, 1, 1, 1 },
-			{ 0, 2, 1, 1, 1, 1, 1, 1 }, };
-
-	static int[][] blob10filltable = new int[][] { { 0, 0, 0, 0, 0 },
-			{ 0, 0, 0, 1, 1 }, { 0, 0, 1, 9, A }, { 0, 1, 9, A, A },
-			{ 0, 1, 2, 2, 2 }, { 0, 1, 2, 2, 2 }, { 0, 1, 9, A, A },
-			{ 0, 0, 1, 9, A }, { 0, 0, 0, 1, 1 }, { 0, 0, 0, 0, 0 }, };
-
-	static int[][] rand6filltable = new int[][] { { D, D, D }, { D, D, D },
-			{ D, D, D }, { D, D, D }, { D, D, D }, { D, D, D }, };
-
-	static int[][] rand10filltable = new int[][] { { 0, 0, 0, 0, 0 },
-			{ 0, 9, 9, 9, 9 }, { 0, 9, 9, 9, 9 }, { 0, 9, 9, 9, 9 },
-			{ 0, 9, 9, 9, 9 }, { 0, 9, 9, 9, 9 }, { 0, 9, 9, 9, 9 },
-			{ 0, 9, 9, 9, 9 }, { 0, 9, 9, 9, 9 }, { 0, 0, 0, 0, 0 }, };
-
-	static int[][] rand10afilltable = new int[][] {
-			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
-			{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 0 }, { 0, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
-			{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 0 }, { 0, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
-			{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 0 }, { 0, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
-			{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, };
-
-	static int[][] rand8afilltable = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 0, 9, 9, 9, 9, 9, 9, 0 }, { 0, 9, 9, 9, 9, 9, 9, 0 },
-			{ 0, 9, 9, 9, 9, 9, 9, 0 }, { 0, 9, 9, 9, 9, 9, 9, 0 },
-			{ 0, 9, 9, 9, 9, 9, 9, 0 }, { 0, 9, 9, 9, 9, 9, 9, 0 },
-			{ 0, 0, 0, 0, 0, 0, 0, 0 }, };
-
-	static int[][] rand12filltable = new int[][] { { 0, 0, 0, 0, 0, 0 },
-			{ 0, 9, 9, 9, 9, 9 }, { 0, 9, 9, 9, 9, 9 }, { 0, 9, 9, 9, 9, 9 },
-			{ 0, 9, 9, 9, 9, 9 }, { 0, 9, 9, 9, 9, 9 }, { 0, 9, 9, 9, 9, 9 },
-			{ 0, 9, 9, 9, 9, 9 }, { 0, 9, 9, 9, 9, 9 }, { 0, 9, 9, 9, 9, 9 },
-			{ 0, 9, 9, 9, 9, 9 }, { 0, 0, 0, 0, 0, 0 }, };
-
-	static int[][] rand12yfilltable = new int[][] {
-			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
-			{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
-			{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
-			{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
-			{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0 }, };
-
-	static int[][] rand12dfilltable = new int[][] { { 0, 0, 0, 0, 0, 0 },
-			{ 0, 9, 9, 9, 9, 9 }, { 0, 9, 9, 9, 9, 9 }, { 0, 9, 9, 9, 9, 9 },
-			{ 0, 9, 9, 9, 9, 9 }, { 0, 9, 9, 9, 9, 9 }, };
-
-	static int[][] rand14filltable = new int[][] { { 0, 0, 0, 0, 0, 0, 0 },
-			{ 0, 1, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1 },
-			{ 0, 1, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1 },
-			{ 0, 1, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1 },
-			{ 0, 1, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1 },
-			{ 0, 1, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1 },
-			{ 0, 1, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1 },
-			{ 0, 0, 0, 0, 0, 0, 0 }, };
-
-	static int[][] rand14dfilltable = new int[][] { { 0, 0, 0, 0, 0, 0, 0 },
-			{ 0, 1, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1 },
-			{ 0, 1, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1 },
-			{ 0, 1, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1 }, };
-
-	static int[][] rand16filltable = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 0, 1, 1, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1, 1 },
-			{ 0, 1, 1, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1, 1 },
-			{ 0, 1, 1, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1, 1 },
-			{ 0, 1, 1, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1, 1 },
-			{ 0, 1, 1, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1, 1 },
-			{ 0, 1, 1, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1, 1 },
-			{ 0, 1, 1, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1, 1 },
-			{ 0, 0, 0, 0, 0, 0, 0, 0 }, };
 
 	// -----------------------------------------
 	// anim tables
@@ -1075,61 +872,61 @@ public class SpriteGenerator {
 	double color_smoothing_horiz_bias = 0.5;
 
 	public static SpriteGenerator[] shapes = new SpriteGenerator[] {
-			new SpriteGenerator(16, 16, shipfilltable, null, true, false, 1, 1,
+			new SpriteGenerator(16, 16, FillingTable.SHIP, null, true, false, 1, 1,
 					0.5, 0.6, 0.5, 0.3, 0.4, 0.6, 0.5),
-			new SpriteGenerator(18, 18, butterflyfilltable18, birdanimtable18,
+			new SpriteGenerator(18, 18, FillingTable.BUTTERFLY_18, birdanimtable18,
 					true, false, 1, 1, 0.5, 0.7, 0.5, 0.3, 0.4, 0.6, 0.5),
-			new SpriteGenerator(18, 18, manfilltable18, mananimtable18, true,
+			new SpriteGenerator(18, 18, FillingTable.MAN_18, mananimtable18, true,
 					false, 1, 1, 0.5, 0.6, 0.5, 0.3, 0.4, 0.6, 0.5),
-			new SpriteGenerator(18, 18, ufofilltable18, null, true, true, 1, 1,
+			new SpriteGenerator(18, 18, FillingTable.UFO_18, null, true, true, 1, 1,
 					0.5, 0.75, 0.5, 0.3, 0.4, 0.8, 0.5) };
 
 	public static SpriteGenerator[] shapes2 = new SpriteGenerator[] {
-			new SpriteGenerator(12, 12, rand12filltable, rand12walkanimtable, true,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12walkanimtable, true,
 					false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12filltable, rand12flyanimtable, true,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12flyanimtable, true,
 					false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12filltable, rand12rcrawlanimtable,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12rcrawlanimtable,
 					true, false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12filltable, rand12crawlanimtable,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12crawlanimtable,
 					true, false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12filltable, rand12bendanimtable, true,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12bendanimtable, true,
 					false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12filltable, rand12bubbleanimtable,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12bubbleanimtable,
 					true, false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12filltable, rand12pokeanimtable, true,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12pokeanimtable, true,
 					false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12yfilltable, rand12rwalkanimtable,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12rwalkanimtable,
 					false, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12yfilltable, rand12crawlanimtable,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12crawlanimtable,
 					false, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12yfilltable, rand12bendanimtable,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12bendanimtable,
 					false, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12yfilltable, rand12bubbleanimtable,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12bubbleanimtable,
 					false, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12yfilltable, rand12pokeanimtable,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12pokeanimtable,
 					false, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12dfilltable, rand12turnanimtable,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12turnanimtable,
 					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12dfilltable, rand12bendanimtable,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12bendanimtable,
 					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12dfilltable, rand12crawlanimtable,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12crawlanimtable,
 					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12dfilltable, rand12bubbleanimtable,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12bubbleanimtable,
 					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12dfilltable, rand12pokeanimtable,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12pokeanimtable,
 					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12filltable, rand12wiggleanimtable,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12wiggleanimtable,
 					true, false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12yfilltable, rand12rwiggleanimtable,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12rwiggleanimtable,
 					false, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12filltable, rand12bounceanimtable,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12bounceanimtable,
 					true, false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12dfilltable, rand12bounceanimtable,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12bounceanimtable,
 					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12filltable, rand12nullanimtable, true,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12nullanimtable, true,
 					false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, rand12dfilltable, rand12nullanimtable,
+			new SpriteGenerator(12, 12, FillingTable.RAND_12, rand12nullanimtable,
 					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5), };
 
 	public SpriteGenerator(int xsize, int ysize, int[][] filltable,

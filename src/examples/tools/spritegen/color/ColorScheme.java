@@ -1,9 +1,9 @@
-package examples.tools.spritegen;
+package examples.tools.spritegen.color;
 
 public class ColorScheme {
-	static int TRANSPARENT = 0x010101;
+	public static int TRANSPARENT = 0x010101;
 
-	static int[] BROWN_RED_YELLOW = new int[] { 
+	public static int[] BROWN_RED_YELLOW = new int[] { 
 			TRANSPARENT, TRANSPARENT, TRANSPARENT, // trans
 			0x000000, 0x000000, 0x000000, // outline
 			0xC0A080, 0x806040, 0x503010, // col2
@@ -12,7 +12,7 @@ public class ColorScheme {
 			0xFFFFFF, 0xB0B0B0, 0x808080, // highlight
 	};
 
-	static int[] GRAY_BLUE_TEAL = new int[] { 
+	public static int[] GRAY_BLUE_TEAL = new int[] { 
 			TRANSPARENT, TRANSPARENT, TRANSPARENT, // trans
 			0x000000, 0x000000, 0x000000, // outline
 			0x808080, 0x505050, 0x202020, // col2
@@ -21,7 +21,7 @@ public class ColorScheme {
 			0xFFFFFF, 0xB0B0B0, 0x808080, // highlight
 	};
 
-	static int[] GREEN = new int[] { 
+	public static int[] GREEN = new int[] { 
 			TRANSPARENT, TRANSPARENT, TRANSPARENT, // trans
 			0x000000, 0x000000, 0x000000, // outline
 			0xA0C080, 0x608040, 0x305010, // col2
@@ -30,7 +30,7 @@ public class ColorScheme {
 			0xFFFFFF, 0xB0B0B0, 0x808080, // highlight
 	};
 
-	static int[] PURPLE_RED = new int[] { 
+	public static int[] PURPLE_RED = new int[] { 
 			TRANSPARENT, TRANSPARENT, TRANSPARENT, // trans
 			0x000000, 0x000000, 0x000000, // outline
 			0x907090, 0x604060, 0x301030, // col2
@@ -39,7 +39,7 @@ public class ColorScheme {
 			0xFFFFFF, 0xB0B0B0, 0x808080, // highlight
 	};
 
-	static int[] BLUE_PURPLE = new int[] { 
+	public static int[] BLUE_PURPLE = new int[] { 
 			TRANSPARENT, TRANSPARENT, TRANSPARENT, // trans
 			0x000000, 0x000000, 0x000000, // outline
 			0xA080C0, 0x604080, 0x301050, // col2
@@ -48,7 +48,7 @@ public class ColorScheme {
 			0xFFFFFF, 0xB0B0B0, 0x808080, // highlight
 	};
 
-	static int[] BLUE_GREEN = new int[] { 
+	public static int[] BLUE_GREEN = new int[] { 
 			TRANSPARENT, TRANSPARENT, TRANSPARENT, // trans
 			0x000000, 0x000000, 0x000000, // outline
 			0x80A0C0, 0x507090, 0x204060, // col2
@@ -57,7 +57,7 @@ public class ColorScheme {
 			0xFFFFFF, 0xB0B0B0, 0x808080, // highlight
 	};
 
-	static int[] RED_YELLOW = new int[] { 
+	public static int[] RED_YELLOW = new int[] { 
 			TRANSPARENT, TRANSPARENT, TRANSPARENT, // trans
 			0x000000, 0x000000, 0x000000, // outline
 			0xFF0000, 0xD00000, 0xA00000, // col
@@ -66,7 +66,7 @@ public class ColorScheme {
 			0xFFFFFF, 0xB0B0B0, 0x808080, // highlight
 	};
 
-	static int[] BLUE = new int[] { 
+	public static int[] BLUE = new int[] { 
 			TRANSPARENT, TRANSPARENT, TRANSPARENT, // trans
 			0x000000, 0x000000, 0x000000, // outline
 			0x0000FF, 0x0000D0, 0x0000A0, // col

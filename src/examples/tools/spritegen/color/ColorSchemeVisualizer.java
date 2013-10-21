@@ -1,4 +1,4 @@
-package examples.tools.spritegen;
+package examples.tools.spritegen.color;
 
 import java.util.Random;
 

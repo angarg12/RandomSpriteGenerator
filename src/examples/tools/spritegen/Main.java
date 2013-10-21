@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Random;
 
+import examples.tools.spritegen.color.ColorScheme;
+import examples.tools.spritegen.color.ColorSchemeGenerator;
+
 import jgame.JGColor;
 import jgame.JGFont;
 import jgame.JGObject;

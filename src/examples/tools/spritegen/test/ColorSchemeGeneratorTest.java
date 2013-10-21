@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import examples.tools.spritegen.ColorSchemeGenerator;
+import examples.tools.spritegen.color.ColorSchemeGenerator;
 
 public class ColorSchemeGeneratorTest {	
 	@Test

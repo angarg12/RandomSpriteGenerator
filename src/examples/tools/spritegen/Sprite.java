@@ -1,5 +1,7 @@
 package examples.tools.spritegen;
 
+import examples.tools.spritegen.color.ColorScheme;
+
 public class Sprite {
 	// render parameters as part of instance
 	public int[] coltable;
