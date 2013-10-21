@@ -158,7 +158,7 @@ public class Main extends JGEngine {
 				sprite.pixels,
 				sprite.pixels.length,
 				sprite.pixels[0].length,
-				SpriteGenerator.transcolor);
+				ColorScheme.TRANSPARENT);
 	}
 	
 	/**
@@ -277,11 +277,11 @@ public class Main extends JGEngine {
 		// generate new color tables. Part handpicked, part random
 		int[][] colorSchemes = new int[COLOR_SCHEMES_COUNT][];
 		for (int i = 0; i < colorSchemes.length; i++) {
-			if (i < SpriteGenerator.coltables.length) {
-				colorSchemes[i] = SpriteGenerator.coltables[i];
+			if (i < ColorScheme.colorSchemes().length) {
+				colorSchemes[i] = ColorScheme.colorSchemes()[i];
 			} else {
 				colorSchemes[i] = ColorSchemeGenerator.genSpriteColorScheme(
-						SpriteGenerator.transcolor, 0, 3, 3);
+						ColorScheme.TRANSPARENT, 0, 3, 3);
 			}
 		}
 		return colorSchemes;

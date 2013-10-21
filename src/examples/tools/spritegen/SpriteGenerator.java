@@ -5,60 +5,6 @@ import java.util.Random;
 
 public class SpriteGenerator {
 
-	static int transcolor = 0x010101;
-
-	static int[][] coltables = new int[][] {
-			{ transcolor, transcolor, transcolor, // trans
-					0x000000, 0x000000, 0x000000, // outline
-					0xC0A080, 0x806040, 0x503010, // col2
-					0xFF7070, 0xD04040, 0xB02020, // col1
-					0xFFE020, 0xFFB000, 0xF0A000, // col3
-					0xFFFFFF, 0xB0B0B0, 0x808080, // highlight
-			}, { transcolor, transcolor, transcolor, // trans
-					0x000000, 0x000000, 0x000000, // outline
-					0x808080, 0x505050, 0x202020, // col2
-					0x9090FF, 0x6060F0, 0x4040E0, // col1
-					0x20E0FF, 0x00B0FF, 0x00A0F0, // col3
-					0xFFFFFF, 0xB0B0B0, 0x808080, // highlight
-			}, { transcolor, transcolor, transcolor, // trans
-					0x000000, 0x000000, 0x000000, // outline
-					0xA0C080, 0x608040, 0x305010, // col2
-					0x70FF70, 0x40D040, 0x20B020, // col1
-					0xE0FF20, 0xB0FF00, 0xA0F000, // col3
-					0xFFFFFF, 0xB0B0B0, 0x808080, // highlight
-			}, { transcolor, transcolor, transcolor, // trans
-					0x000000, 0x000000, 0x000000, // outline
-					0x907090, 0x604060, 0x301030, // col2
-					0xE020E0, 0xB000B0, 0xA000A0, // col3
-					0xFF9090, 0xF06060, 0xE04040, // col1
-					0xFFFFFF, 0xB0B0B0, 0x808080, // highlight
-			}, { transcolor, transcolor, transcolor, // trans
-					0x000000, 0x000000, 0x000000, // outline
-					0xA080C0, 0x604080, 0x301050, // col2
-					0x7070FF, 0x4040D0, 0x2020B0, // col1
-					0xE020FF, 0xB000FF, 0xA000F0, // col3
-					0xFFFFFF, 0xB0B0B0, 0x808080, // highlight
-			}, { transcolor, transcolor, transcolor, // trans
-					0x000000, 0x000000, 0x000000, // outline
-					0x80A0C0, 0x507090, 0x204060, // col2
-					0x20D0F0, 0x00B0D0, 0x0090B0, // col3
-					0x50FF50, 0x30F030, 0x10E010, // col1
-					0xFFFFFF, 0xB0B0B0, 0x808080, // highlight
-			}, { // red/yellow
-			transcolor, transcolor, transcolor, // trans
-					0x000000, 0x000000, 0x000000, // outline
-					0xFF0000, 0xD00000, 0xA00000, // col
-					0xFF0000, 0xD00000, 0xA00000, // col
-					0xFFD000, 0xD0B000, 0xA08000, // col
-					0xFFFFFF, 0xB0B0B0, 0x808080, // highlight
-			}, { // blue
-			transcolor, transcolor, transcolor, // trans
-					0x000000, 0x000000, 0x000000, // outline
-					0x0000FF, 0x0000D0, 0x0000A0, // col
-					0x0000FF, 0x0000D0, 0x0000A0, // col
-					0x9090FF, 0x6868D0, 0x4040A0, // col
-					0xFFFFFF, 0xB0B0B0, 0x808080, // highlight
-			}, };
 
 	// filltable values:
 	// bit 0-1:
@@ -1220,7 +1166,7 @@ public class SpriteGenerator {
 	public static void main(String[] args) throws IOException {
 		while (true) {
 			int shapetype = (int) (random.nextDouble() * shapes.length);
-			int[] coltable = coltables[(int) (random.nextDouble() * coltables.length)];
+			int[] coltable = ColorScheme.colorSchemes()[(int) (random.nextDouble() * ColorScheme.colorSchemes().length)];
 			SpriteGenerator shape = shapes[shapetype];
 			Sprite sprite1 = shape.createSprite(coltable);
 			ImageUtils.writePPM("a.ppm", sprite1.pixels, sprite1.pixels.length,
@@ -1275,7 +1221,7 @@ public class SpriteGenerator {
 		int[][] pixels = new int[xsize][ysize];
 		for (int i = 0; i < xsize; i++) {
 			for (int j = 0; j < ysize; j++) {
-				pixels[i][j] = transcolor;
+				pixels[i][j] = ColorScheme.TRANSPARENT;
 			}
 		}
 		return pixels;
@@ -1301,20 +1247,20 @@ public class SpriteGenerator {
 		for (int x = 0; x < pixels.length; x++) {
 			for (int y = 0; y < pixels[x].length; y++) {
 				boolean neigh = false;
-				neigh = neigh || x > 0 && pixels[x - 1][y] != transcolor
+				neigh = neigh || x > 0 && pixels[x - 1][y] != ColorScheme.TRANSPARENT
 						&& pixels[x - 1][y] != 0;
 				neigh = neigh || x < pixels.length - 1
-						&& pixels[x + 1][y] != transcolor
+						&& pixels[x + 1][y] != ColorScheme.TRANSPARENT
 						&& pixels[x + 1][y] != 0;
-				neigh = neigh || y > 0 && pixels[x][y - 1] != transcolor
+				neigh = neigh || y > 0 && pixels[x][y - 1] != ColorScheme.TRANSPARENT
 						&& pixels[x][y - 1] != 0;
 				neigh = neigh || y < pixels[x].length - 1
-						&& pixels[x][y + 1] != transcolor
+						&& pixels[x][y + 1] != ColorScheme.TRANSPARENT
 						&& pixels[x][y + 1] != 0;
-				if (neigh && pixels[x][y] == transcolor)
+				if (neigh && pixels[x][y] == ColorScheme.TRANSPARENT)
 					pixels[x][y] = 0;
 				if (!neigh && pixels[x][y] == 0)
-					pixels[x][y] = transcolor;
+					pixels[x][y] = ColorScheme.TRANSPARENT;
 			}
 		}
 	}
@@ -1506,7 +1452,7 @@ public class SpriteGenerator {
 		for (int y = 0; y < ysize; y++) {
 			for (int x = 0; x < xsize; x++) {
 				int col = spr.colidx[x][y];
-				if (col != 0 && col != transcolor) {
+				if (col != 0 && col != ColorScheme.TRANSPARENT) {
 					int tldist = findOutlineDist(spr, x, y, -1, -1, 5);
 					int brdist = findOutlineDist(spr, x, y, 1, 1, 5);
 					// System.err.println(" "+tldist+" "+brdist);
@@ -1659,7 +1605,7 @@ public class SpriteGenerator {
 			for (int y = 0; y < ysize; y++) {
 				for (int x = 0; x < xsize; x++) {
 					int col = spr.pixels[x][y];
-					if (col == transcolor)
+					if (col == ColorScheme.TRANSPARENT)
 						continue;
 					for (int a = 0; a < animtable.length; a++) {
 						int anim = animtable[a][y][x];
@@ -1680,7 +1626,7 @@ public class SpriteGenerator {
 							dx = -1;
 						dx *= mul;
 						dy *= mul;
-						// spr.pixels[(a+1)*xsize + x][y] = transcolor;
+						// spr.pixels[(a+1)*xsize + x][y] = ColorScheme.TRANSPARENT;
 						if (x + dx >= 0 && x + dx < xsize && y + dy >= 0
 								&& y + dy < ysize) {
 							spr.pixels[(a + 1) * xsize + x + dx][y + dy] = col;

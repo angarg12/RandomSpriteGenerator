@@ -16,7 +16,7 @@ public class ColorSchemeVisualizer extends JGEngine {
 	int i5 = 567;
 	int i6 = 678;
 	private static final long serialVersionUID = 2698073082669353351L;
-	
+
 	public static void fixRandom(int seed) {
 		random = new Random(seed);
 	}
@@ -52,7 +52,7 @@ public class ColorSchemeVisualizer extends JGEngine {
 	}
 
 	public void paintFrame() {
-		if(getMouseButton(1)){
+		if (getMouseButton(1)) {
 			i1 = random.nextInt();
 			i2 = random.nextInt();
 			i3 = random.nextInt();
@@ -60,35 +60,29 @@ public class ColorSchemeVisualizer extends JGEngine {
 			i5 = random.nextInt();
 			i6 = random.nextInt();
 		}
-		paintScheme(i1,60*0);
-		paintScheme(i2,60*1);
-		paintScheme(i3,60*2);
-		paintScheme(i4,60*3);
-		paintScheme(i5,60*4);
-		paintScheme(i6,60*5);
+		paintScheme(i1, 60 * 0);
+		paintScheme(i2, 60 * 1);
+		paintScheme(i3, 60 * 2);
+		paintScheme(i4, 60 * 3);
+		paintScheme(i5, 60 * 4);
+		paintScheme(i6, 60 * 5);
 	}
-	
-	public void paintScheme(int seed, int offset){
+
+	public void paintScheme(int seed, int offset) {
 		ColorSchemeGenerator.fixRandom(seed);
 		System.out.println("generate");
 		int[] c = ColorSchemeGenerator.genSpriteColorScheme(
-				SpriteGenerator.transcolor, 0, 3, 4);
-		//System.out.println(seed);
-		for(int i = 0; i < c.length; i++){
-			int b = c[i]&0xFF;
-			int g = c[i]>>8&0xFF;
-			int r = c[i]>>16&0xFF;
-			//System.out.println(r+" "+g+" "+b);
-			JGColor boxColor = new JGColor(r, 
-					g,
-					b);
+				ColorScheme.TRANSPARENT, 0, 4, 3);
+
+		// System.out.println(seed);
+		for (int i = 0; i < c.length; i++) {
+			int b = c[i] & 0xFF;
+			int g = c[i] >> 8 & 0xFF;
+			int r = c[i] >> 16 & 0xFF;
+			// System.out.println(r+" "+g+" "+b);
+			JGColor boxColor = new JGColor(r, g, b);
 			setColor(boxColor);
-			drawRect(20*i+10, 
-					20+offset, 
-					20, 
-					50, 
-					true, 
-					false);
+			drawRect(20 * i + 10, 20 + offset, 20, 50, true, false);
 			// Move the sprites to their position on the screen.
 			moveObjects(null, 0);
 		}

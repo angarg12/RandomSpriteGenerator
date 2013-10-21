@@ -48,7 +48,7 @@ public class Sprite {
 			int[] pixcol = pixels[width * frame + x];
 			for (int y = 0; y < pixcol.length; y++) {
 				int idx = x + width * y;
-				if (pixcol[y] == SpriteGenerator.transcolor) {
+				if (pixcol[y] == ColorScheme.TRANSPARENT) {
 					ret[idx++] = 0;
 				} else {
 					ret[idx++] = 0xff000000 | pixcol[y];
