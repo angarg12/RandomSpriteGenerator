@@ -135,6 +135,10 @@ public class SpriteGenerator {
 		}
 	}
 
+	/**
+	 * Adds a black outline sorrounding the sprite.
+	 * @param spr
+	 */
 	public void addOutlineRGB(Sprite spr) {
 		for (int x = 0; x < spr.pixels.length; x++) {
 			for (int y = 0; y < spr.pixels[x].length; y++) {
@@ -149,10 +153,12 @@ public class SpriteGenerator {
 				neigh = neigh || y < spr.pixels[x].length - 1
 						&& spr.pixels[x][y + 1] != ColorScheme.TRANSPARENT
 						&& spr.pixels[x][y + 1] != 0;
-				if (neigh && spr.pixels[x][y] == ColorScheme.TRANSPARENT)
+				if (neigh && spr.pixels[x][y] == ColorScheme.TRANSPARENT){
 					spr.pixels[x][y] = 0;
-				if (!neigh && spr.pixels[x][y] == 0)
+				}
+				if (!neigh && spr.pixels[x][y] == 0){
 					spr.pixels[x][y] = ColorScheme.TRANSPARENT;
+				}
 			}
 		}
 	}
@@ -161,9 +167,16 @@ public class SpriteGenerator {
 	 * Merges two sprites to create a new one. Is the base for mutation. Should be rewritten to
 	 * give a more clear abstraction of mutation.
 	 */
-	public Sprite mergeSprites(Sprite spr1, Sprite spr2, double weight) {
-		Sprite spr = new Sprite(spr1.coltable, spr1.gen, size_x,
-				spr1.pixels.length, size_y);
+	public Sprite mergeSprites(
+			Sprite spr1, 
+			Sprite spr2, 
+			double weight) {
+		Sprite spr = new Sprite(
+				spr1.coltable, 
+				spr1.gen, 
+				size_x,
+				spr1.pixels.length, 
+				size_y);
 		int xmax = flip_x ? size_x / 2 : size_x;
 		int ymax = flip_y ? size_y / 2 : size_y;
 		for (int y = 0; y < ymax; y++) {
@@ -193,7 +206,12 @@ public class SpriteGenerator {
 		int ymax = flip_y ? size_y / 2 : size_y;
 		int totalxsize = animation_table == null ? size_x : size_x
 				* (animation_table.length + 1);
-		Sprite spr = new Sprite(coltable, this, size_x, totalxsize, size_y);
+		Sprite spr = new Sprite(
+				coltable, 
+				this, 
+				size_x, 
+				totalxsize, 
+				size_y);
 		// decide which parts of hull to fill:
 		// * main fill type 1 -> 2
 		// * add outline
@@ -206,10 +224,12 @@ public class SpriteGenerator {
 					// smooth = get colour from neighbouring pixel
 					if (random.nextDouble() < fill_smoothing) {
 						int above = 0, left = 0, chosen = 0;
-						if (x > 0)
+						if (x > 0){
 							left = (spr.hull[x - 1][y] & 3) == 2 ? 1 : 0;
-						if (y > 0)
+						}
+						if (y > 0){
 							above = (spr.hull[x][y - 1] & 3) == 2 ? 1 : 0;
+						}
 						if (above == 0 && left == 0) {
 							chosen = 0;
 						} else if (above != 0 && left == 0) {
@@ -223,11 +243,13 @@ public class SpriteGenerator {
 								chosen = left;
 							}
 						}
-						if (chosen != 0)
+						if (chosen != 0){
 							spr.hull[x][y] = filltype_fill;
+						}
 					} else {
-						if (random.nextDouble() > fill_probability)
+						if (random.nextDouble() > fill_probability){
 							spr.hull[x][y] = filltype_fill;
+						}
 					}
 				} else if (filltype_main == 2) {
 					spr.hull[x][y] = filltype_fill;
@@ -239,10 +261,12 @@ public class SpriteGenerator {
 		// colour fill type is handled by colorize
 		colorize(spr);
 		flip(spr);
-		if (shading == Shading.BEVEL)
+		if (shading == Shading.BEVEL){
 			bevelShade(spr);
-		if (shading == Shading.GOURAUD)
+		}
+		if (shading == Shading.GOURAUD){
 			gouraudShade(spr);
+		}
 		indexToRGB(spr);
 		animate(spr);
 		addOutlineRGB(spr);
@@ -296,10 +320,12 @@ public class SpriteGenerator {
 					// smooth = get colour from neighbouring pixel
 					if (colnr > 1 && random.nextDouble() < color_smoothing) {
 						int above = 0, left = 0, chosen = 0;
-						if (x > 0)
+						if (x > 0){
 							left = spr.colidx[x - 1][y] / 3;
-						if (y > 0)
+						}
+						if (y > 0){
 							above = spr.colidx[x][y - 1] / 3;
+						}
 						if (above == 0 && left == 0) {
 							chosen = 0;
 						} else if (above != 0 && left == 0) {
@@ -313,8 +339,9 @@ public class SpriteGenerator {
 								chosen = left;
 							}
 						}
-						if (chosen > 1)
+						if (chosen > 1){
 							colnr = chosen;
+						}
 					}
 				}
 				spr.colidx[x][y] = colnr * 3;
@@ -366,16 +393,16 @@ public class SpriteGenerator {
 				int idx = spr.colidx[x][y];
 				if (idx >= 6) {
 					int top_left_distance = findOutlineDistance(spr, x, y, -1, -1, 2);
-					int brdist = findOutlineDistance(spr, x, y, 1, 1, 2);
+					int bottom_right_distance = findOutlineDistance(spr, x, y, 1, 1, 2);
 					// System.err.println(" "+tldist+" "+brdist);
 					// 0=darkest ... 4=brightest. Odd numbers will dither.
 					int bright = 2;
 					if (top_left_distance == 1)
 						bright = 4;
-					if (brdist == 1)
+					if (bottom_right_distance == 1)
 						bright = 0;
 					// special cases: thin areas
-					if (top_left_distance == 1 && brdist == 1)
+					if (top_left_distance == 1 && bottom_right_distance == 1)
 						bright = 2;
 					boolean dither = (bright & 1) == 1 && ((x + y) & 1) == 1;
 					// 0, 1, or 2
@@ -443,14 +470,15 @@ public class SpriteGenerator {
 				if (idx >= 6) {
 					// 0=darkest .. 4=brightest. Odd numbers will dither.
 					int bright = 2;
-					if (dx <= hlt_rx && dy <= hlt_ry)
+					if (dx <= hlt_rx && dy <= hlt_ry){
 						bright = 4;
-					else if (dd <= inner_r)
+					}else if (dd <= inner_r){
 						bright = 3;
-					else if (dd >= maxdist * maxdist - outer_r)
+					}else if (dd >= maxdist * maxdist - outer_r){
 						bright = 0;
-					else if (dd >= maxdist * maxdist - outer_r - 13)
+					}else if (dd >= maxdist * maxdist - outer_r - 13){
 						bright = 1;
+					}
 					boolean dither = (bright & 1) == 1 && ((x + y) & 1) == 1;
 					// 0, 1, or 2
 					bright = bright / 2 + (dither ? 1 : 0);
@@ -478,25 +506,31 @@ public class SpriteGenerator {
 			for (int y = 0; y < size_y; y++) {
 				for (int x = 0; x < size_x; x++) {
 					int col = spr.pixels[x][y];
-					if (col == ColorScheme.TRANSPARENT)
+					if (col == ColorScheme.TRANSPARENT){
 						continue;
+					}
 					for (int a = 0; a < animation_table.length; a++) {
 						int anim = animation_table[a][y][x];
-						if ((anim + 7) / 8 != d)
+						if ((anim + 7) / 8 != d){
 							continue;
+						}
 						int dx = 0, dy = 0, mul = 1;
 						if (anim > 8) {
 							mul = 2;
 							anim -= 8;
 						}
-						if (anim == 8 || anim == 1 || anim == 2)
+						if (anim == 8 || anim == 1 || anim == 2){
 							dy = -1;
-						if (anim == 2 || anim == 3 || anim == 4)
+						}
+						if (anim == 2 || anim == 3 || anim == 4){
 							dx = 1;
-						if (anim == 4 || anim == 5 || anim == 6)
+						}
+						if (anim == 4 || anim == 5 || anim == 6){
 							dy = 1;
-						if (anim == 6 || anim == 7 || anim == 8)
+						}
+						if (anim == 6 || anim == 7 || anim == 8){
 							dx = -1;
+						}
 						dx *= mul;
 						dy *= mul;
 						if (x + dx >= 0 && x + dx < size_x && y + dy >= 0

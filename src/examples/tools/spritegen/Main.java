@@ -64,7 +64,7 @@ public class Main extends JGEngine {
 			setFrameRate(25, 1);
 		}
 
-		setBGColor(new JGColor(80, 80, 80));
+		setBGColor(new JGColor(220, 220, 220));
 		dbgShowFullStackTrace(true);
 		dbgShowMessagesInPf(false);
 		setSmoothing(false);
@@ -253,19 +253,17 @@ public class Main extends JGEngine {
 				FillingTable.RAND_12, 
 				AnimationTable.NULL_12,
 				true, 
-				true, 
-				1, 
-				1, 
-				0.0, 
+				false, 
+				0, 
+				0, 
+				0.6, 
 				0.2, 
 				0.5, 
 				0.3, 
 				0.4, 
-				0.8, 
+				0.2, 
 				0.5);
 		gen.shading = Shading.NONE;
-		Sprite spr = gen.createSprite(ColorScheme.BLUE);
-		System.out.println(gen.findOutlineDistance(spr, 8, 8, -1, -1, 12));
 		return gen;
 	}
 	
