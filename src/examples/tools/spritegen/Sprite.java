@@ -36,9 +36,9 @@ public class Sprite {
 	}
 
 	public int getNrFrames() {
-		if (gen.animtable == null)
+		if (gen.animation_table == null)
 			return 1;
-		return gen.animtable.length + 1;
+		return gen.animation_table.length + 1;
 	}
 
 	public int[] getData(int frame) {

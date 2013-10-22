@@ -1,6 +1,5 @@
 package examples.tools.spritegen;
 
-import java.io.*;
 import java.util.Random;
 
 import examples.tools.spritegen.color.ColorScheme;
@@ -13,50 +12,40 @@ public class SpriteGenerator {
 	public static void fixRandom(int seed){
 		random = new Random(seed);
 	}
+
+	int size_x = 16;
+	int size_y = 16;
 	
-	// hull code:
-	// 0 = transparent
-	// 1 = any colour
-	// 2 = any colour
-	// 4 = always black
-
-	// render parameters as part of type (instance variables)
-
-	int xsize = 16;
-	int ysize = 16;
-
-	int[][] filltable;
-
-	int[][][] animtable;
-
-	boolean flipx = true, flipy = false;
-
-	public final static int NONE = 0;
-	public final static int BEVEL = 1;
-	public final static int GOURAUD = 2;
-	int shading = NONE;
-
+	int[][] fill_table;
+	int[][][] animation_table;
+	
+	boolean flip_x = true;
+	boolean flip_y = false;
+	
+	Shading shading = Shading.NONE;
+	// shades the colour when flipping
 	// note: xshadingfac+yshadingfac must be <= 2
-	// 0=no shading 1=darken 2=darken more
-	int xshadingfac = 0;
-	// 0=no shading 1=darken 2=darken more
-	int yshadingfac = 0;
+	// 0=no shading 
+	// 1=darken 
+	// 2=darken more
+	int shade_at_flip_x = 0;
+	int shade_at_flip_y = 0;
 
 	// probability of filling pixel
-	double fill_prob = 0.6;
+	double fill_probability = 0.6;
 	// probability that a pixel is filled the same as its neighbours
 	double fill_smoothing = 0.2;
 	// balance between taking horizontal versus vertical neighbours
-	double fill_smoothing_horiz_bias = 0.8;
-
+	double fill_smoothing_x_bias = 0.8;
 	// probability of black pixel if enabled
-	double black_prob = 0.2;
+	// TODO: actually fills it black or transparent??
+	double black_probability = 0.2;
 	// probability of highlight pixel if enabled
-	double highlight_prob = 0.4;
+	double highlight_probability = 0.4;
 	// probability that a colour (non-black) pixel is taken from neighbour
 	double color_smoothing = 0.7;
 	// balance between taking horizontal versus vertical neighbours
-	double color_smoothing_horiz_bias = 0.5;
+	double color_smoothing_x_bias = 0.5;
 
 	public static SpriteGenerator[] shapes = new SpriteGenerator[] {
 			new SpriteGenerator(16, 16, FillingTable.SHIP, null, true, false, 1, 1,
@@ -122,59 +111,61 @@ public class SpriteGenerator {
 			double fill_smoothing_horiz_bias, double black_prob,
 			double highlight_prob, double color_smoothing,
 			double color_smoothing_horiz_bias) {
-		this.xsize = xsize;
-		this.ysize = ysize;
-		this.filltable = filltable;
-		this.animtable = animtable;
-		this.flipx = flipx;
-		this.flipy = flipy;
-		this.xshadingfac = xshadingfac;
-		this.yshadingfac = yshadingfac;
-		this.fill_prob = fill_prob;
+		this.size_x = xsize;
+		this.size_y = ysize;
+		this.fill_table = filltable;
+		this.animation_table = animtable;
+		this.flip_x = flipx;
+		this.flip_y = flipy;
+		this.shade_at_flip_x = xshadingfac;
+		this.shade_at_flip_y = yshadingfac;
+		this.fill_probability = fill_prob;
 		this.fill_smoothing = fill_smoothing;
-		this.fill_smoothing_horiz_bias = fill_smoothing_horiz_bias;
-		this.black_prob = black_prob;
-		this.highlight_prob = highlight_prob;
+		this.fill_smoothing_x_bias = fill_smoothing_horiz_bias;
+		this.black_probability = black_prob;
+		this.highlight_probability = highlight_prob;
 		this.color_smoothing = color_smoothing;
-		this.color_smoothing_horiz_bias = color_smoothing_horiz_bias;
-		if (this.shading == BEVEL) {
-			this.xshadingfac = 0;
-			this.yshadingfac = 0;
-			// highlight_prob = 0;
+		this.color_smoothing_x_bias = color_smoothing_horiz_bias;
+		if (this.shading == Shading.BEVEL) {
+			this.shade_at_flip_x = 0;
+			this.shade_at_flip_y = 0;
 		}
-		if (this.shading == GOURAUD) {
+		if (this.shading == Shading.GOURAUD) {
 			highlight_prob = 0;
 		}
 	}
 
-	public static void addOutlineRGB(int[][] pixels) {
-		for (int x = 0; x < pixels.length; x++) {
-			for (int y = 0; y < pixels[x].length; y++) {
+	public void addOutlineRGB(Sprite spr) {
+		for (int x = 0; x < spr.pixels.length; x++) {
+			for (int y = 0; y < spr.pixels[x].length; y++) {
 				boolean neigh = false;
-				neigh = neigh || x > 0 && pixels[x - 1][y] != ColorScheme.TRANSPARENT
-						&& pixels[x - 1][y] != 0;
-				neigh = neigh || x < pixels.length - 1
-						&& pixels[x + 1][y] != ColorScheme.TRANSPARENT
-						&& pixels[x + 1][y] != 0;
-				neigh = neigh || y > 0 && pixels[x][y - 1] != ColorScheme.TRANSPARENT
-						&& pixels[x][y - 1] != 0;
-				neigh = neigh || y < pixels[x].length - 1
-						&& pixels[x][y + 1] != ColorScheme.TRANSPARENT
-						&& pixels[x][y + 1] != 0;
-				if (neigh && pixels[x][y] == ColorScheme.TRANSPARENT)
-					pixels[x][y] = 0;
-				if (!neigh && pixels[x][y] == 0)
-					pixels[x][y] = ColorScheme.TRANSPARENT;
+				neigh = neigh || x > 0 && spr.pixels[x - 1][y] != ColorScheme.TRANSPARENT
+						&& spr.pixels[x - 1][y] != 0;
+				neigh = neigh || x < spr.pixels.length - 1
+						&& spr.pixels[x + 1][y] != ColorScheme.TRANSPARENT
+						&& spr.pixels[x + 1][y] != 0;
+				neigh = neigh || y > 0 && spr.pixels[x][y - 1] != ColorScheme.TRANSPARENT
+						&& spr.pixels[x][y - 1] != 0;
+				neigh = neigh || y < spr.pixels[x].length - 1
+						&& spr.pixels[x][y + 1] != ColorScheme.TRANSPARENT
+						&& spr.pixels[x][y + 1] != 0;
+				if (neigh && spr.pixels[x][y] == ColorScheme.TRANSPARENT)
+					spr.pixels[x][y] = 0;
+				if (!neigh && spr.pixels[x][y] == 0)
+					spr.pixels[x][y] = ColorScheme.TRANSPARENT;
 			}
 		}
 	}
 
-	/** Weight is probability of using sprite 1. */
+	/** 
+	 * Merges two sprites to create a new one. Is the base for mutation. Should be rewritten to
+	 * give a more clear abstraction of mutation.
+	 */
 	public Sprite mergeSprites(Sprite spr1, Sprite spr2, double weight) {
-		Sprite spr = new Sprite(spr1.coltable, spr1.gen, xsize,
-				spr1.pixels.length, ysize);
-		int xmax = flipx ? xsize / 2 : xsize;
-		int ymax = flipy ? ysize / 2 : ysize;
+		Sprite spr = new Sprite(spr1.coltable, spr1.gen, size_x,
+				spr1.pixels.length, size_y);
+		int xmax = flip_x ? size_x / 2 : size_x;
+		int ymax = flip_y ? size_y / 2 : size_y;
 		for (int y = 0; y < ymax; y++) {
 			for (int x = 0; x < xmax; x++) {
 				if (random.nextDouble() > weight) {
@@ -187,22 +178,28 @@ public class SpriteGenerator {
 		flip(spr);
 		indexToRGB(spr);
 		animate(spr);
-		addOutlineRGB(spr.pixels);
+		addOutlineRGB(spr);
 		return spr;
 	}
 
+	/**
+	 * Creates a new sprite.
+	 * 
+	 * @param coltable
+	 * @return
+	 */
 	public Sprite createSprite(int[] coltable) {
-		int xmax = flipx ? xsize / 2 : xsize;
-		int ymax = flipy ? ysize / 2 : ysize;
-		int totalxsize = animtable == null ? xsize : xsize
-				* (animtable.length + 1);
-		Sprite spr = new Sprite(coltable, this, xsize, totalxsize, ysize);
+		int xmax = flip_x ? size_x / 2 : size_x;
+		int ymax = flip_y ? size_y / 2 : size_y;
+		int totalxsize = animation_table == null ? size_x : size_x
+				* (animation_table.length + 1);
+		Sprite spr = new Sprite(coltable, this, size_x, totalxsize, size_y);
 		// decide which parts of hull to fill:
 		// * main fill type 1 -> 2
 		// * add outline
 		for (int y = 0; y < ymax; y++) {
 			for (int x = 0; x < xmax; x++) {
-				int filltype = filltable[y][x];
+				int filltype = fill_table[y][x];
 				int filltype_main = (filltype & 3);
 				int filltype_fill = ((filltype & 12) | 2);
 				if (filltype_main == 1) {
@@ -220,7 +217,7 @@ public class SpriteGenerator {
 						} else if (above == 0 && left != 0) {
 							chosen = left;
 						} else if (above != 0 && left != 0) {
-							if (random.nextDouble() > fill_smoothing_horiz_bias) {
+							if (random.nextDouble() > fill_smoothing_x_bias) {
 								chosen = above;
 							} else {
 								chosen = left;
@@ -229,7 +226,7 @@ public class SpriteGenerator {
 						if (chosen != 0)
 							spr.hull[x][y] = filltype_fill;
 					} else {
-						if (random.nextDouble() > fill_prob)
+						if (random.nextDouble() > fill_probability)
 							spr.hull[x][y] = filltype_fill;
 					}
 				} else if (filltype_main == 2) {
@@ -239,24 +236,26 @@ public class SpriteGenerator {
 				}
 			}
 		}
-		// addOutline(spr.hull);
 		// colour fill type is handled by colorize
 		colorize(spr);
 		flip(spr);
-		if (shading == BEVEL)
+		if (shading == Shading.BEVEL)
 			bevelShade(spr);
-		if (shading == GOURAUD)
+		if (shading == Shading.GOURAUD)
 			gouraudShade(spr);
 		indexToRGB(spr);
 		animate(spr);
-		addOutlineRGB(spr.pixels);
-		// colorizeShade(pixels,spr.hull);
+		addOutlineRGB(spr);
 		return spr;
 	}
 
+	/**
+	 * Colorizes a sprite.
+	 * @param spr
+	 */
 	public void colorize(Sprite spr) {
-		int xmax = flipx ? xsize / 2 : xsize;
-		int ymax = flipy ? ysize / 2 : ysize;
+		int xmax = flip_x ? size_x / 2 : size_x;
+		int ymax = flip_y ? size_y / 2 : size_y;
 		int white = spr.coltable.length / 3 - 1;
 		for (int y = 0; y < ymax; y++) {
 			for (int x = 0; x < xmax; x++) {
@@ -266,11 +265,11 @@ public class SpriteGenerator {
 					colnr = 1;
 				} else if ((filltype & 3) == 2) { // normal fill
 					if ((filltype & 4) == 4) { // black enabled
-						if (random.nextDouble() < black_prob) {
+						if (random.nextDouble() < black_probability) {
 							colnr = 1; // black
 						} else {
 							if ((filltype & 8) == 8) { // highlight enabled
-								if (random.nextDouble() < highlight_prob) {
+								if (random.nextDouble() < highlight_probability) {
 									colnr = white;
 								} else {
 									// any colour except black and highlight
@@ -280,7 +279,7 @@ public class SpriteGenerator {
 							}
 						}
 					} else if ((filltype & 8) == 8) { // highlight enabled
-						if (random.nextDouble() < highlight_prob) {
+						if (random.nextDouble() < highlight_probability) {
 							colnr = white;
 						} else {
 							// any colour except black and highlight
@@ -308,7 +307,7 @@ public class SpriteGenerator {
 						} else if (above == 0 && left != 0) {
 							chosen = left;
 						} else if (above != 0 && left != 0) {
-							if (random.nextDouble() > color_smoothing_horiz_bias) {
+							if (random.nextDouble() > color_smoothing_x_bias) {
 								chosen = above;
 							} else {
 								chosen = left;
@@ -323,53 +322,60 @@ public class SpriteGenerator {
 		}
 	}
 
-	/** flip according to symmetry axes and shade */
+	/** 
+	 * flip according to symmetry axes. Apply shade if needed. 
+	 */
 	public void flip(Sprite spr) {
-		for (int y = 0; y < ysize; y++) {
-			for (int x = 0; x < xsize; x++) {
+		for (int y = 0; y < size_y; y++) {
+			for (int x = 0; x < size_x; x++) {
 				int colnr = spr.colidx[x][y];
-				if (flipx && x < xsize / 2) {
-					spr.colidx[xsize - x - 1][y] = colnr + xshadingfac;
+				if (flip_x && x < size_x / 2) {
+					spr.colidx[size_x - x - 1][y] = colnr + shade_at_flip_x;
 				}
-				if (flipy && y < ysize / 2) {
-					spr.colidx[x][ysize - y - 1] = colnr + yshadingfac;
+				if (flip_y && y < size_y / 2) {
+					spr.colidx[x][size_y - y - 1] = colnr + shade_at_flip_y;
 				}
-				if (flipx && flipy && x < xsize / 2 && y < ysize / 2) {
-					spr.colidx[xsize - x - 1][ysize - y - 1] = colnr
-							+ xshadingfac + yshadingfac;
+				if (flip_x && flip_y && x < size_x / 2 && y < size_y / 2) {
+					spr.colidx[size_x - x - 1][size_y - y - 1] = colnr
+							+ shade_at_flip_x + shade_at_flip_y;
 				}
 			}
 		}
 	}
 
+	/**
+	 * Transforms the colour indexes to the colors themselves 
+	 * @param spr
+	 */
 	public void indexToRGB(Sprite spr) {
-		for (int x = 0; x < xsize; x++) {
-			for (int y = 0; y < ysize; y++) {
+		for (int x = 0; x < size_x; x++) {
+			for (int y = 0; y < size_y; y++) {
 				spr.pixels[x][y] = spr.coltable[spr.colidx[x][y]];
 			}
 		}
 	}
 
+	/**
+	 * Performs a bevel shading
+	 * @param spr
+	 */
 	public void bevelShade(Sprite spr) {
 		// shade given colours
-		for (int y = 0; y < ysize; y++) {
-			for (int x = 0; x < xsize; x++) {
+		for (int y = 0; y < size_y; y++) {
+			for (int x = 0; x < size_x; x++) {
 				int idx = spr.colidx[x][y];
-				// if (idx >= 15) idx -= 3; // remove highlights
 				if (idx >= 6) {
-					int tldist = findOutlineDist(spr, x, y, -1, -1, 2);
-					int brdist = findOutlineDist(spr, x, y, 1, 1, 2);
+					int top_left_distance = findOutlineDistance(spr, x, y, -1, -1, 2);
+					int brdist = findOutlineDistance(spr, x, y, 1, 1, 2);
 					// System.err.println(" "+tldist+" "+brdist);
 					// 0=darkest ... 4=brightest. Odd numbers will dither.
 					int bright = 2;
-					// if (tldist == 2) bright = 4;
-					if (tldist == 1)
+					if (top_left_distance == 1)
 						bright = 4;
-					// if (brdist == 2) bright = 1;
 					if (brdist == 1)
 						bright = 0;
 					// special cases: thin areas
-					if (tldist == 1 && brdist == 1)
+					if (top_left_distance == 1 && brdist == 1)
 						bright = 2;
 					boolean dither = (bright & 1) == 1 && ((x + y) & 1) == 1;
 					// 0, 1, or 2
@@ -384,34 +390,56 @@ public class SpriteGenerator {
 		}
 	}
 
-	public int findOutlineDist(Sprite spr, int x, int y, int dx, int dy,
+	/**
+	 * Finds the closest distance to an outline (a black or transparent pixel)
+	 * up to depth distance. dx and dy determine the direction to explore.
+	 * 
+	 * @param spr
+	 * @param x
+	 * @param y
+	 * @param dx
+	 * @param dy
+	 * @param depth
+	 * @return
+	 */
+	public int findOutlineDistance(Sprite spr, 
+			int x, 
+			int y, 
+			int dx, 
+			int dy,
 			int depth) {
-		if (x < 0 || x >= xsize || y < 0 || y >= ysize)
+		if (x < 0 || x >= size_x || y < 0 || y >= size_y){
 			return 0;
-		if (depth <= 0)
+		}
+		if (depth <= 0){
 			return 0;
-		if (spr.colidx[x][y] <= 5)
+		}
+		if (spr.colidx[x][y] <= 5){
 			return 0;
-		int xdist = findOutlineDist(spr, x + dx, y, dx, dy, depth - 1);
-		int ydist = findOutlineDist(spr, x, y + dy, dx, dy, depth - 1);
+		}
+		int xdist = findOutlineDistance(spr, x + dx, y, dx, dy, depth - 1);
+		int ydist = findOutlineDistance(spr, x, y + dy, dx, dy, depth - 1);
 		return xdist < ydist ? xdist + 1 : ydist + 1;
 	}
 
+	/**
+	 * Performs a Gouraud shading
+	 * @param spr
+	 */
 	public void gouraudShade(Sprite spr) {
-		int cenx = xsize / 4 + (int) (random.nextDouble() * 2.999);
-		int ceny = ysize / 4 + (int) (random.nextDouble() * 2.999);
-		int maxdist = xsize - cenx - 1;
+		int cenx = size_x / 4 + (int) (random.nextDouble() * 2.999);
+		int ceny = size_y / 4 + (int) (random.nextDouble() * 2.999);
+		int maxdist = size_x - cenx - 1;
 		int hlt_rx = (int) (random.nextDouble() * 2.9999);
 		int hlt_ry = (int) (random.nextDouble() * 2.9999);
 		int inner_r = 7 + (int) (random.nextDouble() * 16);
 		int outer_r = 7 + (int) (random.nextDouble() * 16);
-		for (int y = 0; y < ysize; y++) {
+		for (int y = 0; y < size_y; y++) {
 			int dy = Math.abs(y - ceny);
-			for (int x = 0; x < xsize; x++) {
+			for (int x = 0; x < size_x; x++) {
 				int dx = Math.abs(x - cenx);
 				int dd = dx * dx + dy * dy;
 				int idx = spr.colidx[x][y];
-				// if (idx==15) idx-=3;
 				if (idx >= 6) {
 					// 0=darkest .. 4=brightest. Odd numbers will dither.
 					int bright = 2;
@@ -431,26 +459,29 @@ public class SpriteGenerator {
 					} else {
 						spr.colidx[x][y] = 3 * (idx / 3) + 2 - 2 * bright;
 					}
-					// spr.colidx[x][y] = 3*(idx/3) + 2 - bright;
 				}
 			}
 		}
 	}
 
+	/**
+	 * Animates a sprite
+	 * @param spr
+	 */
 	public void animate(Sprite spr) {
 		// now, animate if applicable
-		if (animtable == null)
+		if (animation_table == null)
 			return;
 		// d = distance travelled. Pixels that travel the largest distance
 		// should overwrite other pixels
 		for (int d = 0; d <= 2; d++) {
-			for (int y = 0; y < ysize; y++) {
-				for (int x = 0; x < xsize; x++) {
+			for (int y = 0; y < size_y; y++) {
+				for (int x = 0; x < size_x; x++) {
 					int col = spr.pixels[x][y];
 					if (col == ColorScheme.TRANSPARENT)
 						continue;
-					for (int a = 0; a < animtable.length; a++) {
-						int anim = animtable[a][y][x];
+					for (int a = 0; a < animation_table.length; a++) {
+						int anim = animation_table[a][y][x];
 						if ((anim + 7) / 8 != d)
 							continue;
 						int dx = 0, dy = 0, mul = 1;
@@ -468,10 +499,9 @@ public class SpriteGenerator {
 							dx = -1;
 						dx *= mul;
 						dy *= mul;
-						// spr.pixels[(a+1)*xsize + x][y] = ColorScheme.TRANSPARENT;
-						if (x + dx >= 0 && x + dx < xsize && y + dy >= 0
-								&& y + dy < ysize) {
-							spr.pixels[(a + 1) * xsize + x + dx][y + dy] = col;
+						if (x + dx >= 0 && x + dx < size_x && y + dy >= 0
+								&& y + dy < size_y) {
+							spr.pixels[(a + 1) * size_x + x + dx][y + dy] = col;
 						}
 					}
 				}

@@ -218,6 +218,7 @@ public class Main extends JGEngine {
 	 * @return
 	 */
 	private SpriteGenerator randomizedGenerator(){
+		/*
 		final double NO_SHADE_PROB = 0.75;
 		final double BEVEL_SHADE_PROB = 0.125;
 		// The rest up to 1 is the Gouraud prob
@@ -229,22 +230,43 @@ public class Main extends JGEngine {
 		double randomRoll = random.nextDouble();
 		// NO_SHADE_PROB of time the sprite doesn't have a shadow
 		if(randomRoll < NO_SHADE_PROB){
-			generator.shading = SpriteGenerator.NONE;
+			generator.shading = Shading.NONE;
 		// BEVEL_SHADE_PROB of time it has Bevel shadow
 		}else if((randomRoll-NO_SHADE_PROB) < BEVEL_SHADE_PROB){
-			generator.shading = SpriteGenerator.BEVEL;
+			generator.shading = Shading.BEVEL;
 		// the rest of the time it has Gouraud shadow
 		}else{
-			generator.shading = SpriteGenerator.GOURAUD;
+			generator.shading = Shading.GOURAUD;
 		}
 		
 		// If it doesn't have a shadow, it has a HIGHLIGHT_PROB chance of highlight
-		if(generator.shading == 0){
-			generator.highlight_prob = HIGHLIGHT_PROB;
+		if(generator.shading == Shading.NONE){
+			generator.highlight_probability = HIGHLIGHT_PROB;
 		}else{
-			generator.highlight_prob = 0;
+			generator.highlight_probability = 0;
 		}
 		return generator;
+		*/
+		SpriteGenerator gen = new SpriteGenerator(
+				12, 
+				12, 
+				FillingTable.RAND_12, 
+				AnimationTable.NULL_12,
+				true, 
+				true, 
+				1, 
+				1, 
+				0.0, 
+				0.2, 
+				0.5, 
+				0.3, 
+				0.4, 
+				0.8, 
+				0.5);
+		gen.shading = Shading.NONE;
+		Sprite spr = gen.createSprite(ColorScheme.BLUE);
+		System.out.println(gen.findOutlineDistance(spr, 8, 8, -1, -1, 12));
+		return gen;
 	}
 	
 	/**
