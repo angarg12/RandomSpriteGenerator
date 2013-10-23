@@ -457,31 +457,30 @@ public class SpriteGenerator {
 		for (int y = 0; y < size_y; y++) {
 			for (int x = 0; x < size_x; x++) {
 				int color_index = spr.colidx[x][y];
-				// if is a color (not transparent or black)
+				// if is a colour (not transparent or black)
 				if (color_index >= 6) {
 					int top_left_distance = findOutlineDistance(spr, x, y, -1, -1, 2);
 					int bottom_right_distance = findOutlineDistance(spr, x, y, 1, 1, 2);
-					// System.err.println(" "+tldist+" "+brdist);
-					// 0=darkest ... 4=brightest. Odd numbers will dither.
-					int bright = 2;
-					if (top_left_distance == 1){
-						bright = 4;
-					}
-					if (bottom_right_distance == 1){
-						bright = 0;
-					}
+					// 0=darkest ... 2=brightest.
+					int bright = 1;
 					// special cases: thin areas
 					if (top_left_distance == 1 && 
 							bottom_right_distance == 1){
+						bright = 1;
+					}else if (top_left_distance == 1){
 						bright = 2;
+					}else if (bottom_right_distance == 1){
+						bright = 0;
 					}
-					boolean dither = (bright & 1) == 1 && ((x + y) & 1) == 1;
-					// 0, 1, or 2
-					bright = bright / 2 + (dither ? 1 : 0);
+
 					if (bright == 2) {
 						spr.colidx[x][y] = 15; // highlight
 					} else {
-						spr.colidx[x][y] = 3 * (color_index / 3) + 2 - 2 * bright;
+						// base index for all the shades of a color
+						int color_base_index = 3 * (color_index / 3);
+						// adjusts the shade index by making it brighter
+						int color_shade_index = 2 - 2 * bright;
+						spr.colidx[x][y] =  color_base_index + color_shade_index;
 					}
 				}
 			}
