@@ -426,11 +426,17 @@ public class SpriteGenerator {
 		}
 	}
 	
+	/**
+	 * returns whether the x coordinate must be flipped or not
+	 */
 	private boolean mustFlipX(int x){
 		return flip_x && 
 				x < size_x / 2;
 	}
-		
+	
+	/**
+	 * returns whether the y coordinate must be flipped or not
+	 */
 	private boolean mustFlipY(int y){
 		return flip_y && 
 				y < size_y / 2;
@@ -450,6 +456,7 @@ public class SpriteGenerator {
 
 	/**
 	 * Performs a bevel shading
+	 * 
 	 * @param spr
 	 */
 	public void bevelShade(Sprite spr) {
@@ -459,8 +466,14 @@ public class SpriteGenerator {
 				int color_index = spr.colidx[x][y];
 				// if is a colour (not transparent or black)
 				if (color_index >= 6) {
-					int top_left_distance = findOutlineDistance(spr, x, y, -1, -1, 2);
-					int bottom_right_distance = findOutlineDistance(spr, x, y, 1, 1, 2);
+					int top_left_distance = Math.min(
+							findOutlineDistanceTop(spr,x,y), 
+							findOutlineDistanceLeft(spr,x,y));
+					int bottom_right_distance = Math.min(
+							findOutlineDistanceBottom(spr,x,y), 
+							findOutlineDistanceRight(spr,x,y));
+					System.out.println(findOutlineDistanceTop(spr,x,y)+" "+findOutlineDistanceLeft(spr,x,y)+" "+
+							findOutlineDistanceBottom(spr,x,y)+" "+findOutlineDistanceRight(spr,x,y));
 					// 0=darkest ... 2=brightest.
 					int bright = 1;
 					// special cases: thin areas
@@ -487,9 +500,39 @@ public class SpriteGenerator {
 		}
 	}
 
+	private int findOutlineDistanceTop(Sprite spr, 
+			int x, 
+			int y) {
+		return findOutlineDistance(spr, x, y, -1, 0);
+	}
+	
+	private int findOutlineDistanceBottom(Sprite spr, 
+			int x, 
+			int y) {
+		return findOutlineDistance(spr, x, y, 1, 0);
+	}
+	
+	private int findOutlineDistanceLeft(Sprite spr, 
+			int x, 
+			int y) {
+		return findOutlineDistance(spr, x, y, 0, -1);
+	}
+	
+	private int findOutlineDistanceRight(Sprite spr, 
+			int x, 
+			int y) {
+		return findOutlineDistance(spr, x, y, 0, 1);
+	}
+	
 	/**
 	 * Finds the closest distance to an outline (a black or transparent pixel)
 	 * up to depth distance. dx and dy determine the direction to explore.
+	 * 
+	 * TODO: This function probably can be refactored or modified further to make more clear 
+	 * its function (look for the closer distance to an outline.
+	 * 
+	 * Sketch of a solution: a function that calculates the closer distance to an outline in every direction 
+	 * (vertical, horizontal, maybe diagonals).
 	 * 
 	 * @param spr
 	 * @param x
@@ -499,26 +542,54 @@ public class SpriteGenerator {
 	 * @param depth
 	 * @return
 	 */
-	public int findOutlineDistance(Sprite spr, 
+	private int findOutlineDistance(Sprite spr, 
 			int x, 
 			int y, 
 			int dx, 
-			int dy,
-			int depth) {
-		if (x < 0 || x >= size_x || y < 0 || y >= size_y){
+			int dy) {
+		if (isInBounds(x,y) == false){
 			return 0;
 		}
-		if (depth <= 0){
-			return 0;
-		}
+		// if is transparent or black, is the outline
 		if (spr.colidx[x][y] <= 5){
 			return 0;
 		}
-		int xdist = findOutlineDistance(spr, x + dx, y, dx, dy, depth - 1);
-		int ydist = findOutlineDistance(spr, x, y + dy, dx, dy, depth - 1);
-		return xdist < ydist ? xdist + 1 : ydist + 1;
+		// set the distance to the maximum posible
+		// in case we are not exploring that direction
+		int xdist = Integer.MAX_VALUE;
+		// move x by the amount dx (this is used to move to left and right)
+		if(dx != 0){
+			xdist = findOutlineDistance(spr, x + dx, y, dx, dy);
+		}
+		
+		int ydist = Integer.MAX_VALUE;
+		// move y by the amount dy (this is used to move up and down)
+		if(dy != 0){
+			ydist = findOutlineDistance(spr, x, y + dy, dx, dy);
+		}
+		
+		// return the minimum distance from both axis
+		if(xdist < ydist){
+			return xdist + 1;
+		}else{
+			return ydist + 1;
+		}
 	}
 
+	/**
+	 * returns whether the coordinates are inside the bounds of the sprite. 
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	private boolean isInBounds(int x, int y){
+		return x >= 0 && 
+				x < size_x && 
+				y >= 0 && 
+				y < size_y;
+	}
+	
 	/**
 	 * Performs a Gouraud shading
 	 * @param spr

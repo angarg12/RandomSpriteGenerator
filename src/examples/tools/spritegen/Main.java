@@ -263,7 +263,7 @@ public class Main extends JGEngine {
 				0.4, 
 				0.2, 
 				0.5);
-		gen.shading = Shading.NONE;
+		gen.shading = Shading.BEVEL;
 		return gen;
 	}
 	
