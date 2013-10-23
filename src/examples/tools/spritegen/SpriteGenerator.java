@@ -136,33 +136,84 @@ public class SpriteGenerator {
 	}
 
 	/**
-	 * Adds a black outline sorrounding the sprite.
+	 * Adds a black outline surrounding the sprite.
 	 * @param spr
 	 */
 	public void addOutlineRGB(Sprite spr) {
 		for (int x = 0; x < spr.pixels.length; x++) {
 			for (int y = 0; y < spr.pixels[x].length; y++) {
-				boolean neigh = false;
-				neigh = neigh || x > 0 && spr.pixels[x - 1][y] != ColorScheme.TRANSPARENT
-						&& spr.pixels[x - 1][y] != 0;
-				neigh = neigh || x < spr.pixels.length - 1
-						&& spr.pixels[x + 1][y] != ColorScheme.TRANSPARENT
-						&& spr.pixels[x + 1][y] != 0;
-				neigh = neigh || y > 0 && spr.pixels[x][y - 1] != ColorScheme.TRANSPARENT
-						&& spr.pixels[x][y - 1] != 0;
-				neigh = neigh || y < spr.pixels[x].length - 1
-						&& spr.pixels[x][y + 1] != ColorScheme.TRANSPARENT
-						&& spr.pixels[x][y + 1] != 0;
-				if (neigh && spr.pixels[x][y] == ColorScheme.TRANSPARENT){
+				boolean isNeighbourColored = isLeftPixelColored(x,y,spr) || 
+						isRightPixelColored(x,y,spr) || 
+						isDownPixelColored(x,y,spr) || 
+						isUpPixelColored(x,y,spr);
+				if (isNeighbourColored && 
+						spr.pixels[x][y] == ColorScheme.TRANSPARENT){
 					spr.pixels[x][y] = 0;
 				}
-				if (!neigh && spr.pixels[x][y] == 0){
+				if (isNeighbourColored == false && 
+						spr.pixels[x][y] == 0){
 					spr.pixels[x][y] = ColorScheme.TRANSPARENT;
 				}
 			}
 		}
 	}
 
+	/**
+	 * Returns whether the left pixel is not transparent or black.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param spr
+	 * @return
+	 */
+	private boolean isLeftPixelColored(int x, int y, Sprite spr){
+		return x > 0 && 
+				spr.pixels[x - 1][y] != ColorScheme.TRANSPARENT && 
+				spr.pixels[x - 1][y] != 0;
+	}
+
+	/**
+	 * Returns whether the right pixel is not transparent or black.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param spr
+	 * @return
+	 */
+	private boolean isRightPixelColored(int x, int y, Sprite spr){
+		return x < spr.pixels.length - 1 && 
+				spr.pixels[x + 1][y] != ColorScheme.TRANSPARENT && 
+				spr.pixels[x + 1][y] != 0;
+	}
+
+	/**
+	 * Returns whether the right pixel is not transparent or black.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param spr
+	 * @return
+	 */
+	private boolean isDownPixelColored(int x, int y, Sprite spr){
+		return y > 0 && 
+				spr.pixels[x][y - 1] != ColorScheme.TRANSPARENT	&& 
+				spr.pixels[x][y - 1] != 0;
+	}
+
+	/**
+	 * Returns whether the right pixel is not transparent or black.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param spr
+	 * @return
+	 */
+	private boolean isUpPixelColored(int x, int y, Sprite spr){
+		return y < spr.pixels[x].length - 1	&& 
+				spr.pixels[x][y + 1] != ColorScheme.TRANSPARENT	&& 
+				spr.pixels[x][y + 1] != 0;
+	}
+	
 	/** 
 	 * Merges two sprites to create a new one. Is the base for mutation. Should be rewritten to
 	 * give a more clear abstraction of mutation.
