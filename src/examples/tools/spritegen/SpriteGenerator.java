@@ -406,19 +406,34 @@ public class SpriteGenerator {
 	public void flip(Sprite spr) {
 		for (int y = 0; y < size_y; y++) {
 			for (int x = 0; x < size_x; x++) {
-				int colnr = spr.colidx[x][y];
-				if (flip_x && x < size_x / 2) {
-					spr.colidx[size_x - x - 1][y] = colnr + shade_at_flip_x;
+				int color_number = spr.colidx[x][y];
+				int flipped_x = size_x - x - 1;
+				int flipped_y = size_y - y - 1;
+				// if a pixel must be flipped, flip it and apply shade
+				if (mustFlipX(x)) {
+					spr.colidx[flipped_x][y] = color_number + shade_at_flip_x;
 				}
-				if (flip_y && y < size_y / 2) {
-					spr.colidx[x][size_y - y - 1] = colnr + shade_at_flip_y;
+				if (mustFlipY(y)) {
+					spr.colidx[x][flipped_y] = color_number + shade_at_flip_y;
 				}
-				if (flip_x && flip_y && x < size_x / 2 && y < size_y / 2) {
-					spr.colidx[size_x - x - 1][size_y - y - 1] = colnr
-							+ shade_at_flip_x + shade_at_flip_y;
+				if (mustFlipX(x) &&
+						mustFlipY(y)) {
+					spr.colidx[flipped_x][flipped_y] = color_number
+							+ shade_at_flip_x 
+							+ shade_at_flip_y;
 				}
 			}
 		}
+	}
+	
+	private boolean mustFlipX(int x){
+		return flip_x && 
+				x < size_x / 2;
+	}
+		
+	private boolean mustFlipY(int y){
+		return flip_y && 
+				y < size_y / 2;
 	}
 
 	/**
@@ -441,27 +456,32 @@ public class SpriteGenerator {
 		// shade given colours
 		for (int y = 0; y < size_y; y++) {
 			for (int x = 0; x < size_x; x++) {
-				int idx = spr.colidx[x][y];
-				if (idx >= 6) {
+				int color_index = spr.colidx[x][y];
+				// if is a color (not transparent or black)
+				if (color_index >= 6) {
 					int top_left_distance = findOutlineDistance(spr, x, y, -1, -1, 2);
 					int bottom_right_distance = findOutlineDistance(spr, x, y, 1, 1, 2);
 					// System.err.println(" "+tldist+" "+brdist);
 					// 0=darkest ... 4=brightest. Odd numbers will dither.
 					int bright = 2;
-					if (top_left_distance == 1)
+					if (top_left_distance == 1){
 						bright = 4;
-					if (bottom_right_distance == 1)
+					}
+					if (bottom_right_distance == 1){
 						bright = 0;
+					}
 					// special cases: thin areas
-					if (top_left_distance == 1 && bottom_right_distance == 1)
+					if (top_left_distance == 1 && 
+							bottom_right_distance == 1){
 						bright = 2;
+					}
 					boolean dither = (bright & 1) == 1 && ((x + y) & 1) == 1;
 					// 0, 1, or 2
 					bright = bright / 2 + (dither ? 1 : 0);
 					if (bright == 2) {
 						spr.colidx[x][y] = 15; // highlight
 					} else {
-						spr.colidx[x][y] = 3 * (idx / 3) + 2 - 2 * bright;
+						spr.colidx[x][y] = 3 * (color_index / 3) + 2 - 2 * bright;
 					}
 				}
 			}
