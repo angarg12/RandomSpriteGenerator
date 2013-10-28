@@ -20,13 +20,13 @@ class AnimationTable {
 	// 9 .. 16 = 2x
 	//
 	//       9
-	//     G 1 A
-	//     8 | 2
+	//   G   1   A
+	//    8  |  2
 	//     \ | /
 	// F 7--- ---3 B
 	//     / | \
-	//     6 | 4
-	//     E 5 C
+	//    6  |  4
+	//   E   5   C
 	//       D
 
 	static int[][][] BEND_12 = new int[][][] {
@@ -778,20 +778,37 @@ class AnimationTable {
 					// This condition checks the inner values (1 pixel distance)
 					if (value >= 1 && value <= 8) {
 						value += 2;
-						if (value > 8)
+						if (value > 8){
 							value -= 8;
+						}
 					}
 					// The value must be adjusted to rotate 90º
 					// This condition checks the outer values (2 pixel distance)
 					if (value >= 9 && value <= G) {
 						value += 2;
-						if (value > G)
+						if (value > G){
 							value -= 8;
+						}
 					}
 					rotated[frame][column][line] = value;
 				}
 			}
 		}
 		return rotated;
+	}
+	
+	public static int distanceTraveled(int movement){
+		if(movement == 0){
+			return 0;
+		}
+		if(1 <= movement && movement <= 8){
+			return 1;
+		}
+		if(8 <= movement && movement <= 16){
+			return 2;
+		}
+		// BAD practice. If the value is not in range it should throw an error indicating
+		// that the value is bad
+		return -1;
 	}
 }

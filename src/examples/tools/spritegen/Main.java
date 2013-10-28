@@ -250,7 +250,7 @@ class Main extends JGEngine {
 				12, 
 				12, 
 				FillingTable.RAND_12, 
-				AnimationTable.NULL_12,
+				AnimationTable.BEND_12,
 				false, 
 				true, 
 				0, 

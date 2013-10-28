@@ -324,8 +324,8 @@ public class SpriteGeneratorTest {
 		gen.indexToRGB(clone);
 		SpriteGenerator.fixRandom(1000);
 		gen.animate(clone);
-		gen.addOutlineRGB(clone);
-		assertArrayEquals("Outline RGB sprite does not match the expected.", getAddOutlineRGBTable(gen, coltable, spr), clone.pixels);
+		gen.addOutline(clone);
+		assertArrayEquals("Outline sprite does not match the expected.", getAddOutlineRGBTable(gen, coltable, spr), clone.pixels);
 	}
 	
 	private int[][] getColorizeTable(SpriteGenerator gen, 

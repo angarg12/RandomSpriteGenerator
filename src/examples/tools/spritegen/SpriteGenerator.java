@@ -720,44 +720,61 @@ public class SpriteGenerator {
 	 */
 	public void animate(Sprite spr) {
 		// now, animate if applicable
-		if (animation_table == null)
+		if (animation_table == null){
 			return;
+		}
 		// d = distance travelled. Pixels that travel the largest distance
-		// should overwrite other pixels
-		for (int d = 0; d <= 2; d++) {
+		// should overwrite other pixels. This is why we process pixels in the order
+		// of the distance they travel
+		for (int distance = 0; distance <= 2; distance++) {
 			for (int y = 0; y < size_y; y++) {
 				for (int x = 0; x < size_x; x++) {
-					int col = spr.pixels[x][y];
-					if (col == ColorScheme.TRANSPARENT){
+					int color = spr.pixels[x][y];
+					// if the colour is transparent, there is no need for animation
+					if (color == ColorScheme.TRANSPARENT){
 						continue;
 					}
-					for (int a = 0; a < animation_table.length; a++) {
-						int anim = animation_table[a][y][x];
-						if ((anim + 7) / 8 != d){
+					for (int frame = 0; frame < animation_table.length; frame++) {
+						int movement = animation_table[frame][y][x];
+						// if the distance travelled is different from distance, there is no need
+						// to animate
+						// 0 is 0, 1-8 is 1 and > 8 is 2
+						if (AnimationTable.distanceTraveled(movement) != distance){
 							continue;
 						}
-						int dx = 0, dy = 0, mul = 1;
-						if (anim > 8) {
-							mul = 2;
-							anim -= 8;
+						// a pretty obscure way to decide in what direction it should move.
+						// will get better once the animation movements are refactored to its own classes.
+						// that way you could have a TwoLeft movement class, with getX and getY methods
+						// that return -2 and 0 respectively
+						int distance_x = 0; 
+						int distance_y = 0; 
+						// use this multiplier if the distance is two
+						if (movement > 8) {
+							movement -= 8;
 						}
-						if (anim == 8 || anim == 1 || anim == 2){
-							dy = -1;
+						// one up
+						if (movement == 8 || movement == 1 || movement == 2){
+							distance_y = -1;
 						}
-						if (anim == 2 || anim == 3 || anim == 4){
-							dx = 1;
+						// one right
+						if (movement == 2 || movement == 3 || movement == 4){
+							distance_x = 1;
 						}
-						if (anim == 4 || anim == 5 || anim == 6){
-							dy = 1;
+						// one down
+						if (movement == 4 || movement == 5 || movement == 6){
+							distance_y = 1;
 						}
-						if (anim == 6 || anim == 7 || anim == 8){
-							dx = -1;
+						// one left
+						if (movement == 6 || movement == 7 || movement == 8){
+							distance_x = -1;
 						}
-						dx *= mul;
-						dy *= mul;
-						if (x + dx >= 0 && x + dx < size_x && y + dy >= 0
-								&& y + dy < size_y) {
-							spr.pixels[(a + 1) * size_x + x + dx][y + dy] = col;
+						distance_x *= distance;
+						distance_y *= distance;
+						// TODO: small 'bug': if the animation paints a pixel in the border, it shows
+						// colored, when it should be shown black (as per the outline). 
+						if (isInBounds(x + distance_x, y + distance_y)) {
+							// paint the pixel where the animation lands in the current frame 
+							spr.pixels[(frame + 1) * size_x + x + distance_x][y + distance_y] = color;
 						}
 					}
 				}
