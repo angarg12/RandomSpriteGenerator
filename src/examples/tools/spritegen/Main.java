@@ -255,14 +255,14 @@ class Main extends JGEngine {
 				true, 
 				0, 
 				0, 
-				0, 
+				0.6, 
 				0.2, 
 				0.5, 
 				0.3, 
 				0.4, 
 				0.2, 
 				0.5);
-		gen.shading = Shading.GOURAUD;
+		gen.shading = Shading.NONE;
 		return gen;
 	}
 	

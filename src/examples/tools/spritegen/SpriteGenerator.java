@@ -105,11 +105,20 @@ public class SpriteGenerator {
 			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.NULL_12,
 					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5), };
 
-	public SpriteGenerator(int xsize, int ysize, int[][] filltable,
-			int[][][] animtable, boolean flipx, boolean flipy, int xshadingfac,
-			int yshadingfac, double fill_prob, double fill_smoothing,
-			double fill_smoothing_horiz_bias, double black_prob,
-			double highlight_prob, double color_smoothing,
+	public SpriteGenerator(int xsize, 
+			int ysize, 
+			int[][] filltable,
+			int[][][] animtable, 
+			boolean flipx, 
+			boolean flipy, 
+			int xshadingfac,
+			int yshadingfac, 
+			double fill_prob, 
+			double fill_smoothing,
+			double fill_smoothing_horiz_bias, 
+			double black_prob,
+			double highlight_prob, 
+			double color_smoothing,
 			double color_smoothing_horiz_bias) {
 		this.size_x = xsize;
 		this.size_y = ysize;
@@ -139,7 +148,7 @@ public class SpriteGenerator {
 	 * Adds a black outline surrounding the sprite.
 	 * @param spr
 	 */
-	public void addOutlineRGB(Sprite spr) {
+	public void addOutline(Sprite spr) {
 		for (int x = 0; x < spr.pixels.length; x++) {
 			for (int y = 0; y < spr.pixels[x].length; y++) {
 				boolean isNeighbourColored = isLeftPixelColored(x,y,spr) || 
@@ -242,88 +251,136 @@ public class SpriteGenerator {
 		flip(spr);
 		indexToRGB(spr);
 		animate(spr);
-		addOutlineRGB(spr);
+		addOutline(spr);
 		return spr;
 	}
 
 	/**
 	 * Creates a new sprite.
 	 * 
-	 * @param coltable
+	 * @param color_table
 	 * @return
 	 */
-	public Sprite createSprite(int[] coltable) {
-		int xmax = flip_x ? size_x / 2 : size_x;
-		int ymax = flip_y ? size_y / 2 : size_y;
-		int totalxsize = animation_table == null ? size_x : size_x
-				* (animation_table.length + 1);
+	public Sprite createSprite(int[] color_table) {
+		// the limit of the loop is the size of the sprite
+		int x_max = size_x;
+		// if the sprite is flipped, only fill half of it (the other half will be the symmetric)
+		if(flip_x){
+			x_max /= 2;
+		}
+		// the limit of the loop is the size of the sprite
+		int y_max = size_y;
+		// if the sprite is flipped, only fill half of it (the other half will be the symmetric)
+		if(flip_y){
+			y_max /= 2;
+		}
+		int total_x_size = size_x;
+		// the total x size is the x size by the number of frames (plus 1 for the still)
+		if(animation_table != null){
+			total_x_size = size_x*(animation_table.length+1);
+		}
+
 		Sprite spr = new Sprite(
-				coltable, 
+				color_table, 
 				this, 
 				size_x, 
-				totalxsize, 
+				total_x_size, 
 				size_y);
-		// decide which parts of hull to fill:
-		// * main fill type 1 -> 2
-		// * add outline
-		for (int y = 0; y < ymax; y++) {
-			for (int x = 0; x < xmax; x++) {
-				int filltype = fill_table[y][x];
-				int filltype_main = (filltype & 3);
-				int filltype_fill = ((filltype & 12) | 2);
-				if (filltype_main == 1) {
-					// smooth = get colour from neighbouring pixel
-					if (random.nextDouble() < fill_smoothing) {
-						int above = 0, left = 0, chosen = 0;
-						if (x > 0){
-							left = (spr.hull[x - 1][y] & 3) == 2 ? 1 : 0;
-						}
-						if (y > 0){
-							above = (spr.hull[x][y - 1] & 3) == 2 ? 1 : 0;
-						}
-						if (above == 0 && left == 0) {
-							chosen = 0;
-						} else if (above != 0 && left == 0) {
-							chosen = above;
-						} else if (above == 0 && left != 0) {
-							chosen = left;
-						} else if (above != 0 && left != 0) {
-							if (random.nextDouble() > fill_smoothing_x_bias) {
-								chosen = above;
-							} else {
-								chosen = left;
-							}
-						}
-						if (chosen != 0){
-							spr.hull[x][y] = filltype_fill;
-						}
-					} else {
-						if (random.nextDouble() > fill_probability){
-							spr.hull[x][y] = filltype_fill;
-						}
-					}
-				} else if (filltype_main == 2) {
-					spr.hull[x][y] = filltype_fill;
-				} else if (filltype_main == 3) {
-					spr.hull[x][y] = 3;
-				}
+
+		for (int y = 0; y < y_max; y++) {
+			for (int x = 0; x < x_max; x++) {
+				fillPixel(x,y,spr);
 			}
 		}
-		// colour fill type is handled by colorize
 		colorize(spr);
 		flip(spr);
-		if (shading == Shading.BEVEL){
-			bevelShade(spr);
-		}
-		if (shading == Shading.GOURAUD){
-			gouraudShade(spr);
+		switch(shading){
+			case BEVEL: bevelShade(spr); break;
+			case GOURAUD: gouraudShade(spr); break;
+			default: break;
 		}
 		indexToRGB(spr);
 		animate(spr);
-		addOutlineRGB(spr);
+		addOutline(spr);
 		return spr;
 	}
+	
+	/** 
+	 * Decide which parts of hull to fill:
+	 * this decision is made based on the smooth coefficient
+	 * and the fill probability.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param spr
+	 */
+	private void fillPixel(int x, int y, Sprite spr){
+		int filltype = fill_table[y][x];
+		// extract code from two lower bits
+		int filltype_main = (filltype & 3);
+		// extract code from two upper bits
+		int filltype_fill = ((filltype & 12) | 2);
+		// fill or empty
+		// TODO: Notice that the logic is a little bit warped. If a neighbour is filled, the pixel
+		// gets filled, but with its own value, not the one of the neighbour. This means that fill_smoothing
+		// actually does nothing, and this function can be greatly simplified. Check if this is a bug or a feature.
+		if (filltype_main == 1) {
+			// smooth = fill the pixel if a neighbour is
+			// since the pixels are filled from left to right and from top to bottom
+			// the neighbours selected are above and left
+			if (random.nextDouble() < fill_smoothing) {
+				boolean isChosenFilled = false;
 
+				if (isAboveFilled(spr,x,y) && 
+						isLeftFilled(spr,x,y) == false) {
+					isChosenFilled = true;
+				} else if (isAboveFilled(spr,x,y) == false && 
+						isLeftFilled(spr,x,y)) {
+					isChosenFilled = true;
+				} else if (isAboveFilled(spr,x,y) && 
+						isLeftFilled(spr,x,y)) {
+					if (random.nextDouble() > fill_smoothing_x_bias) {
+						isChosenFilled = true;
+					} else {
+						isChosenFilled = true;
+					}
+				}
+				if (isChosenFilled){
+					spr.hull[x][y] = filltype_fill;
+				}
+			} else {
+				// if the colour is not smooth, just fill it at random
+				if (random.nextDouble() > fill_probability){
+					spr.hull[x][y] = filltype_fill;
+				}
+			}
+		// always fill 
+		} else if (filltype_main == 2) {
+			spr.hull[x][y] = filltype_fill;
+		// always black
+		} else if (filltype_main == 3) {
+			spr.hull[x][y] = 3;
+		}
+	}
+
+	private boolean isLeftFilled(Sprite spr, int x, int y){
+		if (x > 0){
+			if((spr.hull[x-1][y] & 3) == 2){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isAboveFilled(Sprite spr, int x, int y){
+		if (y > 0){
+			if((spr.hull[x][y-1] & 3) == 2){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/**
 	 * Colorizes a sprite.
 	 * @param spr
