@@ -472,8 +472,6 @@ public class SpriteGenerator {
 					int bottom_right_distance = Math.min(
 							findOutlineDistanceBottom(spr,x,y), 
 							findOutlineDistanceRight(spr,x,y));
-					System.out.println(findOutlineDistanceTop(spr,x,y)+" "+findOutlineDistanceLeft(spr,x,y)+" "+
-							findOutlineDistanceBottom(spr,x,y)+" "+findOutlineDistanceRight(spr,x,y));
 					// 0=darkest ... 2=brightest.
 					int bright = 1;
 					// special cases: thin areas
@@ -595,44 +593,70 @@ public class SpriteGenerator {
 	 * @param spr
 	 */
 	public void gouraudShade(Sprite spr) {
-		int cenx = size_x / 4 + (int) (random.nextDouble() * 2.999);
-		int ceny = size_y / 4 + (int) (random.nextDouble() * 2.999);
-		int maxdist = size_x - cenx - 1;
-		int hlt_rx = (int) (random.nextDouble() * 2.9999);
-		int hlt_ry = (int) (random.nextDouble() * 2.9999);
-		int inner_r = 7 + (int) (random.nextDouble() * 16);
-		int outer_r = 7 + (int) (random.nextDouble() * 16);
+		// coordinates of the centre of the focus
+		int focus_center_x = size_x / 4 + (int) (random.nextDouble() * 3);
+		int focus_center_y = size_y / 4 + (int) (random.nextDouble() * 3);
+		// maximum distance from the focus, given squared
+		int maximum_distance = (int) Math.pow(size_x - focus_center_x - 1, 2);
+		int highlight_radius_x = (int) (random.nextDouble() * 3);
+		int highlight_radius_y = (int) (random.nextDouble() * 3);
+		int inner_radius = 7 + (int) (random.nextDouble() * 16);
+		int outer_radius = 7 + (int) (random.nextDouble() * 16);
 		for (int y = 0; y < size_y; y++) {
-			int dy = Math.abs(y - ceny);
+			int distance_focus_y = Math.abs(y - focus_center_y);
 			for (int x = 0; x < size_x; x++) {
-				int dx = Math.abs(x - cenx);
-				int dd = dx * dx + dy * dy;
-				int idx = spr.colidx[x][y];
-				if (idx >= 6) {
+				int distance_focus_x = Math.abs(x - focus_center_x);
+				// the distance is dx^2+dy^2, where dx is the distance of x to the focus
+				int distance = (int) (Math.pow(distance_focus_x,2) +  Math.pow(distance_focus_y,2));
+				int color_index = spr.colidx[x][y];
+				// if is a colour (not transparent or black)
+				if (color_index >= 6) {
 					// 0=darkest .. 4=brightest. Odd numbers will dither.
 					int bright = 2;
-					if (dx <= hlt_rx && dy <= hlt_ry){
+					if (isInsideHighlightRadius(distance_focus_x,
+							distance_focus_y,
+							highlight_radius_x, 
+							highlight_radius_y)){
 						bright = 4;
-					}else if (dd <= inner_r){
+					}else if (distance <= inner_radius){
 						bright = 3;
-					}else if (dd >= maxdist * maxdist - outer_r){
+					}else if (distance >= maximum_distance - outer_radius){
 						bright = 0;
-					}else if (dd >= maxdist * maxdist - outer_r - 13){
+					}else if (distance >= maximum_distance - outer_radius - 13){
 						bright = 1;
 					}
-					boolean dither = (bright & 1) == 1 && ((x + y) & 1) == 1;
+					boolean dither = isDither(bright, x, y);
+					bright /= 2;
 					// 0, 1, or 2
-					bright = bright / 2 + (dither ? 1 : 0);
+					if(dither){
+						bright++;
+					}
+					
 					if (bright == 2) {
 						spr.colidx[x][y] = 15; // highlight
 					} else {
-						spr.colidx[x][y] = 3 * (idx / 3) + 2 - 2 * bright;
+						// base index for all the shades of a color
+						int color_base_index = 3 * (color_index / 3);
+						// adjusts the shade index by making it brighter
+						int color_shade_index = 2 - 2 * bright;
+						spr.colidx[x][y] =  color_base_index + color_shade_index;
 					}
 				}
 			}
 		}
 	}
 
+	private boolean isInsideHighlightRadius(int distance_x, int distance_y, int radius_x, int radius_y){
+		return distance_x <= radius_x && distance_y <= radius_y;
+	}
+	
+	private boolean isDither(int bright, int x, int y){
+		// if the bright level is odd and the pixel coordinates are odd
+		// the pixel dithers
+		return (bright % 2) == 1 && 
+				((x + y) % 2) == 1;
+	}
+	
 	/**
 	 * Animates a sprite
 	 * @param spr

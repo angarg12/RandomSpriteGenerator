@@ -1,13 +1,13 @@
 package examples.tools.spritegen;
 
-public class AnimationTable {
-	static final int A = 10;
-	static final int B = 11;
-	static final int C = 12;
-	static final int D = 13;
-	static final int E = 14;
-	static final int F = 15;
-	static final int G = 16;
+class AnimationTable {
+	private static final int A = 10;
+	private static final int B = 11;
+	private static final int C = 12;
+	private static final int D = 13;
+	private static final int E = 14;
+	private static final int F = 15;
+	private static final int G = 16;
 
 	// 1 = 1x up
 	// 2 = 1x up right

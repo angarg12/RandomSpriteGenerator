@@ -2,7 +2,6 @@ package examples.tools.spritegen.test;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import examples.tools.spritegen.color.ColorSchemeGenerator;

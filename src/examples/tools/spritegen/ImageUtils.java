@@ -4,7 +4,7 @@ import java.io.*;
 
 import examples.tools.spritegen.color.ColorScheme;
 
-public class ImageUtils {
+class ImageUtils {
 
 	// http://stackoverflow.com/questions/11590075/crc32-calculation-with-pycrc-and-php-code-doesnt-match-expected-result
 	// http://stackoverflow.com/questions/2587766/how-is-a-crc32-checksum-calculated

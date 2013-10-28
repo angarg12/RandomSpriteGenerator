@@ -13,8 +13,7 @@ import jgame.JGObject;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
 
-/** Minimal shooter for jgame skeletons. */
-public class Main extends JGEngine {
+class Main extends JGEngine {
 	static int NUMBER_SPRITES_X = 16;
 	static int NUMBER_SPRITES_Y = 16;
 	static int SEPARATION_X = 22;
@@ -256,14 +255,14 @@ public class Main extends JGEngine {
 				true, 
 				0, 
 				0, 
-				0.6, 
+				0, 
 				0.2, 
 				0.5, 
 				0.3, 
 				0.4, 
 				0.2, 
 				0.5);
-		gen.shading = Shading.BEVEL;
+		gen.shading = Shading.GOURAUD;
 		return gen;
 	}
 	

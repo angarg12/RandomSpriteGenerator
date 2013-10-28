@@ -1,6 +1,6 @@
 package examples.tools.spritegen;
 
-public class FillingTable {
+class FillingTable {
 	// Filltable values:
 	//
 	// bit 0-1:
@@ -35,12 +35,12 @@ public class FillingTable {
 	// E = colour with highlights + black
 	// F = N/A (always black)
 
-	static final int A = 10;
-	static final int B = 11;
-	static final int C = 12;
-	static final int D = 13;
-	static final int E = 14;
-	static final int F = 15;
+	private static final int A = 10;
+	private static final int B = 11;
+	private static final int C = 12;
+	private static final int D = 13;
+	private static final int E = 14;
+	private static final int F = 15;
 
 	static int[][] SHIP = new int[][] { 
 			{ 0, 0, 0, 0, 0, 0, 0, 0 },
