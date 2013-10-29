@@ -6,27 +6,29 @@ import examples.tools.spritegen.color.ColorScheme;
 
 public class SpriteGenerator {
 	/**
-	 * TODO: Encapsulate filling tables, animation tables and generation parameters in some kind of pattern (factory, strategy?)
+	 * TODO: Encapsulate filling tables, animation tables and generation
+	 * parameters in some kind of pattern (factory, strategy?)
 	 */
 	static Random random = new Random();
-	public static void fixRandom(int seed){
+
+	public static void fixRandom(int seed) {
 		random = new Random(seed);
 	}
 
 	int size_x = 16;
 	int size_y = 16;
-	
+
 	int[][] fill_table;
 	int[][][] animation_table;
-	
+
 	boolean flip_x = true;
 	boolean flip_y = false;
-	
+
 	Shading shading = Shading.NONE;
 	// shades the colour when flipping
 	// note: xshadingfac+yshadingfac must be <= 2
-	// 0=no shading 
-	// 1=darken 
+	// 0=no shading
+	// 1=darken
 	// 2=darken more
 	int shade_at_flip_x = 0;
 	int shade_at_flip_y = 0;
@@ -48,77 +50,93 @@ public class SpriteGenerator {
 	double color_smoothing_x_bias = 0.5;
 
 	public static SpriteGenerator[] shapes = new SpriteGenerator[] {
-			new SpriteGenerator(16, 16, FillingTable.SHIP, null, true, false, 1, 1,
-					0.5, 0.6, 0.5, 0.3, 0.4, 0.6, 0.5),
-			new SpriteGenerator(18, 18, FillingTable.BUTTERFLY_18, AnimationTable.BIRD_18,
-					true, false, 1, 1, 0.5, 0.7, 0.5, 0.3, 0.4, 0.6, 0.5),
-			new SpriteGenerator(18, 18, FillingTable.MAN_18, AnimationTable.MAN_18, true,
-					false, 1, 1, 0.5, 0.6, 0.5, 0.3, 0.4, 0.6, 0.5),
-			new SpriteGenerator(18, 18, FillingTable.UFO_18, null, true, true, 1, 1,
-					0.5, 0.75, 0.5, 0.3, 0.4, 0.8, 0.5) };
+			new SpriteGenerator(16, 16, FillingTable.SHIP, null, true, false,
+					1, 1, 0.5, 0.6, 0.5, 0.3, 0.4, 0.6, 0.5),
+			new SpriteGenerator(18, 18, FillingTable.BUTTERFLY_18,
+					AnimationTable.BIRD_18, true, false, 1, 1, 0.5, 0.7, 0.5,
+					0.3, 0.4, 0.6, 0.5),
+			new SpriteGenerator(18, 18, FillingTable.MAN_18,
+					AnimationTable.MAN_18, true, false, 1, 1, 0.5, 0.6, 0.5,
+					0.3, 0.4, 0.6, 0.5),
+			new SpriteGenerator(18, 18, FillingTable.UFO_18, null, true, true,
+					1, 1, 0.5, 0.75, 0.5, 0.3, 0.4, 0.8, 0.5) };
 
 	public static SpriteGenerator[] shapes2 = new SpriteGenerator[] {
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.WALK_12, true,
-					false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.FLY_12, true,
-					false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.CRAWL2_12,
-					true, false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.CRAWL_12,
-					true, false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.BEND_12, true,
-					false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.BUBBLE_12,
-					true, false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.POKE_12, true,
-					false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.WALK2_12,
-					false, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.CRAWL_12,
-					false, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.BEND_12,
-					false, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.BUBBLE_12,
-					false, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.POKE_12,
-					false, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.TURN_12,
-					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.BEND_12,
-					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.CRAWL_12,
-					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.BUBBLE_12,
-					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.POKE_12,
-					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.WIGGLE_12,
-					true, false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.WIGGLE2_12,
-					false, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.BOUNCE_12,
-					true, false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.BOUNCE_12,
-					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.NULL_12, true,
-					false, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12, AnimationTable.NULL_12,
-					true, true, 0, 0, 0.6, 0.2, 0.5, 0.3, 0.4, 0.3, 0.5), };
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.WALK_12, true, false, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.FLY_12, true, false, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.CRAWL2_12, true, false, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.CRAWL_12, true, false, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.BEND_12, true, false, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.BUBBLE_12, true, false, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.POKE_12, true, false, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.WALK2_12, false, true, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.CRAWL_12, false, true, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.BEND_12, false, true, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.BUBBLE_12, false, true, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.POKE_12, false, true, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.TURN_12, true, true, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.BEND_12, true, true, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.CRAWL_12, true, true, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.BUBBLE_12, true, true, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.POKE_12, true, true, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.WIGGLE_12, true, false, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.WIGGLE2_12, false, true, 0, 0, 0.6, 0.2,
+					0.5, 0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.BOUNCE_12, true, false, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.BOUNCE_12, true, true, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.NULL_12, true, false, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5),
+			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+					AnimationTable.NULL_12, true, true, 0, 0, 0.6, 0.2, 0.5,
+					0.3, 0.4, 0.3, 0.5), };
 
-	public SpriteGenerator(int xsize, 
-			int ysize, 
-			int[][] filltable,
-			int[][][] animtable, 
-			boolean flipx, 
-			boolean flipy, 
-			int xshadingfac,
-			int yshadingfac, 
-			double fill_prob, 
-			double fill_smoothing,
-			double fill_smoothing_horiz_bias, 
-			double black_prob,
-			double highlight_prob, 
-			double color_smoothing,
+	public SpriteGenerator(int xsize, int ysize, int[][] filltable,
+			int[][][] animtable, boolean flipx, boolean flipy, int xshadingfac,
+			int yshadingfac, double fill_prob, double fill_smoothing,
+			double fill_smoothing_horiz_bias, double black_prob,
+			double highlight_prob, double color_smoothing,
 			double color_smoothing_horiz_bias) {
 		this.size_x = xsize;
 		this.size_y = ysize;
@@ -144,117 +162,10 @@ public class SpriteGenerator {
 		}
 	}
 
-	/**
-	 * Adds a black outline surrounding the sprite.
-	 * @param spr
-	 */
-	public void addOutline(Sprite spr) {
-		for (int x = 0; x < spr.pixels.length; x++) {
-			for (int y = 0; y < spr.pixels[x].length; y++) {
-				boolean isNeighbourColored = isLeftPixelColored(x,y,spr) || 
-						isRightPixelColored(x,y,spr) || 
-						isDownPixelColored(x,y,spr) || 
-						isUpPixelColored(x,y,spr);
-				if (isNeighbourColored && 
-						spr.pixels[x][y] == ColorScheme.TRANSPARENT){
-					spr.pixels[x][y] = 0;
-				}
-				if (isNeighbourColored == false && 
-						spr.pixels[x][y] == 0){
-					spr.pixels[x][y] = ColorScheme.TRANSPARENT;
-				}
-			}
-		}
-	}
-
-	/**
-	 * Returns whether the left pixel is not transparent or black.
-	 * 
-	 * @param x
-	 * @param y
-	 * @param spr
-	 * @return
-	 */
-	private boolean isLeftPixelColored(int x, int y, Sprite spr){
-		return x > 0 && 
-				spr.pixels[x - 1][y] != ColorScheme.TRANSPARENT && 
-				spr.pixels[x - 1][y] != 0;
-	}
-
-	/**
-	 * Returns whether the right pixel is not transparent or black.
-	 * 
-	 * @param x
-	 * @param y
-	 * @param spr
-	 * @return
-	 */
-	private boolean isRightPixelColored(int x, int y, Sprite spr){
-		return x < spr.pixels.length - 1 && 
-				spr.pixels[x + 1][y] != ColorScheme.TRANSPARENT && 
-				spr.pixels[x + 1][y] != 0;
-	}
-
-	/**
-	 * Returns whether the right pixel is not transparent or black.
-	 * 
-	 * @param x
-	 * @param y
-	 * @param spr
-	 * @return
-	 */
-	private boolean isDownPixelColored(int x, int y, Sprite spr){
-		return y > 0 && 
-				spr.pixels[x][y - 1] != ColorScheme.TRANSPARENT	&& 
-				spr.pixels[x][y - 1] != 0;
-	}
-
-	/**
-	 * Returns whether the right pixel is not transparent or black.
-	 * 
-	 * @param x
-	 * @param y
-	 * @param spr
-	 * @return
-	 */
-	private boolean isUpPixelColored(int x, int y, Sprite spr){
-		return y < spr.pixels[x].length - 1	&& 
-				spr.pixels[x][y + 1] != ColorScheme.TRANSPARENT	&& 
-				spr.pixels[x][y + 1] != 0;
-	}
+	//================================================================================
+    // createSprite
+    //================================================================================
 	
-	/** 
-	 * Merges two sprites to create a new one. Is the base for mutation. Should be rewritten to
-	 * give a more clear abstraction of mutation.
-	 */
-	public Sprite mergeSprites(
-			Sprite spr1, 
-			Sprite spr2, 
-			double weight) {
-		Sprite spr = new Sprite(
-				spr1.coltable, 
-				spr1.gen, 
-				size_x,
-				spr1.pixels.length, 
-				size_y);
-		int xmax = flip_x ? size_x / 2 : size_x;
-		int ymax = flip_y ? size_y / 2 : size_y;
-		for (int y = 0; y < ymax; y++) {
-			for (int x = 0; x < xmax; x++) {
-				if (random.nextDouble() > weight) {
-					spr.colidx[x][y] = spr2.colidx[x][y];
-				} else {
-					spr.colidx[x][y] = spr1.colidx[x][y];
-				}
-			}
-		}
-		flip(spr);
-		indexToRGB(spr);
-		animate(spr);
-		addOutline(spr);
-		return spr;
-	}
-
 	/**
 	 * Creates a new sprite.
 	 * 
@@ -264,125 +175,135 @@ public class SpriteGenerator {
 	public Sprite createSprite(int[] color_table) {
 		// the limit of the loop is the size of the sprite
 		int x_max = size_x;
-		// if the sprite is flipped, only fill half of it (the other half will be the symmetric)
-		if(flip_x){
+		// if the sprite is flipped, only fill half of it (the other half will
+		// be the symmetric)
+		if (flip_x) {
 			x_max /= 2;
 		}
 		// the limit of the loop is the size of the sprite
 		int y_max = size_y;
-		// if the sprite is flipped, only fill half of it (the other half will be the symmetric)
-		if(flip_y){
+		// if the sprite is flipped, only fill half of it (the other half will
+		// be the symmetric)
+		if (flip_y) {
 			y_max /= 2;
 		}
 		int total_x_size = size_x;
-		// the total x size is the x size by the number of frames (plus 1 for the still)
-		if(animation_table != null){
-			total_x_size = size_x*(animation_table.length+1);
+		// the total x size is the x size by the number of frames (plus 1 for
+		// the still)
+		if (animation_table != null) {
+			total_x_size = size_x * (animation_table.length + 1);
 		}
 
-		Sprite spr = new Sprite(
-				color_table, 
-				this, 
-				size_x, 
-				total_x_size, 
-				size_y);
+		Sprite spr = new Sprite(color_table, this, size_x, total_x_size, size_y);
 
 		for (int y = 0; y < y_max; y++) {
 			for (int x = 0; x < x_max; x++) {
-				fillPixel(x,y,spr);
+				fillPixel(x, y, spr);
 			}
 		}
 		colorize(spr);
 		flip(spr);
-		switch(shading){
-			case BEVEL: bevelShade(spr); break;
-			case GOURAUD: gouraudShade(spr); break;
-			default: break;
+		switch (shading) {
+		case BEVEL:
+			bevelShade(spr);
+			break;
+		case GOURAUD:
+			gouraudShade(spr);
+			break;
+		default:
+			break;
 		}
 		indexToRGB(spr);
 		animate(spr);
 		addOutline(spr);
 		return spr;
 	}
-	
-	/** 
-	 * Decide which parts of hull to fill:
-	 * this decision is made based on the smooth coefficient
-	 * and the fill probability.
+
+	/**
+	 * Decide which parts of hull to fill: this decision is made based on the
+	 * smooth coefficient and the fill probability.
 	 * 
 	 * @param x
 	 * @param y
 	 * @param spr
 	 */
-	private void fillPixel(int x, int y, Sprite spr){
+	private void fillPixel(int x, int y, Sprite spr) {
 		int filltype = fill_table[y][x];
 		// extract code from two lower bits
 		int filltype_main = (filltype & 3);
 		// extract code from two upper bits
 		int filltype_fill = ((filltype & 12) | 2);
 		// fill or empty
-		// TODO: Notice that the logic is a little bit warped. If a neighbour is filled, the pixel
-		// gets filled, but with its own value, not the one of the neighbour. This means that fill_smoothing
-		// actually does nothing, and this function can be greatly simplified. Check if this is a bug or a feature.
+		// TODO: Notice that the logic is a little bit warped. If a neighbour is
+		// filled, the pixel
+		// gets filled, but with its own value, not the one of the neighbour.
+		// This means that fill_smoothing
+		// actually does nothing, and this function can be greatly simplified.
+		// Check if this is a bug or a feature.
 		if (filltype_main == 1) {
 			// smooth = fill the pixel if a neighbour is
-			// since the pixels are filled from left to right and from top to bottom
+			// since the pixels are filled from left to right and from top to
+			// bottom
 			// the neighbours selected are above and left
 			if (random.nextDouble() < fill_smoothing) {
 				boolean isChosenFilled = false;
 
-				if (isAboveFilled(spr,x,y) && 
-						isLeftFilled(spr,x,y) == false) {
+				if (isAboveFilled(spr, x, y)
+						&& isLeftFilled(spr, x, y) == false) {
 					isChosenFilled = true;
-				} else if (isAboveFilled(spr,x,y) == false && 
-						isLeftFilled(spr,x,y)) {
+				} else if (isAboveFilled(spr, x, y) == false
+						&& isLeftFilled(spr, x, y)) {
 					isChosenFilled = true;
-				} else if (isAboveFilled(spr,x,y) && 
-						isLeftFilled(spr,x,y)) {
+				} else if (isAboveFilled(spr, x, y) && isLeftFilled(spr, x, y)) {
 					if (random.nextDouble() > fill_smoothing_x_bias) {
 						isChosenFilled = true;
 					} else {
 						isChosenFilled = true;
 					}
 				}
-				if (isChosenFilled){
+				if (isChosenFilled) {
 					spr.hull[x][y] = filltype_fill;
 				}
 			} else {
 				// if the colour is not smooth, just fill it at random
-				if (random.nextDouble() > fill_probability){
+				if (random.nextDouble() > fill_probability) {
 					spr.hull[x][y] = filltype_fill;
 				}
 			}
-		// always fill 
+			// always fill
 		} else if (filltype_main == 2) {
 			spr.hull[x][y] = filltype_fill;
-		// always black
+			// always black
 		} else if (filltype_main == 3) {
 			spr.hull[x][y] = 3;
 		}
 	}
 
-	private boolean isLeftFilled(Sprite spr, int x, int y){
-		if (x > 0){
-			if((spr.hull[x-1][y] & 3) == 2){
+	private boolean isLeftFilled(Sprite spr, int x, int y) {
+		if (x > 0) {
+			if ((spr.hull[x - 1][y] & 3) == 2) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isAboveFilled(Sprite spr, int x, int y) {
+		if (y > 0) {
+			if ((spr.hull[x][y - 1] & 3) == 2) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	private boolean isAboveFilled(Sprite spr, int x, int y){
-		if (y > 0){
-			if((spr.hull[x][y-1] & 3) == 2){
-				return true;
-			}
-		}
-		return false;
-	}
+	//================================================================================
+    // colorize
+    //================================================================================
 	
 	/**
 	 * Colorizes a sprite.
+	 * 
 	 * @param spr
 	 */
 	public void colorize(Sprite spr) {
@@ -428,10 +349,10 @@ public class SpriteGenerator {
 					// smooth = get colour from neighbouring pixel
 					if (colnr > 1 && random.nextDouble() < color_smoothing) {
 						int above = 0, left = 0, chosen = 0;
-						if (x > 0){
+						if (x > 0) {
 							left = spr.colidx[x - 1][y] / 3;
 						}
-						if (y > 0){
+						if (y > 0) {
 							above = spr.colidx[x][y - 1] / 3;
 						}
 						if (above == 0 && left == 0) {
@@ -447,7 +368,7 @@ public class SpriteGenerator {
 								chosen = left;
 							}
 						}
-						if (chosen > 1){
+						if (chosen > 1) {
 							colnr = chosen;
 						}
 					}
@@ -457,8 +378,12 @@ public class SpriteGenerator {
 		}
 	}
 
-	/** 
-	 * flip according to symmetry axes. Apply shade if needed. 
+	//================================================================================
+    // flip
+    //================================================================================
+	
+	/**
+	 * flip according to symmetry axes. Apply shade if needed.
 	 */
 	public void flip(Sprite spr) {
 		for (int y = 0; y < size_y; y++) {
@@ -473,44 +398,32 @@ public class SpriteGenerator {
 				if (mustFlipY(y)) {
 					spr.colidx[x][flipped_y] = color_number + shade_at_flip_y;
 				}
-				if (mustFlipX(x) &&
-						mustFlipY(y)) {
+				if (mustFlipX(x) && mustFlipY(y)) {
 					spr.colidx[flipped_x][flipped_y] = color_number
-							+ shade_at_flip_x 
-							+ shade_at_flip_y;
+							+ shade_at_flip_x + shade_at_flip_y;
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * returns whether the x coordinate must be flipped or not
 	 */
-	private boolean mustFlipX(int x){
-		return flip_x && 
-				x < size_x / 2;
+	private boolean mustFlipX(int x) {
+		return flip_x && x < size_x / 2;
 	}
-	
+
 	/**
 	 * returns whether the y coordinate must be flipped or not
 	 */
-	private boolean mustFlipY(int y){
-		return flip_y && 
-				y < size_y / 2;
+	private boolean mustFlipY(int y) {
+		return flip_y && y < size_y / 2;
 	}
 
-	/**
-	 * Transforms the colour indexes to the colors themselves 
-	 * @param spr
-	 */
-	public void indexToRGB(Sprite spr) {
-		for (int x = 0; x < size_x; x++) {
-			for (int y = 0; y < size_y; y++) {
-				spr.pixels[x][y] = spr.coltable[spr.colidx[x][y]];
-			}
-		}
-	}
-
+	//================================================================================
+    // bevelShade
+    //================================================================================
+	
 	/**
 	 * Performs a bevel shading
 	 * 
@@ -524,20 +437,19 @@ public class SpriteGenerator {
 				// if is a colour (not transparent or black)
 				if (color_index >= 6) {
 					int top_left_distance = Math.min(
-							findOutlineDistanceTop(spr,x,y), 
-							findOutlineDistanceLeft(spr,x,y));
+							findOutlineDistanceTop(spr, x, y),
+							findOutlineDistanceLeft(spr, x, y));
 					int bottom_right_distance = Math.min(
-							findOutlineDistanceBottom(spr,x,y), 
-							findOutlineDistanceRight(spr,x,y));
+							findOutlineDistanceBottom(spr, x, y),
+							findOutlineDistanceRight(spr, x, y));
 					// 0=darkest ... 2=brightest.
 					int bright = 1;
 					// special cases: thin areas
-					if (top_left_distance == 1 && 
-							bottom_right_distance == 1){
+					if (top_left_distance == 1 && bottom_right_distance == 1) {
 						bright = 1;
-					}else if (top_left_distance == 1){
+					} else if (top_left_distance == 1) {
 						bright = 2;
-					}else if (bottom_right_distance == 1){
+					} else if (bottom_right_distance == 1) {
 						bright = 0;
 					}
 
@@ -548,46 +460,38 @@ public class SpriteGenerator {
 						int color_base_index = 3 * (color_index / 3);
 						// adjusts the shade index by making it brighter
 						int color_shade_index = 2 - 2 * bright;
-						spr.colidx[x][y] =  color_base_index + color_shade_index;
+						spr.colidx[x][y] = color_base_index + color_shade_index;
 					}
 				}
 			}
 		}
 	}
 
-	private int findOutlineDistanceTop(Sprite spr, 
-			int x, 
-			int y) {
+	private int findOutlineDistanceTop(Sprite spr, int x, int y) {
 		return findOutlineDistance(spr, x, y, -1, 0);
 	}
-	
-	private int findOutlineDistanceBottom(Sprite spr, 
-			int x, 
-			int y) {
+
+	private int findOutlineDistanceBottom(Sprite spr, int x, int y) {
 		return findOutlineDistance(spr, x, y, 1, 0);
 	}
-	
-	private int findOutlineDistanceLeft(Sprite spr, 
-			int x, 
-			int y) {
+
+	private int findOutlineDistanceLeft(Sprite spr, int x, int y) {
 		return findOutlineDistance(spr, x, y, 0, -1);
 	}
-	
-	private int findOutlineDistanceRight(Sprite spr, 
-			int x, 
-			int y) {
+
+	private int findOutlineDistanceRight(Sprite spr, int x, int y) {
 		return findOutlineDistance(spr, x, y, 0, 1);
 	}
-	
+
 	/**
 	 * Finds the closest distance to an outline (a black or transparent pixel)
 	 * up to depth distance. dx and dy determine the direction to explore.
 	 * 
-	 * TODO: This function probably can be refactored or modified further to make more clear 
-	 * its function (look for the closer distance to an outline.
+	 * TODO: This function probably can be refactored or modified further to
+	 * make more clear its function (look for the closer distance to an outline.
 	 * 
-	 * Sketch of a solution: a function that calculates the closer distance to an outline in every direction 
-	 * (vertical, horizontal, maybe diagonals).
+	 * Sketch of a solution: a function that calculates the closer distance to
+	 * an outline in every direction (vertical, horizontal, maybe diagonals).
 	 * 
 	 * @param spr
 	 * @param x
@@ -597,56 +501,54 @@ public class SpriteGenerator {
 	 * @param depth
 	 * @return
 	 */
-	private int findOutlineDistance(Sprite spr, 
-			int x, 
-			int y, 
-			int dx, 
-			int dy) {
-		if (isInBounds(x,y) == false){
+	private int findOutlineDistance(Sprite spr, int x, int y, int dx, int dy) {
+		if (isInBounds(x, y) == false) {
 			return 0;
 		}
 		// if is transparent or black, is the outline
-		if (spr.colidx[x][y] <= 5){
+		if (spr.colidx[x][y] <= 5) {
 			return 0;
 		}
 		// set the distance to the maximum posible
 		// in case we are not exploring that direction
 		int xdist = Integer.MAX_VALUE;
 		// move x by the amount dx (this is used to move to left and right)
-		if(dx != 0){
+		if (dx != 0) {
 			xdist = findOutlineDistance(spr, x + dx, y, dx, dy);
 		}
-		
+
 		int ydist = Integer.MAX_VALUE;
 		// move y by the amount dy (this is used to move up and down)
-		if(dy != 0){
+		if (dy != 0) {
 			ydist = findOutlineDistance(spr, x, y + dy, dx, dy);
 		}
-		
+
 		// return the minimum distance from both axis
-		if(xdist < ydist){
+		if (xdist < ydist) {
 			return xdist + 1;
-		}else{
+		} else {
 			return ydist + 1;
 		}
 	}
 
 	/**
-	 * returns whether the coordinates are inside the bounds of the sprite. 
+	 * returns whether the coordinates are inside the bounds of the sprite.
 	 * 
 	 * @param x
 	 * @param y
 	 * @return
 	 */
-	private boolean isInBounds(int x, int y){
-		return x >= 0 && 
-				x < size_x && 
-				y >= 0 && 
-				y < size_y;
+	private boolean isInBounds(int x, int y) {
+		return x >= 0 && x < size_x && y >= 0 && y < size_y;
 	}
+
+	//================================================================================
+    // gouraudShade
+    //================================================================================
 	
 	/**
 	 * Performs a Gouraud shading
+	 * 
 	 * @param spr
 	 */
 	public void gouraudShade(Sprite spr) {
@@ -663,32 +565,33 @@ public class SpriteGenerator {
 			int distance_focus_y = Math.abs(y - focus_center_y);
 			for (int x = 0; x < size_x; x++) {
 				int distance_focus_x = Math.abs(x - focus_center_x);
-				// the distance is dx^2+dy^2, where dx is the distance of x to the focus
-				int distance = (int) (Math.pow(distance_focus_x,2) +  Math.pow(distance_focus_y,2));
+				// the distance is dx^2+dy^2, where dx is the distance of x to
+				// the focus
+				int distance = (int) (Math.pow(distance_focus_x, 2) + Math.pow(
+						distance_focus_y, 2));
 				int color_index = spr.colidx[x][y];
 				// if is a colour (not transparent or black)
 				if (color_index >= 6) {
 					// 0=darkest .. 4=brightest. Odd numbers will dither.
 					int bright = 2;
 					if (isInsideHighlightRadius(distance_focus_x,
-							distance_focus_y,
-							highlight_radius_x, 
-							highlight_radius_y)){
+							distance_focus_y, highlight_radius_x,
+							highlight_radius_y)) {
 						bright = 4;
-					}else if (distance <= inner_radius){
+					} else if (distance <= inner_radius) {
 						bright = 3;
-					}else if (distance >= maximum_distance - outer_radius){
+					} else if (distance >= maximum_distance - outer_radius) {
 						bright = 0;
-					}else if (distance >= maximum_distance - outer_radius - 13){
+					} else if (distance >= maximum_distance - outer_radius - 13) {
 						bright = 1;
 					}
 					boolean dither = isDither(bright, x, y);
 					bright /= 2;
 					// 0, 1, or 2
-					if(dither){
+					if (dither) {
 						bright++;
 					}
-					
+
 					if (bright == 2) {
 						spr.colidx[x][y] = 15; // highlight
 					} else {
@@ -696,89 +599,231 @@ public class SpriteGenerator {
 						int color_base_index = 3 * (color_index / 3);
 						// adjusts the shade index by making it brighter
 						int color_shade_index = 2 - 2 * bright;
-						spr.colidx[x][y] =  color_base_index + color_shade_index;
+						spr.colidx[x][y] = color_base_index + color_shade_index;
 					}
 				}
 			}
 		}
 	}
 
-	private boolean isInsideHighlightRadius(int distance_x, int distance_y, int radius_x, int radius_y){
+	private boolean isInsideHighlightRadius(int distance_x, int distance_y,
+			int radius_x, int radius_y) {
 		return distance_x <= radius_x && distance_y <= radius_y;
 	}
-	
-	private boolean isDither(int bright, int x, int y){
+
+	private boolean isDither(int bright, int x, int y) {
 		// if the bright level is odd and the pixel coordinates are odd
 		// the pixel dithers
-		return (bright % 2) == 1 && 
-				((x + y) % 2) == 1;
+		return (bright % 2) == 1 && ((x + y) % 2) == 1;
 	}
+
+	//================================================================================
+    // indexToRGB
+    //================================================================================
+	
+	/**
+	 * Transforms the colour indexes to the colors themselves
+	 * 
+	 * @param spr
+	 */
+	public void indexToRGB(Sprite spr) {
+		for (int x = 0; x < size_x; x++) {
+			for (int y = 0; y < size_y; y++) {
+				spr.pixels[x][y] = spr.coltable[spr.colidx[x][y]];
+			}
+		}
+	}
+
+	//================================================================================
+    // animate
+    //================================================================================
 	
 	/**
 	 * Animates a sprite
+	 * 
 	 * @param spr
 	 */
 	public void animate(Sprite spr) {
 		// now, animate if applicable
-		if (animation_table == null){
+		if (animation_table == null) {
 			return;
 		}
 		// d = distance travelled. Pixels that travel the largest distance
-		// should overwrite other pixels. This is why we process pixels in the order
+		// should overwrite other pixels. This is why we process pixels in the
+		// order
 		// of the distance they travel
 		for (int distance = 0; distance <= 2; distance++) {
 			for (int y = 0; y < size_y; y++) {
 				for (int x = 0; x < size_x; x++) {
 					int color = spr.pixels[x][y];
-					// if the colour is transparent, there is no need for animation
-					if (color == ColorScheme.TRANSPARENT){
+					// if the colour is transparent, there is no need for
+					// animation
+					if (color == ColorScheme.TRANSPARENT) {
 						continue;
 					}
 					for (int frame = 0; frame < animation_table.length; frame++) {
 						int movement = animation_table[frame][y][x];
-						// if the distance travelled is different from distance, there is no need
+						// if the distance travelled is different from distance,
+						// there is no need
 						// to animate
 						// 0 is 0, 1-8 is 1 and > 8 is 2
-						if (AnimationTable.distanceTraveled(movement) != distance){
+						if (AnimationTable.distanceTraveled(movement) != distance) {
 							continue;
 						}
-						// a pretty obscure way to decide in what direction it should move.
-						// will get better once the animation movements are refactored to its own classes.
-						// that way you could have a TwoLeft movement class, with getX and getY methods
-						// that return -2 and 0 respectively
-						int distance_x = 0; 
-						int distance_y = 0; 
+						// a pretty obscure way to decide in what direction it
+						// should move.
+						// will get better once the animation movements are
+						// refactored to its own classes.
+						// that way you could use inversion of control
+						// have a TwoLeft movement class, with getX and getY
+						// methods that return -2 and 0 respectively
+						int distance_x = 0;
+						int distance_y = 0;
 						// use this multiplier if the distance is two
 						if (movement > 8) {
 							movement -= 8;
 						}
 						// one up
-						if (movement == 8 || movement == 1 || movement == 2){
+						if (movement == 8 || movement == 1 || movement == 2) {
 							distance_y = -1;
 						}
 						// one right
-						if (movement == 2 || movement == 3 || movement == 4){
+						if (movement == 2 || movement == 3 || movement == 4) {
 							distance_x = 1;
 						}
 						// one down
-						if (movement == 4 || movement == 5 || movement == 6){
+						if (movement == 4 || movement == 5 || movement == 6) {
 							distance_y = 1;
 						}
 						// one left
-						if (movement == 6 || movement == 7 || movement == 8){
+						if (movement == 6 || movement == 7 || movement == 8) {
 							distance_x = -1;
 						}
 						distance_x *= distance;
 						distance_y *= distance;
-						// TODO: small 'bug': if the animation paints a pixel in the border, it shows
-						// colored, when it should be shown black (as per the outline). 
+						// TODO: small 'bug': if the animation paints a pixel in
+						// the border, it shows
+						// coloured, when it should be shown black (as per the
+						// outline).
 						if (isInBounds(x + distance_x, y + distance_y)) {
-							// paint the pixel where the animation lands in the current frame 
-							spr.pixels[(frame + 1) * size_x + x + distance_x][y + distance_y] = color;
+							// paint the pixel where the animation lands in the
+							// current frame
+							spr.pixels[(frame + 1) * size_x + x + distance_x][y
+									+ distance_y] = color;
 						}
 					}
 				}
 			}
 		}
+	}
+	
+	//================================================================================
+    // addOutline
+    //================================================================================
+	
+	/**
+	 * Adds a black outline surrounding the sprite.
+	 * 
+	 * @param spr
+	 */
+	public void addOutline(Sprite spr) {
+		for (int x = 0; x < spr.pixels.length; x++) {
+			for (int y = 0; y < spr.pixels[x].length; y++) {
+				boolean isNeighbourColored = isLeftPixelColored(x, y, spr)
+						|| isRightPixelColored(x, y, spr)
+						|| isDownPixelColored(x, y, spr)
+						|| isUpPixelColored(x, y, spr);
+				if (isNeighbourColored
+						&& spr.pixels[x][y] == ColorScheme.TRANSPARENT) {
+					spr.pixels[x][y] = 0;
+				}
+				if (isNeighbourColored == false && spr.pixels[x][y] == 0) {
+					spr.pixels[x][y] = ColorScheme.TRANSPARENT;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Returns whether the left pixel is not transparent or black.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param spr
+	 * @return
+	 */
+	private boolean isLeftPixelColored(int x, int y, Sprite spr) {
+		return x > 0 && spr.pixels[x - 1][y] != ColorScheme.TRANSPARENT
+				&& spr.pixels[x - 1][y] != 0;
+	}
+
+	/**
+	 * Returns whether the right pixel is not transparent or black.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param spr
+	 * @return
+	 */
+	private boolean isRightPixelColored(int x, int y, Sprite spr) {
+		return x < spr.pixels.length - 1
+				&& spr.pixels[x + 1][y] != ColorScheme.TRANSPARENT
+				&& spr.pixels[x + 1][y] != 0;
+	}
+
+	/**
+	 * Returns whether the right pixel is not transparent or black.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param spr
+	 * @return
+	 */
+	private boolean isDownPixelColored(int x, int y, Sprite spr) {
+		return y > 0 && spr.pixels[x][y - 1] != ColorScheme.TRANSPARENT
+				&& spr.pixels[x][y - 1] != 0;
+	}
+
+	/**
+	 * Returns whether the right pixel is not transparent or black.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param spr
+	 * @return
+	 */
+	private boolean isUpPixelColored(int x, int y, Sprite spr) {
+		return y < spr.pixels[x].length - 1
+				&& spr.pixels[x][y + 1] != ColorScheme.TRANSPARENT
+				&& spr.pixels[x][y + 1] != 0;
+	}
+	
+	//================================================================================
+    // mergeSprites
+    //================================================================================
+	
+	/**
+	 * Merges two sprites to create a new one. Is the base for mutation. Should
+	 * be rewritten to give a more clear abstraction of mutation.
+	 */
+	public Sprite mergeSprites(Sprite spr1, Sprite spr2, double weight) {
+		Sprite spr = new Sprite(spr1.coltable, spr1.gen, size_x,
+				spr1.pixels.length, size_y);
+		int xmax = flip_x ? size_x / 2 : size_x;
+		int ymax = flip_y ? size_y / 2 : size_y;
+		for (int y = 0; y < ymax; y++) {
+			for (int x = 0; x < xmax; x++) {
+				if (random.nextDouble() > weight) {
+					spr.colidx[x][y] = spr2.colidx[x][y];
+				} else {
+					spr.colidx[x][y] = spr1.colidx[x][y];
+				}
+			}
+		}
+		flip(spr);
+		indexToRGB(spr);
+		animate(spr);
+		addOutline(spr);
+		return spr;
 	}
 }
