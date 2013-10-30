@@ -201,13 +201,10 @@ class Main extends JGEngine {
 	 * Fills the sprite data structure with sprites.
 	 */
 	private void createSprites(){
-		int[][] colorSchemes = generateColorSchemes();
-
 		for (int i = 0; i < NUMBER_SPRITES_X; i++) {
 			for (int j = 0; j < NUMBER_SPRITES_Y; j++) {
-				int[] colorScheme = colorSchemes[(int) (random.nextDouble() * colorSchemes.length)];
 				SpriteGenerator generator = randomizedGenerator();
-				sprites[i][j] = generator.createSprite(colorScheme);			
+				sprites[i][j] = generator.createSprite();			
 			}
 		}
 	}
@@ -218,7 +215,7 @@ class Main extends JGEngine {
 	 */
 	private SpriteGenerator randomizedGenerator(){
 		/*
-		final double NO_SHADE_PROB = 0.75;
+		final double NO_SHADE_PROB = 0.0;
 		final double BEVEL_SHADE_PROB = 0.125;
 		// The rest up to 1 is the Gouraud prob
 		final double HIGHLIGHT_PROB = 0.4;
@@ -246,9 +243,12 @@ class Main extends JGEngine {
 		}
 		return generator;
 		*/
+		int[][] colorSchemes = generateColorSchemes();
+		int[] colorScheme = colorSchemes[(int) (random.nextDouble() * colorSchemes.length)];
 		SpriteGenerator gen = new SpriteGenerator(
 				12, 
 				12, 
+				colorScheme,
 				FillingTable.RAND_12, 
 				AnimationTable.BEND_12,
 				false, 
@@ -270,18 +270,23 @@ class Main extends JGEngine {
 	 * Fills the sprite data structure with mutations of a sprite.
 	 */
 	private void createMutations(Sprite origin){
-		final double SAMENESS_FACTOR = 0.8;
-		int[][] colorSchemes = generateColorSchemes();
+		final double MUTATION_FACTOR = 0.2;
+		//int[][] colorSchemes = generateColorSchemes();
 
 		for (int i = 0; i < NUMBER_SPRITES_X; i++) {
 			for (int j = 0; j < NUMBER_SPRITES_Y; j++) {
-				int[] colorScheme = colorSchemes[(int) (random.nextDouble() * colorSchemes.length)];
+				//int[] colorScheme = colorSchemes[(int) (random.nextDouble() * colorSchemes.length)];
 				SpriteGenerator generator = origin.gen;
 				// Create a mutant of the origin sprite
-				Sprite mutant = generator.mergeSprites(
+				Sprite mutant = generator.mutateHull(
 						origin,
-						generator.createSprite(colorScheme), 
-						SAMENESS_FACTOR);
+						MUTATION_FACTOR);
+				/*
+				mutant = generator.mutateColor(
+						origin,
+						colorScheme, 
+						MUTATION_FACTOR);
+						*/
 				// A mere formality to not override the origin sprite. 
 				if (sprites[i][j] != origin) {
 					sprites[i][j] = mutant;
@@ -334,11 +339,11 @@ class Main extends JGEngine {
 					frames[f] = spriteId + "f" + f;
 					// Defines a new image for each frame.
 					defineImageFromData(frames[f], "-", 0,
-							sprites[i][j].getWidth() / sprites[i][j].getNrFrames(),
+							sprites[i][j].getWidth(),
 							sprites[i][j].getHeight(), 
 							sprites[i][j].getData(f+framesStart), 
 							0,
-							sprites[i][j].getWidth() / sprites[i][j].getNrFrames(),
+							sprites[i][j].getWidth(),
 							"", -1, -1, -1, 1);
 				}
 				// Defines a new animation from each frame.

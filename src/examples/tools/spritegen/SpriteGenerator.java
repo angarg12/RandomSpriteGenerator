@@ -15,9 +15,12 @@ public class SpriteGenerator {
 		random = new Random(seed);
 	}
 
+	// having the size of x and y is error-prone, since the size is
+	// determined by the fill table anyways. These variables should be eliminated
 	int size_x = 16;
 	int size_y = 16;
 
+	int[] color_table;
 	int[][] fill_table;
 	int[][][] animation_table;
 
@@ -26,6 +29,8 @@ public class SpriteGenerator {
 
 	Shading shading = Shading.NONE;
 	// shades the colour when flipping
+	// this is based on the fact that there are only 3 hard-coded shades.
+	// with arbitrary values you don't have this limitation
 	// note: xshadingfac+yshadingfac must be <= 2
 	// 0=no shading
 	// 1=darken
@@ -50,89 +55,96 @@ public class SpriteGenerator {
 	double color_smoothing_x_bias = 0.5;
 
 	public static SpriteGenerator[] shapes = new SpriteGenerator[] {
-			new SpriteGenerator(16, 16, FillingTable.SHIP, null, true, false,
+			new SpriteGenerator(16, 16, ColorScheme.BLUE_GREEN, FillingTable.SHIP, null, true, false,
 					1, 1, 0.5, 0.6, 0.5, 0.3, 0.4, 0.6, 0.5),
-			new SpriteGenerator(18, 18, FillingTable.BUTTERFLY_18,
+			new SpriteGenerator(18, 18, ColorScheme.BLUE_GREEN, FillingTable.BUTTERFLY_18,
 					AnimationTable.BIRD_18, true, false, 1, 1, 0.5, 0.7, 0.5,
 					0.3, 0.4, 0.6, 0.5),
-			new SpriteGenerator(18, 18, FillingTable.MAN_18,
+			new SpriteGenerator(18, 18, ColorScheme.BLUE_GREEN, FillingTable.MAN_18,
 					AnimationTable.MAN_18, true, false, 1, 1, 0.5, 0.6, 0.5,
 					0.3, 0.4, 0.6, 0.5),
-			new SpriteGenerator(18, 18, FillingTable.UFO_18, null, true, true,
+			new SpriteGenerator(18, 18, ColorScheme.BLUE_GREEN, FillingTable.UFO_18, null, true, true,
 					1, 1, 0.5, 0.75, 0.5, 0.3, 0.4, 0.8, 0.5) };
 
 	public static SpriteGenerator[] shapes2 = new SpriteGenerator[] {
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, new int[]{
+				0x010101, 0x010101, 0x010101, // trans
+				0x000000, 0x000000, 0x000000,     // outline
+				0xC0A080, 0x806040, 0x503010,     // col2
+				0xFF7070, 0xD04040, 0xB02020,     // col1
+				0xFFE020, 0xFFB000, 0xF0A000,     // col3
+				0xFFFFFF, 0xB0B0B0, 0x808080,     // highlight
+				}, FillingTable.RAND_12,
 					AnimationTable.WALK_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.FLY_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.CRAWL2_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.CRAWL_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.BEND_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.BUBBLE_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.POKE_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.WALK2_12, false, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.CRAWL_12, false, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.BEND_12, false, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.BUBBLE_12, false, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.POKE_12, false, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.TURN_12, true, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.BEND_12, true, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.CRAWL_12, true, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.BUBBLE_12, true, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.POKE_12, true, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.WIGGLE_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.WIGGLE2_12, false, true, 0, 0, 0.6, 0.2,
 					0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.BOUNCE_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.BOUNCE_12, true, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.NULL_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, FillingTable.RAND_12,
+			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.NULL_12, true, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5), };
 
-	public SpriteGenerator(int xsize, int ysize, int[][] filltable,
+	public SpriteGenerator(int xsize, int ysize, int[] coltable, int[][] filltable,
 			int[][][] animtable, boolean flipx, boolean flipy, int xshadingfac,
 			int yshadingfac, double fill_prob, double fill_smoothing,
 			double fill_smoothing_horiz_bias, double black_prob,
@@ -140,6 +152,7 @@ public class SpriteGenerator {
 			double color_smoothing_horiz_bias) {
 		this.size_x = xsize;
 		this.size_y = ysize;
+		this.color_table = coltable;
 		this.fill_table = filltable;
 		this.animation_table = animtable;
 		this.flip_x = flipx;
@@ -160,8 +173,8 @@ public class SpriteGenerator {
 		if (this.shading == Shading.GOURAUD) {
 			highlight_prob = 0;
 		}
-	}
-
+	}	
+	
 	//================================================================================
     // createSprite
     //================================================================================
@@ -172,7 +185,7 @@ public class SpriteGenerator {
 	 * @param color_table
 	 * @return
 	 */
-	public Sprite createSprite(int[] color_table) {
+	public Sprite createSprite() {
 		// the limit of the loop is the size of the sprite
 		int x_max = size_x;
 		// if the sprite is flipped, only fill half of it (the other half will
@@ -309,7 +322,7 @@ public class SpriteGenerator {
 	public void colorize(Sprite spr) {
 		int xmax = flip_x ? size_x / 2 : size_x;
 		int ymax = flip_y ? size_y / 2 : size_y;
-		int white = spr.coltable.length / 3 - 1;
+		int white = color_table.length / 3 - 1;
 		for (int y = 0; y < ymax; y++) {
 			for (int x = 0; x < xmax; x++) {
 				int colnr = 0;
@@ -327,7 +340,7 @@ public class SpriteGenerator {
 								} else {
 									// any colour except black and highlight
 									colnr = (int) (2 + random.nextDouble()
-											* (spr.coltable.length / 3 - 3));
+											* (color_table.length / 3 - 3));
 								}
 							}
 						}
@@ -337,13 +350,13 @@ public class SpriteGenerator {
 						} else {
 							// any colour except black and highlight
 							colnr = (int) (2 + random.nextDouble()
-									* (spr.coltable.length / 3 - 3));
+									* (color_table.length / 3 - 3));
 						}
 					} else { // any colour except black and highlight
 						// NOTE: previously highlight was also enabled but with
 						// normal probability
 						colnr = (int) (2 + random.nextDouble()
-								* (spr.coltable.length / 3 - 3));
+								* (color_table.length / 3 - 3));
 					}
 					// XXX both black and highlight not supported
 					// smooth = get colour from neighbouring pixel
@@ -799,28 +812,80 @@ public class SpriteGenerator {
 	}
 	
 	//================================================================================
-    // mergeSprites
+    // mutate
     //================================================================================
 	
 	/**
-	 * Merges two sprites to create a new one. Is the base for mutation. Should
-	 * be rewritten to give a more clear abstraction of mutation.
+	 * Mutates the hull of a sprite.
 	 */
-	public Sprite mergeSprites(Sprite spr1, Sprite spr2, double weight) {
-		Sprite spr = new Sprite(spr1.coltable, spr1.gen, size_x,
-				spr1.pixels.length, size_y);
-		int xmax = flip_x ? size_x / 2 : size_x;
-		int ymax = flip_y ? size_y / 2 : size_y;
-		for (int y = 0; y < ymax; y++) {
-			for (int x = 0; x < xmax; x++) {
-				if (random.nextDouble() > weight) {
+	public Sprite mutateHull(Sprite spr1, double mutation_factor) {
+		// TODO: 'conceptual' bug: since the second sprite uses the same base shape than
+		// the original, the mutations aren't that much different from the original.
+		// this is good for mutation because we want sprites that are different, but not completely
+		// yet for instance, if we set a mutation factor of 1, we would expect completely unrrelated sprites
+		// (totally random), yet there is a strong correlation between them (because they use the same
+		// base filling table).
+		Sprite spr = spr1.clone();
+		Sprite spr2 = createSprite();
+		// the limit of the loop is the size of the sprite
+		int x_max = size_x;
+		// if the sprite is flipped, only fill half of it (the other half will
+		// be the symmetric)
+		if (flip_x) {
+			x_max /= 2;
+		}
+
+		// the limit of the loop is the size of the sprite
+		int y_max = size_y;
+		// if the sprite is flipped, only fill half of it (the other half will
+		// be the symmetric)
+		if (flip_y) {
+			y_max /= 2;
+		}
+		
+		for (int y = 0; y < y_max; y++) {
+			for (int x = 0; x < x_max; x++) {
+				if (random.nextDouble() < mutation_factor) {
 					spr.colidx[x][y] = spr2.colidx[x][y];
 				} else {
 					spr.colidx[x][y] = spr1.colidx[x][y];
 				}
 			}
 		}
+
 		flip(spr);
+		switch (shading) {
+		case BEVEL:
+			bevelShade(spr);
+			break;
+		case GOURAUD:
+			gouraudShade(spr);
+			break;
+		default:
+			break;
+		}
+		indexToRGB(spr);
+		animate(spr);
+		addOutline(spr);
+		return spr;
+	}	
+	
+	/**
+	 * Mutates the color of a sprite.
+	 */
+	public Sprite mutateColor(Sprite spr1, int[] mutated_color_table, double mutation_factor) {
+		Sprite spr = spr1.clone();
+		
+		int shorter_table_length = spr.coltable.length;
+		if(mutated_color_table.length < shorter_table_length){
+			shorter_table_length = mutated_color_table.length;
+		}
+		for(int i = 0; i < shorter_table_length; i++){
+			if(random.nextDouble() < mutation_factor){
+				spr.coltable[i] = mutated_color_table[i];
+			}
+		}
+
 		indexToRGB(spr);
 		animate(spr);
 		addOutline(spr);

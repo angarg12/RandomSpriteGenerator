@@ -26,12 +26,13 @@ public class Sprite {
 	}
 
 	public int getWidth() {
-		return pixels.length;
+		return pixels.length/getNrFrames();
 	}
 
 	public int getHeight() {
-		if (pixels.length == 0)
+		if (pixels.length == 0){
 			return 0;
+		}
 		return pixels[0].length;
 	}
 
@@ -42,8 +43,8 @@ public class Sprite {
 	}
 
 	public int[] getData(int frame) {
-		int totalwidth = getWidth();
 		int nrframes = getNrFrames();
+		int totalwidth = getWidth()*nrframes;
 		int width = totalwidth / nrframes;
 		int[] ret = new int[width * getHeight()];
 		for (int x = 0; x < width; x++) {

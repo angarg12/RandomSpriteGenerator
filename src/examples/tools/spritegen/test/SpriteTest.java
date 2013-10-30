@@ -24,12 +24,12 @@ public class SpriteTest {
 	
 	@Test
 	public void test() throws Exception {
-		spriteTest(colorTable1,generator1,5,25,5);
-		spriteTest(colorTable2,generator1,5,25,5);
+		spriteTest(colorTable1,generator1,5,15,5);
+		spriteTest(colorTable2,generator1,5,15,5);
 		spriteTest(colorTable1,generator2,5,25,5);
-		spriteTest(colorTable1,generator1,10,25,5);
-		spriteTest(colorTable1,generator1,5,25,10);
-		spriteTest(colorTable1,generator1,7,32,12);
+		spriteTest(colorTable1,generator1,10,30,5);
+		spriteTest(colorTable1,generator1,5,15,10);
+		spriteTest(colorTable1,generator1,7,21,12);
 	}
 	
 	private void spriteTest(int [] coltable, 
@@ -52,23 +52,23 @@ public class SpriteTest {
 			int xsize,
 			int totalxsize,
 			int ysize) throws Exception { 
-		if(coltable == colorTable1 && gen == generator1 && xsize == 5 && totalxsize == 25 && ysize == 5){
-			return 25;
+		if(coltable == colorTable1 && gen == generator1 && xsize == 5 && totalxsize == 15 && ysize == 5){
+			return 5;
 		}
-		if(coltable == colorTable2 && gen == generator1 && xsize == 5 && totalxsize == 25 && ysize == 5){
-			return 25;
+		if(coltable == colorTable2 && gen == generator1 && xsize == 5 && totalxsize == 15 && ysize == 5){
+			return 5;
 		}
 		if(coltable == colorTable1 && gen == generator2 && xsize == 5 && totalxsize == 25 && ysize == 5){
-			return 25;
+			return 5;
 		}
-		if(coltable == colorTable1 && gen == generator1 && xsize == 10 && totalxsize == 25 && ysize == 5){
-			return 25;
+		if(coltable == colorTable1 && gen == generator1 && xsize == 10 && totalxsize == 30 && ysize == 5){
+			return 10;
 		}
-		if(coltable == colorTable1 && gen == generator1 && xsize == 5 && totalxsize == 25 && ysize == 10){
-			return 25;
+		if(coltable == colorTable1 && gen == generator1 && xsize == 5 && totalxsize == 15 && ysize == 10){
+			return 5;
 		}
-		if(coltable == colorTable1 && gen == generator1 && xsize == 7 && totalxsize == 32 && ysize == 12){
-			return 32;
+		if(coltable == colorTable1 && gen == generator1 && xsize == 7 && totalxsize == 21 && ysize == 12){
+			return 7;
 		}
 		throw new Exception("Values not tabulated: "+coltable+" "+gen+" "+xsize+" "+totalxsize+" "+ysize);
 	}	
@@ -78,22 +78,22 @@ public class SpriteTest {
 			int xsize,
 			int totalxsize,
 			int ysize) throws Exception { 
-		if(coltable == colorTable1 && gen == generator1 && xsize == 5 && totalxsize == 25 && ysize == 5){
+		if(coltable == colorTable1 && gen == generator1 && xsize == 5 && totalxsize == 15 && ysize == 5){
 			return 5;
 		}
-		if(coltable == colorTable2 && gen == generator1 && xsize == 5 && totalxsize == 25 && ysize == 5){
+		if(coltable == colorTable2 && gen == generator1 && xsize == 5 && totalxsize == 15 && ysize == 5){
 			return 5;
 		}
 		if(coltable == colorTable1 && gen == generator2 && xsize == 5 && totalxsize == 25 && ysize == 5){
 			return 5;
 		}
-		if(coltable == colorTable1 && gen == generator1 && xsize == 10 && totalxsize == 25 && ysize == 5){
+		if(coltable == colorTable1 && gen == generator1 && xsize == 10 && totalxsize == 30 && ysize == 5){
 			return 5;
 		}
-		if(coltable == colorTable1 && gen == generator1 && xsize == 5 && totalxsize == 25 && ysize == 10){
+		if(coltable == colorTable1 && gen == generator1 && xsize == 5 && totalxsize == 15 && ysize == 10){
 			return 10;
 		}
-		if(coltable == colorTable1 && gen == generator1 && xsize == 7 && totalxsize == 32 && ysize == 12){
+		if(coltable == colorTable1 && gen == generator1 && xsize == 7 && totalxsize == 21 && ysize == 12){
 			return 12;
 		}
 		throw new Exception("Values not tabulated: "+coltable+" "+gen+" "+xsize+" "+totalxsize+" "+ysize);
@@ -104,22 +104,22 @@ public class SpriteTest {
 			int xsize,
 			int totalxsize,
 			int ysize) throws Exception { 
-		if(coltable == colorTable1 && gen == generator1 && xsize == 5 && totalxsize == 25 && ysize == 5){
+		if(coltable == colorTable1 && gen == generator1 && xsize == 5 && totalxsize == 15 && ysize == 5){
 			return 3;
 		}
-		if(coltable == colorTable2 && gen == generator1 && xsize == 5 && totalxsize == 25 && ysize == 5){
+		if(coltable == colorTable2 && gen == generator1 && xsize == 5 && totalxsize == 15 && ysize == 5){
 			return 3;
 		}
 		if(coltable == colorTable1 && gen == generator2 && xsize == 5 && totalxsize == 25 && ysize == 5){
 			return 5;
 		}
-		if(coltable == colorTable1 && gen == generator1 && xsize == 10 && totalxsize == 25 && ysize == 5){
+		if(coltable == colorTable1 && gen == generator1 && xsize == 10 && totalxsize == 30 && ysize == 5){
 			return 3;
 		}
-		if(coltable == colorTable1 && gen == generator1 && xsize == 5 && totalxsize == 25 && ysize == 10){
+		if(coltable == colorTable1 && gen == generator1 && xsize == 5 && totalxsize == 15 && ysize == 10){
 			return 3;
 		}
-		if(coltable == colorTable1 && gen == generator1 && xsize == 7 && totalxsize == 32 && ysize == 12){
+		if(coltable == colorTable1 && gen == generator1 && xsize == 7 && totalxsize == 21 && ysize == 12){
 			return 3;
 		}
 		throw new Exception("Values not tabulated: "+coltable+" "+gen+" "+xsize+" "+totalxsize+" "+ysize);
@@ -131,23 +131,23 @@ public class SpriteTest {
 			int totalxsize,
 			int ysize,
 			int frame) throws Exception { 
-		if(coltable == colorTable1 && gen == generator1 && xsize == 5 && totalxsize == 25 && ysize == 5 && frame >= 0 && frame <= 2){
-			return new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+		if(coltable == colorTable1 && gen == generator1 && xsize == 5 && totalxsize == 15 && ysize == 5 && frame >= 0 && frame <= 2){
+			return new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 		}
-		if(coltable == colorTable2 && gen == generator1 && xsize == 5 && totalxsize == 25 && ysize == 5 && frame >= 0 && frame <= 2){
-			return new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+		if(coltable == colorTable2 && gen == generator1 && xsize == 5 && totalxsize == 15 && ysize == 5 && frame >= 0 && frame <= 2){
+			return new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 		}
 		if(coltable == colorTable1 && gen == generator2 && xsize == 5 && totalxsize == 25 && ysize == 5 && frame >= 0 && frame <= 4){
 			return new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 		}
-		if(coltable == colorTable1 && gen == generator1 && xsize == 10 && totalxsize == 25 && ysize == 5 && frame >= 0 && frame <= 2){
-			return new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+		if(coltable == colorTable1 && gen == generator1 && xsize == 10 && totalxsize == 30 && ysize == 5 && frame >= 0 && frame <= 2){
+			return new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 		}
-		if(coltable == colorTable1 && gen == generator1 && xsize == 5 && totalxsize == 25 && ysize == 10 && frame >= 0 && frame <= 2){
-			return new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+		if(coltable == colorTable1 && gen == generator1 && xsize == 5 && totalxsize == 15 && ysize == 10 && frame >= 0 && frame <= 2){
+			return new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 		}
-		if(coltable == colorTable1 && gen == generator1 && xsize == 7 && totalxsize == 32 && ysize == 12 && frame >= 0 && frame <= 2){
-			return new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+		if(coltable == colorTable1 && gen == generator1 && xsize == 7 && totalxsize == 21 && ysize == 12 && frame >= 0 && frame <= 2){
+			return new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 		}
 		throw new Exception("Values not tabulated: "+coltable+" "+gen+" "+xsize+" "+totalxsize+" "+ysize+" "+frame);
 	}	
