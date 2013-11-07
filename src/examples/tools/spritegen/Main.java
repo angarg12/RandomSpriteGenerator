@@ -246,8 +246,6 @@ class Main extends JGEngine {
 		int[][] colorSchemes = generateColorSchemes();
 		int[] colorScheme = colorSchemes[(int) (random.nextDouble() * colorSchemes.length)];
 		SpriteGenerator gen = new SpriteGenerator(
-				12, 
-				12, 
 				colorScheme,
 				FillingTable.RAND_12, 
 				AnimationTable.BEND_12,
@@ -263,6 +261,7 @@ class Main extends JGEngine {
 				0.2, 
 				0.5);
 		gen.shading = Shading.NONE;
+		
 		return gen;
 	}
 	

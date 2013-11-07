@@ -15,11 +15,6 @@ public class SpriteGenerator {
 		random = new Random(seed);
 	}
 
-	// having the size of x and y is error-prone, since the size is
-	// determined by the fill table anyways. These variables should be eliminated
-	int size_x = 16;
-	int size_y = 16;
-
 	int[] color_table;
 	int[][] fill_table;
 	int[][][] animation_table;
@@ -55,19 +50,19 @@ public class SpriteGenerator {
 	double color_smoothing_x_bias = 0.5;
 
 	public static SpriteGenerator[] shapes = new SpriteGenerator[] {
-			new SpriteGenerator(16, 16, ColorScheme.BLUE_GREEN, FillingTable.SHIP, null, true, false,
+			new SpriteGenerator(ColorScheme.RED_YELLOW, FillingTable.SHIP, null, true, false,
 					1, 1, 0.5, 0.6, 0.5, 0.3, 0.4, 0.6, 0.5),
-			new SpriteGenerator(18, 18, ColorScheme.BLUE_GREEN, FillingTable.BUTTERFLY_18,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.BUTTERFLY_18,
 					AnimationTable.BIRD_18, true, false, 1, 1, 0.5, 0.7, 0.5,
 					0.3, 0.4, 0.6, 0.5),
-			new SpriteGenerator(18, 18, ColorScheme.BLUE_GREEN, FillingTable.MAN_18,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.MAN_18,
 					AnimationTable.MAN_18, true, false, 1, 1, 0.5, 0.6, 0.5,
 					0.3, 0.4, 0.6, 0.5),
-			new SpriteGenerator(18, 18, ColorScheme.BLUE_GREEN, FillingTable.UFO_18, null, true, true,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.UFO_18, null, true, true,
 					1, 1, 0.5, 0.75, 0.5, 0.3, 0.4, 0.8, 0.5) };
 
 	public static SpriteGenerator[] shapes2 = new SpriteGenerator[] {
-			new SpriteGenerator(12, 12, new int[]{
+			new SpriteGenerator(new int[]{
 				0x010101, 0x010101, 0x010101, // trans
 				0x000000, 0x000000, 0x000000,     // outline
 				0xC0A080, 0x806040, 0x503010,     // col2
@@ -77,81 +72,79 @@ public class SpriteGenerator {
 				}, FillingTable.RAND_12,
 					AnimationTable.WALK_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.FLY_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.CRAWL2_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.CRAWL_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.BEND_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.BUBBLE_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.POKE_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.WALK2_12, false, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.CRAWL_12, false, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.BEND_12, false, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.BUBBLE_12, false, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.POKE_12, false, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.TURN_12, true, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.BEND_12, true, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.CRAWL_12, true, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.BUBBLE_12, true, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.POKE_12, true, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.WIGGLE_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.WIGGLE2_12, false, true, 0, 0, 0.6, 0.2,
 					0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.BOUNCE_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.BOUNCE_12, true, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.NULL_12, true, false, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(12, 12, ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
+			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
 					AnimationTable.NULL_12, true, true, 0, 0, 0.6, 0.2, 0.5,
 					0.3, 0.4, 0.3, 0.5), };
 
-	public SpriteGenerator(int xsize, int ysize, int[] coltable, int[][] filltable,
+	public SpriteGenerator(int[] coltable, int[][] filltable,
 			int[][][] animtable, boolean flipx, boolean flipy, int xshadingfac,
 			int yshadingfac, double fill_prob, double fill_smoothing,
 			double fill_smoothing_horiz_bias, double black_prob,
 			double highlight_prob, double color_smoothing,
 			double color_smoothing_horiz_bias) {
-		this.size_x = xsize;
-		this.size_y = ysize;
 		this.color_table = coltable;
 		this.fill_table = filltable;
 		this.animation_table = animtable;
@@ -187,27 +180,27 @@ public class SpriteGenerator {
 	 */
 	public Sprite createSprite() {
 		// the limit of the loop is the size of the sprite
-		int x_max = size_x;
+		int x_max = fill_table.length;
 		// if the sprite is flipped, only fill half of it (the other half will
 		// be the symmetric)
 		if (flip_x) {
 			x_max /= 2;
 		}
 		// the limit of the loop is the size of the sprite
-		int y_max = size_y;
+		int y_max = fill_table[0].length;
 		// if the sprite is flipped, only fill half of it (the other half will
 		// be the symmetric)
 		if (flip_y) {
 			y_max /= 2;
 		}
-		int total_x_size = size_x;
+		int total_x_size = fill_table.length;
 		// the total x size is the x size by the number of frames (plus 1 for
 		// the still)
 		if (animation_table != null) {
-			total_x_size = size_x * (animation_table.length + 1);
+			total_x_size = fill_table.length * (animation_table.length + 1);
 		}
 
-		Sprite spr = new Sprite(color_table, this, size_x, total_x_size, size_y);
+		Sprite spr = new Sprite(color_table, this, fill_table.length, total_x_size, fill_table[0].length);
 
 		for (int y = 0; y < y_max; y++) {
 			for (int x = 0; x < x_max; x++) {
@@ -320,77 +313,108 @@ public class SpriteGenerator {
 	 * @param spr
 	 */
 	public void colorize(Sprite spr) {
-		int xmax = flip_x ? size_x / 2 : size_x;
-		int ymax = flip_y ? size_y / 2 : size_y;
+		// the limit of the loop is the size of the sprite
+		int x_max = fill_table.length;
+		// if the sprite is flipped, only fill half of it (the other half will
+		// be the symmetric)
+		if (flip_x) {
+			x_max /= 2;
+		}
+		// the limit of the loop is the size of the sprite
+		int y_max = fill_table[0].length;
+		// if the sprite is flipped, only fill half of it (the other half will
+		// be the symmetric)
+		if (flip_y) {
+			y_max /= 2;
+		}
+		// the index of the highlight color
 		int white = color_table.length / 3 - 1;
-		for (int y = 0; y < ymax; y++) {
-			for (int x = 0; x < xmax; x++) {
-				int colnr = 0;
-				int filltype = spr.hull[x][y];
-				if ((filltype & 3) == 3) { // outline
-					colnr = 1;
-				} else if ((filltype & 3) == 2) { // normal fill
-					if ((filltype & 4) == 4) { // black enabled
+		for (int y = 0; y < y_max; y++) {
+			for (int x = 0; x < x_max; x++) {
+				int color_index = 0;
+				int fill_type = spr.hull[x][y];
+				if (isOutline(fill_type)) { // outline
+					color_index = 1;
+				} else if (isAlwaysFill(fill_type)) { // normal fill
+					if (isBlackEnabled(fill_type)) { // black enabled
 						if (random.nextDouble() < black_probability) {
-							colnr = 1; // black
+							color_index = 1; // black
 						} else {
-							if ((filltype & 8) == 8) { // highlight enabled
+							if (isHighlightEnabled(fill_type)) { // highlight enabled
 								if (random.nextDouble() < highlight_probability) {
-									colnr = white;
+									color_index = white;
 								} else {
 									// any colour except black and highlight
-									colnr = (int) (2 + random.nextDouble()
+									color_index = (int) (2 + random.nextDouble()
 											* (color_table.length / 3 - 3));
 								}
 							}
 						}
-					} else if ((filltype & 8) == 8) { // highlight enabled
+					} else if (isHighlightEnabled(fill_type)) { // highlight enabled
 						if (random.nextDouble() < highlight_probability) {
-							colnr = white;
+							color_index = white;
 						} else {
 							// any colour except black and highlight
-							colnr = (int) (2 + random.nextDouble()
+							color_index = (int) (2 + random.nextDouble()
 									* (color_table.length / 3 - 3));
 						}
 					} else { // any colour except black and highlight
 						// NOTE: previously highlight was also enabled but with
 						// normal probability
-						colnr = (int) (2 + random.nextDouble()
+						color_index = (int) (2 + random.nextDouble()
 								* (color_table.length / 3 - 3));
 					}
 					// XXX both black and highlight not supported
 					// smooth = get colour from neighbouring pixel
-					if (colnr > 1 && random.nextDouble() < color_smoothing) {
-						int above = 0, left = 0, chosen = 0;
+					if (color_index > 1 && random.nextDouble() < color_smoothing) {
+						int above_index = 0;
+						int left_index = 0;
+						int chosen_index = 0;
+						
 						if (x > 0) {
-							left = spr.colidx[x - 1][y] / 3;
+							left_index = spr.colidx[x - 1][y] / 3;
 						}
 						if (y > 0) {
-							above = spr.colidx[x][y - 1] / 3;
+							above_index = spr.colidx[x][y - 1] / 3;
 						}
-						if (above == 0 && left == 0) {
-							chosen = 0;
-						} else if (above != 0 && left == 0) {
-							chosen = above;
-						} else if (above == 0 && left != 0) {
-							chosen = left;
-						} else if (above != 0 && left != 0) {
+						if (above_index == 0 && left_index == 0) {
+							chosen_index = 0;
+						} else if (above_index != 0 && left_index == 0) {
+							chosen_index = above_index;
+						} else if (above_index == 0 && left_index != 0) {
+							chosen_index = left_index;
+						} else if (above_index != 0 && left_index != 0) {
 							if (random.nextDouble() > color_smoothing_x_bias) {
-								chosen = above;
+								chosen_index = above_index;
 							} else {
-								chosen = left;
+								chosen_index = left_index;
 							}
 						}
-						if (chosen > 1) {
-							colnr = chosen;
+						if (chosen_index > 1) {
+							color_index = chosen_index;
 						}
 					}
 				}
-				spr.colidx[x][y] = colnr * 3;
+				spr.colidx[x][y] = color_index * 3;
 			}
 		}
 	}
 
+	private boolean isOutline(int fill_type){
+		return (fill_type & 3) == 3;
+	}
+	
+	private boolean isAlwaysFill(int fill_type){
+		return (fill_type & 3) == 2;
+	}
+	
+	private boolean isBlackEnabled(int fill_type){
+		return (fill_type & 4) == 4;
+	}
+	
+	private boolean isHighlightEnabled(int fill_type){
+		return (fill_type & 8) == 8;
+	}
 	//================================================================================
     // flip
     //================================================================================
@@ -399,11 +423,11 @@ public class SpriteGenerator {
 	 * flip according to symmetry axes. Apply shade if needed.
 	 */
 	public void flip(Sprite spr) {
-		for (int y = 0; y < size_y; y++) {
-			for (int x = 0; x < size_x; x++) {
+		for (int y = 0; y < fill_table[0].length; y++) {
+			for (int x = 0; x < fill_table.length; x++) {
 				int color_number = spr.colidx[x][y];
-				int flipped_x = size_x - x - 1;
-				int flipped_y = size_y - y - 1;
+				int flipped_x = fill_table.length - x - 1;
+				int flipped_y = fill_table[0].length - y - 1;
 				// if a pixel must be flipped, flip it and apply shade
 				if (mustFlipX(x)) {
 					spr.colidx[flipped_x][y] = color_number + shade_at_flip_x;
@@ -423,14 +447,14 @@ public class SpriteGenerator {
 	 * returns whether the x coordinate must be flipped or not
 	 */
 	private boolean mustFlipX(int x) {
-		return flip_x && x < size_x / 2;
+		return flip_x && x < fill_table.length / 2;
 	}
 
 	/**
 	 * returns whether the y coordinate must be flipped or not
 	 */
 	private boolean mustFlipY(int y) {
-		return flip_y && y < size_y / 2;
+		return flip_y && y < fill_table[0].length / 2;
 	}
 
 	//================================================================================
@@ -444,8 +468,8 @@ public class SpriteGenerator {
 	 */
 	public void bevelShade(Sprite spr) {
 		// shade given colours
-		for (int y = 0; y < size_y; y++) {
-			for (int x = 0; x < size_x; x++) {
+		for (int y = 0; y < fill_table[0].length; y++) {
+			for (int x = 0; x < fill_table.length; x++) {
 				int color_index = spr.colidx[x][y];
 				// if is a colour (not transparent or black)
 				if (color_index >= 6) {
@@ -552,7 +576,7 @@ public class SpriteGenerator {
 	 * @return
 	 */
 	private boolean isInBounds(int x, int y) {
-		return x >= 0 && x < size_x && y >= 0 && y < size_y;
+		return x >= 0 && x < fill_table.length && y >= 0 && y < fill_table[0].length;
 	}
 
 	//================================================================================
@@ -566,17 +590,17 @@ public class SpriteGenerator {
 	 */
 	public void gouraudShade(Sprite spr) {
 		// coordinates of the centre of the focus
-		int focus_center_x = size_x / 4 + (int) (random.nextDouble() * 3);
-		int focus_center_y = size_y / 4 + (int) (random.nextDouble() * 3);
+		int focus_center_x = fill_table.length / 4 + (int) (random.nextDouble() * 3);
+		int focus_center_y = fill_table[0].length / 4 + (int) (random.nextDouble() * 3);
 		// maximum distance from the focus, given squared
-		int maximum_distance = (int) Math.pow(size_x - focus_center_x - 1, 2);
+		int maximum_distance = (int) Math.pow(fill_table.length - focus_center_x - 1, 2);
 		int highlight_radius_x = (int) (random.nextDouble() * 3);
 		int highlight_radius_y = (int) (random.nextDouble() * 3);
 		int inner_radius = 7 + (int) (random.nextDouble() * 16);
 		int outer_radius = 7 + (int) (random.nextDouble() * 16);
-		for (int y = 0; y < size_y; y++) {
+		for (int y = 0; y < fill_table[0].length; y++) {
 			int distance_focus_y = Math.abs(y - focus_center_y);
-			for (int x = 0; x < size_x; x++) {
+			for (int x = 0; x < fill_table.length; x++) {
 				int distance_focus_x = Math.abs(x - focus_center_x);
 				// the distance is dx^2+dy^2, where dx is the distance of x to
 				// the focus
@@ -624,9 +648,9 @@ public class SpriteGenerator {
 		return distance_x <= radius_x && distance_y <= radius_y;
 	}
 
+	// if the bright level is odd and the pixel coordinates are odd
+	// the pixel dithers
 	private boolean isDither(int bright, int x, int y) {
-		// if the bright level is odd and the pixel coordinates are odd
-		// the pixel dithers
 		return (bright % 2) == 1 && ((x + y) % 2) == 1;
 	}
 
@@ -640,8 +664,8 @@ public class SpriteGenerator {
 	 * @param spr
 	 */
 	public void indexToRGB(Sprite spr) {
-		for (int x = 0; x < size_x; x++) {
-			for (int y = 0; y < size_y; y++) {
+		for (int x = 0; x < fill_table.length; x++) {
+			for (int y = 0; y < fill_table[0].length; y++) {
 				spr.pixels[x][y] = spr.coltable[spr.colidx[x][y]];
 			}
 		}
@@ -666,8 +690,8 @@ public class SpriteGenerator {
 		// order
 		// of the distance they travel
 		for (int distance = 0; distance <= 2; distance++) {
-			for (int y = 0; y < size_y; y++) {
-				for (int x = 0; x < size_x; x++) {
+			for (int y = 0; y < fill_table[0].length; y++) {
+				for (int x = 0; x < fill_table.length; x++) {
 					int color = spr.pixels[x][y];
 					// if the colour is transparent, there is no need for
 					// animation
@@ -721,8 +745,8 @@ public class SpriteGenerator {
 						if (isInBounds(x + distance_x, y + distance_y)) {
 							// paint the pixel where the animation lands in the
 							// current frame
-							spr.pixels[(frame + 1) * size_x + x + distance_x][y
-									+ distance_y] = color;
+							spr.pixels[(frame + 1) * fill_table.length + x + distance_x]
+									  [y + distance_y] = color;
 						}
 					}
 				}
@@ -828,7 +852,7 @@ public class SpriteGenerator {
 		Sprite spr = spr1.clone();
 		Sprite spr2 = createSprite();
 		// the limit of the loop is the size of the sprite
-		int x_max = size_x;
+		int x_max = fill_table.length;
 		// if the sprite is flipped, only fill half of it (the other half will
 		// be the symmetric)
 		if (flip_x) {
@@ -836,7 +860,7 @@ public class SpriteGenerator {
 		}
 
 		// the limit of the loop is the size of the sprite
-		int y_max = size_y;
+		int y_max = fill_table[0].length;
 		// if the sprite is flipped, only fill half of it (the other half will
 		// be the symmetric)
 		if (flip_y) {
