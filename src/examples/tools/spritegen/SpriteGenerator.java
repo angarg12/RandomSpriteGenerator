@@ -50,7 +50,7 @@ public class SpriteGenerator {
 	double color_smoothing_x_bias = 0.5;
 
 	public static SpriteGenerator[] shapes = new SpriteGenerator[] {
-			new SpriteGenerator(ColorScheme.RED_YELLOW, FillingTable.SHIP, null, true, false,
+			new SpriteGenerator(ColorScheme.RED_YELLOW, FillingTable.SHIP2, null, true, false,
 					1, 1, 0.5, 0.6, 0.5, 0.3, 0.4, 0.6, 0.5),
 			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.BUTTERFLY_18,
 					AnimationTable.BIRD_18, true, false, 1, 1, 0.5, 0.7, 0.5,
@@ -180,27 +180,27 @@ public class SpriteGenerator {
 	 */
 	public Sprite createSprite() {
 		// the limit of the loop is the size of the sprite
-		int x_max = fill_table.length;
+		int x_max = fill_table[0].length;
 		// if the sprite is flipped, only fill half of it (the other half will
 		// be the symmetric)
 		if (flip_x) {
 			x_max /= 2;
 		}
 		// the limit of the loop is the size of the sprite
-		int y_max = fill_table[0].length;
+		int y_max = fill_table.length;
 		// if the sprite is flipped, only fill half of it (the other half will
 		// be the symmetric)
 		if (flip_y) {
 			y_max /= 2;
 		}
-		int total_x_size = fill_table.length;
+		int total_x_size = fill_table[0].length;
 		// the total x size is the x size by the number of frames (plus 1 for
 		// the still)
 		if (animation_table != null) {
-			total_x_size = fill_table.length * (animation_table.length + 1);
+			total_x_size = fill_table[0].length * (animation_table.length + 1);
 		}
 
-		Sprite spr = new Sprite(color_table, this, fill_table.length, total_x_size, fill_table[0].length);
+		Sprite spr = new Sprite(color_table, this, fill_table[0].length, total_x_size, fill_table.length);
 
 		for (int y = 0; y < y_max; y++) {
 			for (int x = 0; x < x_max; x++) {
@@ -314,14 +314,14 @@ public class SpriteGenerator {
 	 */
 	public void colorize(Sprite spr) {
 		// the limit of the loop is the size of the sprite
-		int x_max = fill_table.length;
+		int x_max = fill_table[0].length;
 		// if the sprite is flipped, only fill half of it (the other half will
 		// be the symmetric)
 		if (flip_x) {
 			x_max /= 2;
 		}
 		// the limit of the loop is the size of the sprite
-		int y_max = fill_table[0].length;
+		int y_max = fill_table.length;
 		// if the sprite is flipped, only fill half of it (the other half will
 		// be the symmetric)
 		if (flip_y) {
@@ -423,11 +423,11 @@ public class SpriteGenerator {
 	 * flip according to symmetry axes. Apply shade if needed.
 	 */
 	public void flip(Sprite spr) {
-		for (int y = 0; y < fill_table[0].length; y++) {
-			for (int x = 0; x < fill_table.length; x++) {
+		for (int y = 0; y < fill_table.length; y++) {
+			for (int x = 0; x < fill_table[0].length; x++) {
 				int color_number = spr.colidx[x][y];
-				int flipped_x = fill_table.length - x - 1;
-				int flipped_y = fill_table[0].length - y - 1;
+				int flipped_x = fill_table[0].length - x - 1;
+				int flipped_y = fill_table.length - y - 1;
 				// if a pixel must be flipped, flip it and apply shade
 				if (mustFlipX(x)) {
 					spr.colidx[flipped_x][y] = color_number + shade_at_flip_x;
@@ -447,14 +447,14 @@ public class SpriteGenerator {
 	 * returns whether the x coordinate must be flipped or not
 	 */
 	private boolean mustFlipX(int x) {
-		return flip_x && x < fill_table.length / 2;
+		return flip_x && x < fill_table[0].length / 2;
 	}
 
 	/**
 	 * returns whether the y coordinate must be flipped or not
 	 */
 	private boolean mustFlipY(int y) {
-		return flip_y && y < fill_table[0].length / 2;
+		return flip_y && y < fill_table.length / 2;
 	}
 
 	//================================================================================
@@ -468,8 +468,8 @@ public class SpriteGenerator {
 	 */
 	public void bevelShade(Sprite spr) {
 		// shade given colours
-		for (int y = 0; y < fill_table[0].length; y++) {
-			for (int x = 0; x < fill_table.length; x++) {
+		for (int y = 0; y < fill_table.length; y++) {
+			for (int x = 0; x < fill_table[0].length; x++) {
 				int color_index = spr.colidx[x][y];
 				// if is a colour (not transparent or black)
 				if (color_index >= 6) {
@@ -576,7 +576,7 @@ public class SpriteGenerator {
 	 * @return
 	 */
 	private boolean isInBounds(int x, int y) {
-		return x >= 0 && x < fill_table.length && y >= 0 && y < fill_table[0].length;
+		return x >= 0 && x < fill_table[0].length && y >= 0 && y < fill_table.length;
 	}
 
 	//================================================================================
@@ -590,17 +590,17 @@ public class SpriteGenerator {
 	 */
 	public void gouraudShade(Sprite spr) {
 		// coordinates of the centre of the focus
-		int focus_center_x = fill_table.length / 4 + (int) (random.nextDouble() * 3);
-		int focus_center_y = fill_table[0].length / 4 + (int) (random.nextDouble() * 3);
+		int focus_center_x = fill_table[0].length / 4 + (int) (random.nextDouble() * 3);
+		int focus_center_y = fill_table.length / 4 + (int) (random.nextDouble() * 3);
 		// maximum distance from the focus, given squared
-		int maximum_distance = (int) Math.pow(fill_table.length - focus_center_x - 1, 2);
+		int maximum_distance = (int) Math.pow(fill_table[0].length - focus_center_x - 1, 2);
 		int highlight_radius_x = (int) (random.nextDouble() * 3);
 		int highlight_radius_y = (int) (random.nextDouble() * 3);
 		int inner_radius = 7 + (int) (random.nextDouble() * 16);
 		int outer_radius = 7 + (int) (random.nextDouble() * 16);
-		for (int y = 0; y < fill_table[0].length; y++) {
+		for (int y = 0; y < fill_table.length; y++) {
 			int distance_focus_y = Math.abs(y - focus_center_y);
-			for (int x = 0; x < fill_table.length; x++) {
+			for (int x = 0; x < fill_table[0].length; x++) {
 				int distance_focus_x = Math.abs(x - focus_center_x);
 				// the distance is dx^2+dy^2, where dx is the distance of x to
 				// the focus
@@ -664,8 +664,8 @@ public class SpriteGenerator {
 	 * @param spr
 	 */
 	public void indexToRGB(Sprite spr) {
-		for (int x = 0; x < fill_table.length; x++) {
-			for (int y = 0; y < fill_table[0].length; y++) {
+		for (int x = 0; x < fill_table[0].length; x++) {
+			for (int y = 0; y < fill_table.length; y++) {
 				spr.pixels[x][y] = spr.coltable[spr.colidx[x][y]];
 			}
 		}
@@ -690,8 +690,8 @@ public class SpriteGenerator {
 		// order
 		// of the distance they travel
 		for (int distance = 0; distance <= 2; distance++) {
-			for (int y = 0; y < fill_table[0].length; y++) {
-				for (int x = 0; x < fill_table.length; x++) {
+			for (int y = 0; y < fill_table.length; y++) {
+				for (int x = 0; x < fill_table[0].length; x++) {
 					int color = spr.pixels[x][y];
 					// if the colour is transparent, there is no need for
 					// animation
@@ -745,7 +745,7 @@ public class SpriteGenerator {
 						if (isInBounds(x + distance_x, y + distance_y)) {
 							// paint the pixel where the animation lands in the
 							// current frame
-							spr.pixels[(frame + 1) * fill_table.length + x + distance_x]
+							spr.pixels[(frame + 1) * fill_table[0].length + x + distance_x]
 									  [y + distance_y] = color;
 						}
 					}
@@ -852,7 +852,7 @@ public class SpriteGenerator {
 		Sprite spr = spr1.clone();
 		Sprite spr2 = createSprite();
 		// the limit of the loop is the size of the sprite
-		int x_max = fill_table.length;
+		int x_max = fill_table[0].length;
 		// if the sprite is flipped, only fill half of it (the other half will
 		// be the symmetric)
 		if (flip_x) {
@@ -860,7 +860,7 @@ public class SpriteGenerator {
 		}
 
 		// the limit of the loop is the size of the sprite
-		int y_max = fill_table[0].length;
+		int y_max = fill_table.length;
 		// if the sprite is flipped, only fill half of it (the other half will
 		// be the symmetric)
 		if (flip_y) {
