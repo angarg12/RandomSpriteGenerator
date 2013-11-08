@@ -9,20 +9,20 @@ public class SpriteGenerator {
 	 * TODO: Encapsulate filling tables, animation tables and generation
 	 * parameters in some kind of pattern (factory, strategy?)
 	 */
-	static Random random = new Random();
+	private static Random random = new Random();
 
 	public static void fixRandom(int seed) {
 		random = new Random(seed);
 	}
 
-	int[] color_table;
-	int[][] fill_table;
-	int[][][] animation_table;
+	private int[] color_table;
+	private int[][] fill_table;
+	private int[][][] animation_table;
 
-	boolean flip_x = true;
-	boolean flip_y = false;
+	private boolean flip_x = true;
+	private boolean flip_y = false;
 
-	Shading shading = Shading.NONE;
+	private Shading shading = Shading.NONE;
 	// shades the colour when flipping
 	// this is based on the fact that there are only 3 hard-coded shades.
 	// with arbitrary values you don't have this limitation
@@ -30,143 +30,92 @@ public class SpriteGenerator {
 	// 0=no shading
 	// 1=darken
 	// 2=darken more
-	int shade_at_flip_x = 0;
-	int shade_at_flip_y = 0;
+	private int shade_at_flip_x = 0;
+	private int shade_at_flip_y = 0;
 
 	// probability of filling pixel
-	double fill_probability = 0.6;
+	private double fill_probability = 0.6;
 	// probability that a pixel is filled the same as its neighbours
-	double fill_smoothing = 0.2;
+	private double fill_smoothing = 0.2;
 	// balance between taking horizontal versus vertical neighbours
-	double fill_smoothing_x_bias = 0.8;
+	private double fill_smoothing_x_bias = 0.8;
 	// probability of black pixel if enabled
 	// TODO: actually fills it black or transparent??
-	double black_probability = 0.2;
+	private double black_probability = 0.2;
 	// probability of highlight pixel if enabled
-	double highlight_probability = 0.4;
+	private double highlight_probability = 0.4;
 	// probability that a colour (non-black) pixel is taken from neighbour
-	double color_smoothing = 0.7;
+	private double color_smoothing = 0.7;
 	// balance between taking horizontal versus vertical neighbours
-	double color_smoothing_x_bias = 0.5;
+	private double color_smoothing_x_bias = 0.5;
 
-	public static SpriteGenerator[] shapes = new SpriteGenerator[] {
-			new SpriteGenerator(ColorScheme.RED_YELLOW, FillingTable.SHIP2, null, true, false,
-					1, 1, 0.5, 0.6, 0.5, 0.3, 0.4, 0.6, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.BUTTERFLY_18,
-					AnimationTable.BIRD_18, true, false, 1, 1, 0.5, 0.7, 0.5,
-					0.3, 0.4, 0.6, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.MAN_18,
-					AnimationTable.MAN_18, true, false, 1, 1, 0.5, 0.6, 0.5,
-					0.3, 0.4, 0.6, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.UFO_18, null, true, true,
-					1, 1, 0.5, 0.75, 0.5, 0.3, 0.4, 0.8, 0.5) };
+	public void setColorTable(int[] color_table) {
+		this.color_table = color_table;
+	}
 
-	public static SpriteGenerator[] shapes2 = new SpriteGenerator[] {
-			new SpriteGenerator(new int[]{
-				0x010101, 0x010101, 0x010101, // trans
-				0x000000, 0x000000, 0x000000,     // outline
-				0xC0A080, 0x806040, 0x503010,     // col2
-				0xFF7070, 0xD04040, 0xB02020,     // col1
-				0xFFE020, 0xFFB000, 0xF0A000,     // col3
-				0xFFFFFF, 0xB0B0B0, 0x808080,     // highlight
-				}, FillingTable.RAND_12,
-					AnimationTable.WALK_12, true, false, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.FLY_12, true, false, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.CRAWL2_12, true, false, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.CRAWL_12, true, false, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.BEND_12, true, false, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.BUBBLE_12, true, false, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.POKE_12, true, false, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.WALK2_12, false, true, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.CRAWL_12, false, true, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.BEND_12, false, true, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.BUBBLE_12, false, true, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.POKE_12, false, true, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.TURN_12, true, true, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.BEND_12, true, true, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.CRAWL_12, true, true, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.BUBBLE_12, true, true, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.POKE_12, true, true, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.WIGGLE_12, true, false, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.WIGGLE2_12, false, true, 0, 0, 0.6, 0.2,
-					0.5, 0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.BOUNCE_12, true, false, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.BOUNCE_12, true, true, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.NULL_12, true, false, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5),
-			new SpriteGenerator(ColorScheme.BLUE_GREEN, FillingTable.RAND_12,
-					AnimationTable.NULL_12, true, true, 0, 0, 0.6, 0.2, 0.5,
-					0.3, 0.4, 0.3, 0.5), };
+	public void setFillTable(int[][] fill_table) {
+		this.fill_table = fill_table;
+	}
 
-	public SpriteGenerator(int[] coltable, int[][] filltable,
-			int[][][] animtable, boolean flipx, boolean flipy, int xshadingfac,
-			int yshadingfac, double fill_prob, double fill_smoothing,
-			double fill_smoothing_horiz_bias, double black_prob,
-			double highlight_prob, double color_smoothing,
-			double color_smoothing_horiz_bias) {
-		this.color_table = coltable;
-		this.fill_table = filltable;
-		this.animation_table = animtable;
-		this.flip_x = flipx;
-		this.flip_y = flipy;
-		this.shade_at_flip_x = xshadingfac;
-		this.shade_at_flip_y = yshadingfac;
-		this.fill_probability = fill_prob;
-		this.fill_smoothing = fill_smoothing;
-		this.fill_smoothing_x_bias = fill_smoothing_horiz_bias;
-		this.black_probability = black_prob;
-		this.highlight_probability = highlight_prob;
-		this.color_smoothing = color_smoothing;
-		this.color_smoothing_x_bias = color_smoothing_horiz_bias;
+	public void setAnimationTable(int[][][] animation_table) {
+		this.animation_table = animation_table;
+	}
+
+	public void setFlipHorizontal(boolean flip_x) {
+		this.flip_x = flip_x;
+	}
+
+	public void setFlipVertical(boolean flip_y) {
+		this.flip_y = flip_y;
+	}
+
+	public void setShading(Shading shading) {
+		this.shading = shading;
+		
 		if (this.shading == Shading.BEVEL) {
 			this.shade_at_flip_x = 0;
 			this.shade_at_flip_y = 0;
+			this.highlight_probability = 0;
+		}else if (this.shading == Shading.GOURAUD) {
+			this.highlight_probability = 0;
 		}
-		if (this.shading == Shading.GOURAUD) {
-			highlight_prob = 0;
-		}
-	}	
+	}
+
+	public void setShadeAtFlipHorizontal(int shade_at_flip_x) {
+		this.shade_at_flip_x = shade_at_flip_x;
+	}
+
+	public void setShadeAtFlipVertical(int shade_at_flip_y) {
+		this.shade_at_flip_y = shade_at_flip_y;
+	}
+
+	public void setFillProbability(double fill_probability) {
+		this.fill_probability = fill_probability;
+	}
+
+	public void setFillSmoothing(double fill_smoothing) {
+		this.fill_smoothing = fill_smoothing;
+	}
+
+	public void setFillSmoothingHorizontalBias(double fill_smoothing_x_bias) {
+		this.fill_smoothing_x_bias = fill_smoothing_x_bias;
+	}
+
+	public void setBlackProbability(double black_probability) {
+		this.black_probability = black_probability;
+	}
+
+	public void setHighlightProbability(double highlight_probability) {
+		this.highlight_probability = highlight_probability;
+	}
+
+	public void setColorSmoothing(double color_smoothing) {
+		this.color_smoothing = color_smoothing;
+	}
+
+	public void setColorSmoothingHorizontalBias(double color_smoothing_x_bias) {
+		this.color_smoothing_x_bias = color_smoothing_x_bias;
+	}
 	
 	//================================================================================
     // createSprite
@@ -200,7 +149,17 @@ public class SpriteGenerator {
 			total_x_size = fill_table[0].length * (animation_table.length + 1);
 		}
 
-		Sprite spr = new Sprite(color_table, this, fill_table[0].length, total_x_size, fill_table.length);
+		int numberOfFrames = 1;
+		if(animation_table != null){
+			numberOfFrames = animation_table.length + 1;
+		}
+		
+		Sprite spr = new Sprite(color_table, 
+				this, 
+				fill_table[0].length, 
+				total_x_size, 
+				fill_table.length,
+				numberOfFrames);
 
 		for (int y = 0; y < y_max; y++) {
 			for (int x = 0; x < x_max; x++) {
@@ -790,8 +749,9 @@ public class SpriteGenerator {
 	 * @return
 	 */
 	private boolean isLeftPixelColored(int x, int y, Sprite spr) {
-		return x > 0 && spr.pixels[x - 1][y] != ColorScheme.TRANSPARENT
-				&& spr.pixels[x - 1][y] != 0;
+		return x > 0 && 
+				spr.pixels[x - 1][y] != ColorScheme.TRANSPARENT && 
+				spr.pixels[x - 1][y] != 0;
 	}
 
 	/**
@@ -817,8 +777,9 @@ public class SpriteGenerator {
 	 * @return
 	 */
 	private boolean isDownPixelColored(int x, int y, Sprite spr) {
-		return y > 0 && spr.pixels[x][y - 1] != ColorScheme.TRANSPARENT
-				&& spr.pixels[x][y - 1] != 0;
+		return y > 0 && 
+				spr.pixels[x][y - 1] != ColorScheme.TRANSPARENT && 
+				spr.pixels[x][y - 1] != 0;
 	}
 
 	/**
@@ -846,7 +807,7 @@ public class SpriteGenerator {
 		// TODO: 'conceptual' bug: since the second sprite uses the same base shape than
 		// the original, the mutations aren't that much different from the original.
 		// this is good for mutation because we want sprites that are different, but not completely
-		// yet for instance, if we set a mutation factor of 1, we would expect completely unrrelated sprites
+		// yet for instance, if we set a mutation factor of 1, we would expect completely unrelated sprites
 		// (totally random), yet there is a strong correlation between them (because they use the same
 		// base filling table).
 		Sprite spr = spr1.clone();

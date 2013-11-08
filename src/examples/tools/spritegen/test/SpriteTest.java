@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import examples.tools.spritegen.SpriteGenerator;
 import examples.tools.spritegen.Sprite;
+import examples.tools.spritegen.SpriteGeneratorBuilder;
 
 public class SpriteTest {	
 	SpriteGenerator generator1;
@@ -16,28 +17,29 @@ public class SpriteTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		generator1 = SpriteGenerator.shapes2[0];
-		generator2 = SpriteGenerator.shapes2[1];
+		generator1 = SpriteGeneratorBuilder.predefinedInstances()[0];
+		generator2 = SpriteGeneratorBuilder.predefinedInstances()[1];
 		colorTable1 = new int[]{0,0,0,0,999,999,999,999,12713793,11665168,9821696,9755648,8650559,6553358,5102592,5102080,16777215,14277081,11842740,9342606};
 		colorTable2 = new int[]{200,200,200,200,12713793,7646208,8519484,3909376,4063031,369152,3342189,40237,16777215,9342606};
 	}
 	
 	@Test
 	public void test() throws Exception {
-		spriteTest(colorTable1,generator1,5,15,5);
-		spriteTest(colorTable2,generator1,5,15,5);
-		spriteTest(colorTable1,generator2,5,25,5);
-		spriteTest(colorTable1,generator1,10,30,5);
-		spriteTest(colorTable1,generator1,5,15,10);
-		spriteTest(colorTable1,generator1,7,21,12);
+		spriteTest(colorTable1,generator1,5,15,5,3);
+		spriteTest(colorTable2,generator1,5,15,5,3);
+		spriteTest(colorTable1,generator2,5,25,5,5);
+		spriteTest(colorTable1,generator1,10,30,5,3);
+		spriteTest(colorTable1,generator1,5,15,10,3);
+		spriteTest(colorTable1,generator1,7,21,12,3);
 	}
 	
 	private void spriteTest(int [] coltable, 
 			SpriteGenerator gen,
 			int xsize,
 			int totalxsize,
-			int ysize) throws Exception {
-		Sprite sprite = new Sprite(coltable, gen, xsize, totalxsize, ysize);
+			int ysize,
+			int numberOfFrames) throws Exception {
+		Sprite sprite = new Sprite(coltable, gen, xsize, totalxsize, ysize, numberOfFrames);
 		assertEquals("Width does not match the expected.",getWidthTable(coltable,gen,xsize,totalxsize,ysize), sprite.getWidth());
 		assertEquals("Height does not match the expected.",getHeightTable(coltable,gen,xsize,totalxsize,ysize), sprite.getHeight());
 		assertEquals("Number of frames does not match the expected.",getNrFramesTable(coltable,gen,xsize,totalxsize,ysize), sprite.getNrFrames());

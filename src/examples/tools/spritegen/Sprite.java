@@ -15,14 +15,16 @@ public class Sprite {
 	// int [][] shades;
 	// xsize*animsize*ysize colours
 	public int[][] pixels;
+	public int frames;
 
 	public Sprite(int[] coltable, SpriteGenerator gen, int xsize, int totalxsize,
-			int ysize) {
+			int ysize, int frames) {
 		this.coltable = coltable;
 		this.gen = gen;
 		hull = new int[xsize][ysize];
 		colidx = new int[xsize][ysize];
 		pixels = ImageUtils.createTransparentBitmap(totalxsize, ysize);
+		this.frames = frames;
 	}
 
 	public int getWidth() {
@@ -37,9 +39,7 @@ public class Sprite {
 	}
 
 	public int getNrFrames() {
-		if (gen.animation_table == null)
-			return 1;
-		return gen.animation_table.length + 1;
+		return frames;
 	}
 
 	public int[] getData(int frame) {
@@ -62,9 +62,10 @@ public class Sprite {
 	}
 	
 	public Sprite clone(){
-		Sprite spr = new Sprite(null,gen,0,0,0);
+		Sprite spr = new Sprite(null,gen,0,0,0,0);
 		spr.coltable = coltable.clone();
 		spr.colidx = colidx.clone();
+		spr.frames = frames;
 		for(int i = 0; i < spr.colidx.length; i++){
 			spr.colidx[i] = colidx[i].clone();
 		}

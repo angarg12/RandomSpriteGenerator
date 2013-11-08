@@ -214,35 +214,27 @@ class Main extends JGEngine {
 	 * @return
 	 */
 	private SpriteGenerator randomizedGenerator(){
-		/*
 		final double NO_SHADE_PROB = 0.0;
 		final double BEVEL_SHADE_PROB = 0.125;
 		// The rest up to 1 is the Gouraud prob
-		final double HIGHLIGHT_PROB = 0.4;
 		
 		// Choose a random shape
-		SpriteGenerator generator = SpriteGenerator.shapes2[(int) (random.nextDouble() * SpriteGenerator.shapes2.length)];
+		SpriteGenerator generator = SpriteGeneratorBuilder.predefinedInstances()[(int) (random.nextDouble() * SpriteGeneratorBuilder.predefinedInstances().length)];
 		// Defines the probabilities of sprite features
 		double randomRoll = random.nextDouble();
 		// NO_SHADE_PROB of time the sprite doesn't have a shadow
 		if(randomRoll < NO_SHADE_PROB){
-			generator.shading = Shading.NONE;
+			generator.setShading(Shading.NONE);
 		// BEVEL_SHADE_PROB of time it has Bevel shadow
 		}else if((randomRoll-NO_SHADE_PROB) < BEVEL_SHADE_PROB){
-			generator.shading = Shading.BEVEL;
+			generator.setShading(Shading.BEVEL);
 		// the rest of the time it has Gouraud shadow
 		}else{
-			generator.shading = Shading.GOURAUD;
+			generator.setShading(Shading.GOURAUD);
 		}
-		
-		// If it doesn't have a shadow, it has a HIGHLIGHT_PROB chance of highlight
-		if(generator.shading == Shading.NONE){
-			generator.highlight_probability = HIGHLIGHT_PROB;
-		}else{
-			generator.highlight_probability = 0;
-		}
+
 		return generator;
-		*/
+		/*
 		int[][] colorSchemes = generateColorSchemes();
 		int[] colorScheme = colorSchemes[(int) (random.nextDouble() * colorSchemes.length)];
 		SpriteGenerator gen = new SpriteGenerator(
@@ -263,6 +255,7 @@ class Main extends JGEngine {
 		gen.shading = Shading.NONE;
 		
 		return gen;
+		*/
 	}
 	
 	/**

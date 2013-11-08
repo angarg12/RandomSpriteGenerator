@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import examples.tools.spritegen.SpriteGenerator;
 import examples.tools.spritegen.Sprite;
+import examples.tools.spritegen.SpriteGeneratorBuilder;
 
 public class SpriteGeneratorTest {	
 	SpriteGenerator generator1;
@@ -17,7 +18,7 @@ public class SpriteGeneratorTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		generator1 = SpriteGenerator.shapes2[0];
+		generator1 = SpriteGeneratorBuilder.predefinedInstances()[0];
 		colorTable1 = new int[]{
 				0x010101, 0x010101, 0x010101, // trans
 				0x000000, 0x000000, 0x000000,     // outline
@@ -30,7 +31,7 @@ public class SpriteGeneratorTest {
 	}
 	
 	public void initializeSprites() throws Exception {
-		baseSprite1 = new Sprite(colorTable1, generator1, 0, 0, 0);
+		baseSprite1 = new Sprite(colorTable1, generator1, 0, 0, 0, 0);
 		baseSprite1.colidx = new int[][]{{0,0,0,0,0,0,0,0,0,0,0,0},
 			{0,0,0,0,0,0,0,0,0,0,0,0},
 			{0,0,0,0,0,0,0,0,0,0,0,0},
@@ -91,7 +92,7 @@ public class SpriteGeneratorTest {
 				{65793,65793,65793,65793,65793,65793,65793,65793,65793,65793,65793,65793},
 				{65793,65793,65793,65793,65793,65793,65793,65793,65793,65793,65793,65793},
 				{65793,65793,65793,65793,65793,65793,65793,65793,65793,65793,65793,65793}};
-		animatedSprite1 = new Sprite(colorTable1, generator1, 0, 0, 0);
+		animatedSprite1 = new Sprite(colorTable1, generator1, 0, 0, 0, 0);
 		animatedSprite1.colidx = new int[][]{{0,0,0,0,0,0,0,0,0,0,0,0},
 				{0,0,15,0,0,12,0,12,12,15,6,0},
 				{0,0,0,0,0,12,0,0,0,15,8,0},
@@ -152,7 +153,7 @@ public class SpriteGeneratorTest {
 				{65793,65793,0,0,65793,0,16769056,0,16777215,5255184,0,65793},
 				{65793,65793,0,16777215,0,0,16769056,16769056,8421504,5255184,0,65793},
 				{65793,65793,65793,0,65793,65793,0,0,0,0,65793,65793}};
-		animatedSprite2 = new Sprite(colorTable1, generator1, 0, 0, 0);
+		animatedSprite2 = new Sprite(colorTable1, generator1, 0, 0, 0, 0);
 		animatedSprite2.colidx = new int[][]{{0,0,0,0,0,0,0,0,0,0,0,0},
 				{0,0,12,0,0,15,0,15,6,6,6,0},
 				{0,0,0,0,0,12,0,0,0,6,6,0},
