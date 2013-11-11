@@ -15,7 +15,7 @@ public class Sprite {
 	// int [][] shades;
 	// xsize*animsize*ysize colours
 	public int[][] pixels;
-	public int frames;
+	private int frames;
 
 	public Sprite(int[] coltable, SpriteGenerator gen, int xsize, int totalxsize,
 			int ysize, int frames) {

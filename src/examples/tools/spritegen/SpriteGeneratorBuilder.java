@@ -506,6 +506,7 @@ public class SpriteGeneratorBuilder {
 		generator.setAnimationTable(this.animation_table);
 		generator.setFlipHorizontal(this.flip_x);
 		generator.setFlipVertical(this.flip_y);
+		generator.setShading(shading);
 		generator.setShadeAtFlipHorizontal(this.shade_at_flip_x); 
 		generator.setShadeAtFlipVertical(this.shade_at_flip_y); 
 		generator.setFillProbability(this.fill_probability); 

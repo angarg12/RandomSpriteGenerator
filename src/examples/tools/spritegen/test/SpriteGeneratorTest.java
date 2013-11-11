@@ -18,7 +18,6 @@ public class SpriteGeneratorTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		generator1 = SpriteGeneratorBuilder.predefinedInstances()[0];
 		colorTable1 = new int[]{
 				0x010101, 0x010101, 0x010101, // trans
 				0x000000, 0x000000, 0x000000,     // outline
@@ -27,6 +26,59 @@ public class SpriteGeneratorTest {
 				0xFFE020, 0xFFB000, 0xF0A000,     // col3
 				0xFFFFFF, 0xB0B0B0, 0x808080,     // highlight
 				};
+		SpriteGeneratorBuilder builder = new SpriteGeneratorBuilder();
+		
+		builder.colorTable(colorTable1).
+			fillTable(new int[][] {
+					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+					{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
+					{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
+					{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
+					{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
+					{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
+					{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
+					{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
+					{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
+					{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
+					{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
+					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }}).
+			animationTable(new int[][][] {
+				      { { 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+						{ 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+						{ 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+						{ 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0 },
+						{ 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0 },
+						{ 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0 },
+						{ 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0 },
+						{ 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+						{ 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
+						{ 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
+						{ 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
+						{ 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 }},
+				      { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5 },
+						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5 },
+						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5 },
+						{ 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5 },
+						{ 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5 },
+						{ 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5 },
+						{ 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5 },
+						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5 },
+						{ 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 },
+						{ 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 },
+						{ 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 },
+						{ 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 }}}).
+			flipHorizontal(true).
+			flipVertical(false).
+			shadeAtFlipHorizontal(0).
+			shadeAtFlipVertical(0).
+			fillProbability(0.6).
+			fillSmoothing(0.2).
+			fillSmoothingHorizontalBias(0.5).
+			blackProbability(0.3).
+			highlightProbability(0.4).
+			colorSmoothing(0.3).
+			colorSmoothingHorizontalBias(0.5);
+		generator1 = builder.build();
 		initializeSprites();
 	}
 	
@@ -220,7 +272,7 @@ public class SpriteGeneratorTest {
 	public void test() throws Exception {
 		spriteFunctionsTest(generator1,baseSprite1);
 		createSpriteTest(generator1);
-		//mergeSpriteTest(generator1,animatedSprite1,animatedSprite2,0.8);
+		//mergeSpriteTest(generator1,animatedSprite1,0.8);
 	}
 	
 	private void createSpriteTest(SpriteGenerator gen) throws Exception {
@@ -229,13 +281,13 @@ public class SpriteGeneratorTest {
 		assertArrayEquals("Created sprite does not match the expected.", getCreateSpriteTable(gen), spr.pixels);
 	}
 	
-	/*
-	private void mergeSpriteTest(SpriteGenerator gen, Sprite spr1, Sprite spr2, double weight) throws Exception {
+	
+	private void mergeSpriteTest(SpriteGenerator gen, Sprite spr1, double weight) throws Exception {
 		SpriteGenerator.fixRandom(1000);
-		Sprite spr = gen.mergeHull(spr1, spr2, weight);
-		assertArrayEquals("Merged sprite does not match the expected.", getMergeSpriteTable(gen, spr1, spr2, weight), spr.pixels);
+		Sprite spr = gen.mutateHull(spr1, weight);
+		assertArrayEquals("Merged sprite does not match the expected.", getMergeSpriteTable(gen, spr1, weight), spr.pixels);
 	}
-	*/
+	
 	
 	//mergeSprites
 	// need their own function
@@ -580,9 +632,8 @@ public class SpriteGeneratorTest {
 	
 	private int[][] getMergeSpriteTable(SpriteGenerator gen, 
 			Sprite spr1,
-			Sprite spr2,
 			double mergeRatio) throws Exception { 
-		if(gen == generator1 && spr1 == animatedSprite1 && spr2 == animatedSprite2 && mergeRatio == 0.8){
+		if(gen == generator1 && spr1 == animatedSprite1 && mergeRatio == 0.8){
 			return new int[][]{{65793,65793,0,65793,65793,0,65793,0,0,0,0,65793},
 					{65793,0,16777215,0,0,16777215,0,16769056,16769056,16777215,12624000,0},
 					{65793,65793,0,65793,0,16769056,0,0,0,16777215,12624000,0},
@@ -620,6 +671,6 @@ public class SpriteGeneratorTest {
 					{65793,65793,0,16777215,0,0,16777215,16769056,16777215,12624000,0,65793},
 					{65793,65793,65793,0,65793,65793,0,0,0,0,65793,65793}};
 		}
-		throw new Exception("Values not tabulated: "+gen+" "+spr1+" "+spr2+" "+mergeRatio);
+		throw new Exception("Values not tabulated: "+gen+" "+spr1+" "+mergeRatio);
 	}
 }

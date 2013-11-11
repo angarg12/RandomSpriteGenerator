@@ -1,6 +1,6 @@
 package examples.tools.spritegen;
 
-public enum Shading {
+enum Shading {
 	NONE,
 	BEVEL,
 	GOURAUD

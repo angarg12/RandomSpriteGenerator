@@ -18,10 +18,6 @@ public class ColorSchemeGeneratorTest {
 		ColorSchemeGenerator.fixRandom(1000);
 		int[] colorScheme = ColorSchemeGenerator.genSpriteColorScheme(transparentColor,blackColor,colorCount,shadesCount);
 		int[] testScheme = genSpriteColorSchemeTable(transparentColor,blackColor,colorCount,shadesCount);
-		for(int i = 0; i < colorScheme.length; i++){
-			System.out.print(colorScheme[i]+",");
-		}
-		System.out.println();
 		assertArrayEquals("Color array does not match the expected.", testScheme, colorScheme);
 	}
 	
