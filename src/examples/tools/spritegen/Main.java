@@ -243,7 +243,7 @@ class Main extends JGEngine {
 	 * Fills the sprite data structure with mutations of a sprite.
 	 */
 	private void createMutations(Sprite origin){
-		final double MUTATION_FACTOR = 0.2;
+		final double MUTATION_FACTOR = 0.1;
 		//int[][] colorSchemes = generateColorSchemes();
 
 		for (int i = 0; i < NUMBER_SPRITES_X; i++) {

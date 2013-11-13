@@ -28,12 +28,22 @@ public class Sprite {
 	}
 	
 	public Sprite(Sprite spr){
-		coltable = spr.coltable.clone();
-		gen = spr.gen;
-		hull = spr.hull.clone();
-		colidx = spr.colidx.clone();
-		pixels = spr.pixels.clone();
-		frames = spr.getNrFrames();
+        coltable = spr.coltable.clone();
+        colidx = spr.colidx.clone();
+        frames = spr.frames;
+        for(int i = 0; i < spr.colidx.length; i++){
+                colidx[i] = spr.colidx[i].clone();
+        }
+        
+        hull = spr.hull.clone();
+        for(int i = 0; i < spr.hull.length; i++){
+                hull[i] = spr.hull[i].clone();
+        }
+        
+        pixels = spr.pixels.clone();
+        for(int i = 0; i < spr.pixels.length; i++){
+                pixels[i] = spr.pixels[i].clone();
+        }
 	}
 
 	public int getWidth() {
