@@ -782,7 +782,7 @@ public class SpriteGenerator {
 		// yet for instance, if we set a mutation factor of 1, we would expect completely unrelated sprites
 		// (totally random), yet there is a strong correlation between them (because they use the same
 		// base filling table).
-		Sprite spr = spr1.clone();
+		Sprite spr = new Sprite(spr1);
 		Sprite spr2 = createSprite();
 		// the limit of the loop is the size of the sprite
 		int x_max = fill_table[0].length;
@@ -831,7 +831,7 @@ public class SpriteGenerator {
 	 * Mutates the color of a sprite.
 	 */
 	public Sprite mutateColor(Sprite spr1, int[] mutated_color_table, double mutation_factor) {
-		Sprite spr = spr1.clone();
+		Sprite spr = new Sprite(spr1);
 		
 		int shorter_table_length = spr.coltable.length;
 		if(mutated_color_table.length < shorter_table_length){

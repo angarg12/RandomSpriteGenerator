@@ -2,7 +2,7 @@ package examples.tools.spritegen;
 
 import examples.tools.spritegen.color.ColorScheme;
 
-public class Sprite implements Cloneable {
+public class Sprite {
 	// render parameters as part of instance
 	public int[] coltable;
 	public SpriteGenerator gen;
@@ -25,6 +25,15 @@ public class Sprite implements Cloneable {
 		colidx = new int[xsize][ysize];
 		pixels = ImageUtils.createTransparentBitmap(totalxsize, ysize);
 		this.frames = frames;
+	}
+	
+	public Sprite(Sprite spr){
+		coltable = spr.coltable.clone();
+		gen = spr.gen;
+		hull = spr.hull.clone();
+		colidx = spr.colidx.clone();
+		pixels = spr.pixels.clone();
+		frames = spr.getNrFrames();
 	}
 
 	public int getWidth() {
@@ -59,16 +68,6 @@ public class Sprite implements Cloneable {
 			}
 		}
 		return ret;
-	}
-	
-	@Override
-	public Sprite clone(){
-		try {
-				Sprite clone = (Sprite) super.clone();
-				return clone;
-			} catch(CloneNotSupportedException e) {
-				throw new AssertionError(); // Can't happen
-		}
 	}
 	
 	@Override

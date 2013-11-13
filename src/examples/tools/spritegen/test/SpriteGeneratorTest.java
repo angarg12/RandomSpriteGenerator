@@ -302,14 +302,14 @@ public class SpriteGeneratorTest {
 	}
 
 	private void colorize(SpriteGenerator gen, Sprite spr) throws Exception {
-		Sprite clone = spr.clone();
+		Sprite clone = new Sprite(spr);
 		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
 		assertArrayEquals("Colorized sprite does not match the expected.", getColorizeTable(gen, spr), clone.colidx);
 	}
 	
 	private void flipAndShade(SpriteGenerator gen, Sprite spr) throws Exception {
-		Sprite clone = spr.clone();
+		Sprite clone = new Sprite(spr);
 		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
 		SpriteGenerator.fixRandom(1000);
@@ -318,7 +318,7 @@ public class SpriteGeneratorTest {
 	}
 	
 	private void bevelShadeNew(SpriteGenerator gen, Sprite spr) throws Exception {
-		Sprite clone = spr.clone();
+		Sprite clone = new Sprite(spr);
 		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
 		SpriteGenerator.fixRandom(1000);
@@ -329,7 +329,7 @@ public class SpriteGeneratorTest {
 	}
 
 	private void gouraudShade(SpriteGenerator gen, Sprite spr) throws Exception {
-		Sprite clone = spr.clone();
+		Sprite clone = new Sprite(spr);
 		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
 		SpriteGenerator.fixRandom(1000);
@@ -340,7 +340,7 @@ public class SpriteGeneratorTest {
 	}
 
 	private void indexToRGB(SpriteGenerator gen, Sprite spr) throws Exception {
-		Sprite clone = spr.clone();
+		Sprite clone = new Sprite(spr);
 		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
 		SpriteGenerator.fixRandom(1000);
@@ -353,7 +353,7 @@ public class SpriteGeneratorTest {
 	}
 
 	private void animate(SpriteGenerator gen, Sprite spr) throws Exception {
-		Sprite clone = spr.clone();
+		Sprite clone = new Sprite(spr);
 		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
 		SpriteGenerator.fixRandom(1000);
@@ -368,7 +368,7 @@ public class SpriteGeneratorTest {
 	}
 
 	private void addOutlineRGB(SpriteGenerator gen, Sprite spr) throws Exception {
-		Sprite clone = spr.clone();
+		Sprite clone = new Sprite(spr);
 		SpriteGenerator.fixRandom(1000);
 		gen.colorize(clone);
 		SpriteGenerator.fixRandom(1000);
