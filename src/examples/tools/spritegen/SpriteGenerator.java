@@ -49,28 +49,30 @@ public class SpriteGenerator {
 	// balance between taking horizontal versus vertical neighbours
 	private double color_smoothing_x_bias = 0.5;
 
-	public void setColorTable(int[] color_table) {
+	public SpriteGenerator(int[] color_table, 
+			int[][] fill_table, 
+			int[][][] animation_table, 
+			boolean flip_x, 
+			boolean flip_y, 
+			Shading shading, 
+			int shade_at_flip_x, 
+			int shade_at_flip_y, 
+			double fill_probability, 
+			double fill_smoothing, 
+			double fill_smoothing_x_bias, 
+			double black_probability, 
+			double highlight_probability, 
+			double color_smoothing, 
+			double color_smoothing_x_bias){
 		this.color_table = color_table;
-	}
-
-	public void setFillTable(int[][] fill_table) {
 		this.fill_table = fill_table;
-	}
-
-	public void setAnimationTable(int[][][] animation_table) {
 		this.animation_table = animation_table;
-	}
-
-	public void setFlipHorizontal(boolean flip_x) {
 		this.flip_x = flip_x;
-	}
-
-	public void setFlipVertical(boolean flip_y) {
 		this.flip_y = flip_y;
-	}
-
-	public void setShading(Shading shading) {
 		this.shading = shading;
+		this.shade_at_flip_x = shade_at_flip_x;
+		this.shade_at_flip_y = shade_at_flip_y;
+		this.highlight_probability = highlight_probability;
 		
 		if (this.shading == Shading.BEVEL) {
 			this.shade_at_flip_x = 0;
@@ -79,41 +81,11 @@ public class SpriteGenerator {
 		}else if (this.shading == Shading.GOURAUD) {
 			this.highlight_probability = 0;
 		}
-	}
-
-	public void setShadeAtFlipHorizontal(int shade_at_flip_x) {
-		this.shade_at_flip_x = shade_at_flip_x;
-	}
-
-	public void setShadeAtFlipVertical(int shade_at_flip_y) {
-		this.shade_at_flip_y = shade_at_flip_y;
-	}
-
-	public void setFillProbability(double fill_probability) {
 		this.fill_probability = fill_probability;
-	}
-
-	public void setFillSmoothing(double fill_smoothing) {
 		this.fill_smoothing = fill_smoothing;
-	}
-
-	public void setFillSmoothingHorizontalBias(double fill_smoothing_x_bias) {
 		this.fill_smoothing_x_bias = fill_smoothing_x_bias;
-	}
-
-	public void setBlackProbability(double black_probability) {
 		this.black_probability = black_probability;
-	}
-
-	public void setHighlightProbability(double highlight_probability) {
-		this.highlight_probability = highlight_probability;
-	}
-
-	public void setColorSmoothing(double color_smoothing) {
 		this.color_smoothing = color_smoothing;
-	}
-
-	public void setColorSmoothingHorizontalBias(double color_smoothing_x_bias) {
 		this.color_smoothing_x_bias = color_smoothing_x_bias;
 	}
 	

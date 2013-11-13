@@ -5,7 +5,7 @@ import examples.tools.spritegen.color.ColorScheme;
 public class Sprite implements Cloneable {
 	// render parameters as part of instance
 	public int[] coltable;
-	SpriteGenerator gen;
+	public SpriteGenerator gen;
 	// output
 	// xsize*ysize fill types
 	public int[][] hull;
@@ -65,31 +65,10 @@ public class Sprite implements Cloneable {
 	public Sprite clone(){
 		try {
 				Sprite clone = (Sprite) super.clone();
-				clone.gen = gen;
 				return clone;
 			} catch(CloneNotSupportedException e) {
 				throw new AssertionError(); // Can't happen
 		}
-		/*
-		Sprite spr = new Sprite(null,gen,0,0,0,0);
-		spr.coltable = coltable.clone();
-		spr.colidx = colidx.clone();
-		spr.frames = frames;
-		for(int i = 0; i < spr.colidx.length; i++){
-			spr.colidx[i] = colidx[i].clone();
-		}
-		
-		spr.hull = hull.clone();
-		for(int i = 0; i < spr.hull.length; i++){
-			spr.hull[i] = hull[i].clone();
-		}
-		
-		spr.pixels = pixels.clone();
-		for(int i = 0; i < spr.pixels.length; i++){
-			spr.pixels[i] = pixels[i].clone();
-		}
-		return spr;
-		*/
 	}
 	
 	@Override

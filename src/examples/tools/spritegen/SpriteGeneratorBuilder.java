@@ -23,402 +23,425 @@ public class SpriteGeneratorBuilder {
 	
 	public static SpriteGenerator[] predefinedInstances(){
 		Vector<SpriteGenerator> instances = new Vector<SpriteGenerator>();
-		SpriteGenerator generator =	new SpriteGenerator();
-		generator.setColorTable(new int[]{
+		SpriteGenerator generator =	new SpriteGenerator(
+		new int[]{
 					0x010101, 0x010101, 0x010101, // trans
 					0x000000, 0x000000, 0x000000,     // outline
 					0xC0A080, 0x806040, 0x503010,     // col2
 					0xFF7070, 0xD04040, 0xB02020,     // col1
 					0xFFE020, 0xFFB000, 0xF0A000,     // col3
 					0xFFFFFF, 0xB0B0B0, 0x808080,     // highlight
-					});
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.WALK_12);
-		generator.setFlipHorizontal(true);
-		generator.setFlipVertical(false);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+					},
+		FillingTable.RAND_12,
+		AnimationTable.WALK_12,
+		true,
+		false,
+		Shading.NONE, 
+		0,
+		0,
+		0.6,
+		0.2,
+		0.5,
+		0.3,
+		0.4,
+		0.3,
+		0.5);
 		instances.add(generator);
 
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.BLUE);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.FLY_12);
-		generator.setFlipHorizontal(true);
-		generator.setFlipVertical(false);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.BLUE,
+		FillingTable.RAND_12,
+		AnimationTable.FLY_12,
+		true,
+		false,
+		Shading.BEVEL, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.BLUE_PURPLE);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.CRAWL2_12);
-		generator.setFlipHorizontal(true);
-		generator.setFlipVertical(false);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.BLUE_PURPLE,
+		FillingTable.RAND_12,
+		AnimationTable.CRAWL2_12,
+		true,
+		false,
+		Shading.GOURAUD, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.BROWN_RED_YELLOW);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.CRAWL_12);
-		generator.setFlipHorizontal(true);
-		generator.setFlipVertical(false);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.BROWN_RED_YELLOW,
+		FillingTable.RAND_12,
+		AnimationTable.CRAWL_12,
+		true,
+		false,
+		Shading.NONE, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.GRAY_BLUE_TEAL);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.BEND_12);
-		generator.setFlipHorizontal(true);
-		generator.setFlipVertical(false);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.GRAY_BLUE_TEAL,
+		FillingTable.RAND_12,
+		AnimationTable.BEND_12,
+		true,
+		false,
+		Shading.BEVEL, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.GREEN);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.BUBBLE_12);
-		generator.setFlipHorizontal(true);
-		generator.setFlipVertical(false);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.GREEN,
+		FillingTable.RAND_12,
+		AnimationTable.BUBBLE_12,
+		true,
+		false,
+		Shading.GOURAUD, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.PURPLE_RED);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.POKE_12);
-		generator.setFlipHorizontal(true);
-		generator.setFlipVertical(false);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.PURPLE_RED,
+		FillingTable.RAND_12,
+		AnimationTable.POKE_12,
+		true,
+		false,
+		Shading.NONE, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.RED_YELLOW);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.WALK2_12);
-		generator.setFlipHorizontal(false);
-		generator.setFlipVertical(true);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.RED_YELLOW,
+		FillingTable.RAND_12,
+		AnimationTable.WALK2_12,
+		false,
+		true,
+		Shading.BEVEL, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.BLUE);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.CRAWL_12);
-		generator.setFlipHorizontal(false);
-		generator.setFlipVertical(true);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.BLUE,
+		FillingTable.RAND_12,
+		AnimationTable.CRAWL_12,
+		false,
+		true,
+		Shading.GOURAUD, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.BLUE_GREEN);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.BEND_12);
-		generator.setFlipHorizontal(false);
-		generator.setFlipVertical(true);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.BLUE_GREEN,
+		FillingTable.RAND_12,
+		AnimationTable.BEND_12,
+		false,
+		true,
+		Shading.NONE, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.BLUE_PURPLE);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.BUBBLE_12);
-		generator.setFlipHorizontal(false);
-		generator.setFlipVertical(true);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.BLUE_PURPLE,
+		FillingTable.RAND_12,
+		AnimationTable.BUBBLE_12,
+		false,
+		true,
+		Shading.BEVEL, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.BROWN_RED_YELLOW);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.POKE_12);
-		generator.setFlipHorizontal(false);
-		generator.setFlipVertical(true);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.BROWN_RED_YELLOW,
+		FillingTable.RAND_12,
+		AnimationTable.POKE_12,
+		false,
+		true,
+		Shading.GOURAUD, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 		
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.GRAY_BLUE_TEAL);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.TURN_12);
-		generator.setFlipHorizontal(true);
-		generator.setFlipVertical(true);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.GRAY_BLUE_TEAL,
+		FillingTable.RAND_12,
+		AnimationTable.TURN_12,
+		true,
+		true,
+		Shading.NONE, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 		
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.GREEN);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.BEND_12);
-		generator.setFlipHorizontal(true);
-		generator.setFlipVertical(true);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.GREEN,
+		FillingTable.RAND_12,
+		AnimationTable.BEND_12,
+		true,
+		true,
+		Shading.BEVEL, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 		
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.PURPLE_RED);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.CRAWL_12);
-		generator.setFlipHorizontal(true);
-		generator.setFlipVertical(true);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.PURPLE_RED,
+		FillingTable.RAND_12,
+		AnimationTable.CRAWL_12,
+		true,
+		true,
+		Shading.GOURAUD, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 		
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.RED_YELLOW);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.BUBBLE_12);
-		generator.setFlipHorizontal(false);
-		generator.setFlipVertical(true);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.RED_YELLOW,
+		FillingTable.RAND_12,
+		AnimationTable.BUBBLE_12,
+		false,
+		true,
+		Shading.NONE, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 		
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.BLUE);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.POKE_12);
-		generator.setFlipHorizontal(true);
-		generator.setFlipVertical(true);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.BLUE,
+		FillingTable.RAND_12,
+		AnimationTable.POKE_12,
+		true,
+		true,
+		Shading.BEVEL, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 		
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.BLUE_GREEN);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.WIGGLE_12);
-		generator.setFlipHorizontal(true);
-		generator.setFlipVertical(false);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.BLUE_GREEN,
+		FillingTable.RAND_12,
+		AnimationTable.WIGGLE_12,
+		true,
+		false,
+		Shading.GOURAUD, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 		
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.BLUE_PURPLE);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.WIGGLE2_12);
-		generator.setFlipHorizontal(false);
-		generator.setFlipVertical(true);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.BLUE_PURPLE,
+		FillingTable.RAND_12,
+		AnimationTable.WIGGLE2_12,
+		false,
+		true,
+		Shading.NONE, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 		
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.BROWN_RED_YELLOW);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.BOUNCE_12);
-		generator.setFlipHorizontal(true);
-		generator.setFlipVertical(false);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.BROWN_RED_YELLOW,
+		FillingTable.RAND_12,
+		AnimationTable.BOUNCE_12,
+		true,
+		false,
+		Shading.BEVEL, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 		
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.GRAY_BLUE_TEAL);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.BOUNCE_12);
-		generator.setFlipHorizontal(true);
-		generator.setFlipVertical(true);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.GRAY_BLUE_TEAL,
+		FillingTable.RAND_12,
+		AnimationTable.BOUNCE_12,
+		true,
+		true,
+		Shading.GOURAUD, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 		
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.GREEN);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.NULL_12);
-		generator.setFlipHorizontal(true);
-		generator.setFlipVertical(false);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.GREEN,
+		FillingTable.RAND_12,
+		AnimationTable.NULL_12,
+		true,
+		false,
+		Shading.NONE, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 		
-		generator =	new SpriteGenerator();
-		generator.setColorTable(ColorScheme.PURPLE_RED);
-		generator.setFillTable(FillingTable.RAND_12);
-		generator.setAnimationTable(AnimationTable.NULL_12);
-		generator.setFlipHorizontal(true);
-		generator.setFlipVertical(true);
-		generator.setShadeAtFlipHorizontal(0); 
-		generator.setShadeAtFlipVertical(0); 
-		generator.setFillProbability(0.6); 
-		generator.setFillSmoothing(0.2); 
-		generator.setFillSmoothingHorizontalBias(0.5);
-		generator.setBlackProbability(0.3); 
-		generator.setHighlightProbability(0.4); 
-		generator.setColorSmoothing(0.3);
-		generator.setColorSmoothingHorizontalBias(0.5);
+		generator =	new SpriteGenerator(
+		ColorScheme.PURPLE_RED,
+		FillingTable.RAND_12,
+		AnimationTable.NULL_12,
+		true,
+		true,
+		Shading.BEVEL, 
+		0, 
+		0, 
+		0.6, 
+		0.2, 
+		0.5,
+		0.3, 
+		0.4, 
+		0.3,
+		0.5);
 		instances.add(generator);
 		
 		return instances.toArray(new SpriteGenerator[]{});
@@ -500,22 +523,22 @@ public class SpriteGeneratorBuilder {
 	}
 	
 	public SpriteGenerator build(){
-		SpriteGenerator generator =	new SpriteGenerator();
-		generator.setColorTable(this.color_table);
-		generator.setFillTable(this.fill_table);
-		generator.setAnimationTable(this.animation_table);
-		generator.setFlipHorizontal(this.flip_x);
-		generator.setFlipVertical(this.flip_y);
-		generator.setShading(shading);
-		generator.setShadeAtFlipHorizontal(this.shade_at_flip_x); 
-		generator.setShadeAtFlipVertical(this.shade_at_flip_y); 
-		generator.setFillProbability(this.fill_probability); 
-		generator.setFillSmoothing(this.fill_smoothing); 
-		generator.setFillSmoothingHorizontalBias(this.fill_smoothing_x_bias);
-		generator.setBlackProbability(this.black_probability); 
-		generator.setHighlightProbability(this.highlight_probability); 
-		generator.setColorSmoothing(this.color_smoothing);
-		generator.setColorSmoothingHorizontalBias(this.color_smoothing_x_bias);
+		SpriteGenerator generator =	new SpriteGenerator(
+			color_table,
+			fill_table,
+			animation_table,
+			flip_x,
+			flip_y,
+			shading,
+			shade_at_flip_x,
+			shade_at_flip_y,
+			fill_probability,
+			fill_smoothing,
+			fill_smoothing_x_bias,
+			black_probability,
+			highlight_probability,
+			color_smoothing,
+			color_smoothing_x_bias);
 		return generator;
 	}
 }

@@ -220,42 +220,23 @@ class Main extends JGEngine {
 		
 		// Choose a random shape
 		SpriteGenerator generator = SpriteGeneratorBuilder.predefinedInstances()[(int) (random.nextDouble() * SpriteGeneratorBuilder.predefinedInstances().length)];
+		/*
+		SpriteGeneratorBuilder builder = new SpriteGeneratorBuilder();
 		// Defines the probabilities of sprite features
 		double randomRoll = random.nextDouble();
 		// NO_SHADE_PROB of time the sprite doesn't have a shadow
 		if(randomRoll < NO_SHADE_PROB){
-			generator.setShading(Shading.NONE);
+			builder.shading(Shading.NONE);
 		// BEVEL_SHADE_PROB of time it has Bevel shadow
 		}else if((randomRoll-NO_SHADE_PROB) < BEVEL_SHADE_PROB){
-			generator.setShading(Shading.BEVEL);
+			builder.shading(Shading.BEVEL);
 		// the rest of the time it has Gouraud shadow
 		}else{
-			generator.setShading(Shading.GOURAUD);
+			builder.shading(Shading.GOURAUD);
 		}
-
-		return generator;
-		/*
-		int[][] colorSchemes = generateColorSchemes();
-		int[] colorScheme = colorSchemes[(int) (random.nextDouble() * colorSchemes.length)];
-		SpriteGenerator gen = new SpriteGenerator(
-				colorScheme,
-				FillingTable.RAND_16_8, 
-				AnimationTable.NULL_16_8,
-				false, 
-				true, 
-				0, 
-				0, 
-				0.6, 
-				0.2, 
-				0.5, 
-				0.3, 
-				0.4, 
-				0.2, 
-				0.5);
-		gen.shading = Shading.NONE;
-		
-		return gen;
 		*/
+		
+		return generator;
 	}
 	
 	/**
