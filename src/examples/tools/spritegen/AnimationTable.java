@@ -1,6 +1,8 @@
 package examples.tools.spritegen;
 
 class AnimationTable {
+	private AnimationTable(){};
+	
 	private static final int A = 10;
 	private static final int B = 11;
 	private static final int C = 12;

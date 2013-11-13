@@ -2,6 +2,8 @@ package examples.tools.spritegen.test;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -66,7 +68,7 @@ public class SpriteTest {
 		if(coltable == colorTable1 && xsize == 7 && totalxsize == 21 && ysize == 12){
 			return 7;
 		}
-		throw new Exception("Values not tabulated: "+coltable+" "+xsize+" "+totalxsize+" "+ysize);
+		throw new Exception("Values not tabulated: "+Arrays.toString(coltable)+" "+xsize+" "+totalxsize+" "+ysize);
 	}	
 	
 	private int getHeightTable(int [] coltable, 
@@ -91,7 +93,7 @@ public class SpriteTest {
 		if(coltable == colorTable1 && xsize == 7 && totalxsize == 21 && ysize == 12){
 			return 12;
 		}
-		throw new Exception("Values not tabulated: "+coltable+" "+xsize+" "+totalxsize+" "+ysize);
+		throw new Exception("Values not tabulated: "+Arrays.toString(coltable)+" "+xsize+" "+totalxsize+" "+ysize);
 	}
 	
 	private int getNrFramesTable(int [] coltable, 
@@ -116,7 +118,7 @@ public class SpriteTest {
 		if(coltable == colorTable1 && xsize == 7 && totalxsize == 21 && ysize == 12){
 			return 3;
 		}
-		throw new Exception("Values not tabulated: "+coltable+" "+xsize+" "+totalxsize+" "+ysize);
+		throw new Exception("Values not tabulated: "+Arrays.toString(coltable)+" "+xsize+" "+totalxsize+" "+ysize);
 	}	
 	
 	private int[] getDataTable(int [] coltable, 
@@ -142,6 +144,6 @@ public class SpriteTest {
 		if(coltable == colorTable1 && xsize == 7 && totalxsize == 21 && ysize == 12 && frame >= 0 && frame <= 2){
 			return new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 		}
-		throw new Exception("Values not tabulated: "+coltable+" "+xsize+" "+totalxsize+" "+ysize+" "+frame);
+		throw new Exception("Values not tabulated: "+Arrays.toString(coltable)+" "+xsize+" "+totalxsize+" "+ysize+" "+frame);
 	}	
 }

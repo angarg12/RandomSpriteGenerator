@@ -3,6 +3,8 @@ package examples.tools.spritegen.color;
 import java.util.Random;
 
 public class ColorSchemeGenerator {
+	private ColorSchemeGenerator(){};
+	
 	private static Random random = new Random();
 	public static void fixRandom(int seed){
 		random = new Random(seed);

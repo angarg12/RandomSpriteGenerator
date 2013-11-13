@@ -2,7 +2,7 @@ package examples.tools.spritegen;
 
 import examples.tools.spritegen.color.ColorScheme;
 
-public class Sprite {
+public class Sprite implements Cloneable {
 	// render parameters as part of instance
 	public int[] coltable;
 	SpriteGenerator gen;
@@ -61,7 +61,16 @@ public class Sprite {
 		return ret;
 	}
 	
+	@Override
 	public Sprite clone(){
+		try {
+				Sprite clone = (Sprite) super.clone();
+				clone.gen = gen;
+				return clone;
+			} catch(CloneNotSupportedException e) {
+				throw new AssertionError(); // Can't happen
+		}
+		/*
 		Sprite spr = new Sprite(null,gen,0,0,0,0);
 		spr.coltable = coltable.clone();
 		spr.colidx = colidx.clone();
@@ -80,5 +89,43 @@ public class Sprite {
 			spr.pixels[i] = pixels[i].clone();
 		}
 		return spr;
+		*/
+	}
+	
+	@Override
+	public String toString(){
+		String representation = "";
+		representation += "color_table\n";
+		for(int i = 0; i < coltable.length; i++){
+			representation += coltable[i]+" ";
+		}
+		representation += "\n\n";
+		representation += "hull\n";
+		for(int i = 0; i < hull.length; i++){
+			for(int j = 0; j < hull[i].length; j++){
+				representation += hull[i][j]+" ";
+			}
+			representation += "\n";
+		}
+		representation += "\n";
+		representation += "color_index\n";
+		for(int i = 0; i < colidx.length; i++){
+			for(int j = 0; j < colidx[i].length; j++){
+				representation += colidx[i][j]+" ";
+			}
+			representation += "\n";
+		}
+		representation += "\n";
+		representation += "pixels\n";
+		for(int i = 0; i < pixels.length; i++){
+			for(int j = 0; j < pixels[i].length; j++){
+				representation += pixels[i][j]+" ";
+			}
+			representation += "\n";
+		}
+		representation += "\n";
+		representation += "frames_count\n";
+		representation += frames;
+		return representation;
 	}
 }

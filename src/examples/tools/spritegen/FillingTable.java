@@ -1,6 +1,7 @@
 package examples.tools.spritegen;
 
 class FillingTable {
+	private FillingTable(){};
 	// Filltable values:
 	//
 	// bit 0-1:

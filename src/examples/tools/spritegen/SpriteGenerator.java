@@ -610,7 +610,7 @@ public class SpriteGenerator {
 	// if the bright level is odd and the pixel coordinates are odd
 	// the pixel dithers
 	private boolean isDither(int bright, int x, int y) {
-		return (bright % 2) == 1 && ((x + y) % 2) == 1;
+		return (Math.abs(bright) % 2) == 1 && (Math.abs(x + y) % 2) == 1;
 	}
 
 	//================================================================================
