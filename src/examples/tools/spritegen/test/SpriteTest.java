@@ -7,9 +7,7 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
-import examples.tools.spritegen.SpriteGenerator;
 import examples.tools.spritegen.Sprite;
-import examples.tools.spritegen.SpriteGeneratorBuilder;
 
 public class SpriteTest {	
 	int[] colorTable1;

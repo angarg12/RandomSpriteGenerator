@@ -49,7 +49,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 
 		generator =	new SpriteGenerator(
-		ColorScheme.BLUE,
+		ColorScheme.BLUE(),
 		FillingTable.RAND_12,
 		AnimationTable.FLY_12,
 		true,
@@ -67,7 +67,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 
 		generator =	new SpriteGenerator(
-		ColorScheme.BLUE_PURPLE,
+		ColorScheme.BLUE_PURPLE(),
 		FillingTable.RAND_12,
 		AnimationTable.CRAWL2_12,
 		true,
@@ -85,7 +85,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 
 		generator =	new SpriteGenerator(
-		ColorScheme.BROWN_RED_YELLOW,
+		ColorScheme.BROWN_RED_YELLOW(),
 		FillingTable.RAND_12,
 		AnimationTable.CRAWL_12,
 		true,
@@ -103,7 +103,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 
 		generator =	new SpriteGenerator(
-		ColorScheme.GRAY_BLUE_TEAL,
+		ColorScheme.GRAY_BLUE_TEAL(),
 		FillingTable.RAND_12,
 		AnimationTable.BEND_12,
 		true,
@@ -121,7 +121,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 
 		generator =	new SpriteGenerator(
-		ColorScheme.GREEN,
+		ColorScheme.GREEN(),
 		FillingTable.RAND_12,
 		AnimationTable.BUBBLE_12,
 		true,
@@ -139,7 +139,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 
 		generator =	new SpriteGenerator(
-		ColorScheme.PURPLE_RED,
+		ColorScheme.PURPLE_RED(),
 		FillingTable.RAND_12,
 		AnimationTable.POKE_12,
 		true,
@@ -157,7 +157,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 
 		generator =	new SpriteGenerator(
-		ColorScheme.RED_YELLOW,
+		ColorScheme.RED_YELLOW(),
 		FillingTable.RAND_12,
 		AnimationTable.WALK2_12,
 		false,
@@ -175,7 +175,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 
 		generator =	new SpriteGenerator(
-		ColorScheme.BLUE,
+		ColorScheme.BLUE(),
 		FillingTable.RAND_12,
 		AnimationTable.CRAWL_12,
 		false,
@@ -193,7 +193,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 
 		generator =	new SpriteGenerator(
-		ColorScheme.BLUE_GREEN,
+		ColorScheme.GREEN(),
 		FillingTable.RAND_12,
 		AnimationTable.BEND_12,
 		false,
@@ -211,7 +211,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 
 		generator =	new SpriteGenerator(
-		ColorScheme.BLUE_PURPLE,
+		ColorScheme.BLUE_PURPLE(),
 		FillingTable.RAND_12,
 		AnimationTable.BUBBLE_12,
 		false,
@@ -229,7 +229,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 
 		generator =	new SpriteGenerator(
-		ColorScheme.BROWN_RED_YELLOW,
+		ColorScheme.RED_YELLOW(),
 		FillingTable.RAND_12,
 		AnimationTable.POKE_12,
 		false,
@@ -247,7 +247,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 		
 		generator =	new SpriteGenerator(
-		ColorScheme.GRAY_BLUE_TEAL,
+		ColorScheme.GRAY_BLUE_TEAL(),
 		FillingTable.RAND_12,
 		AnimationTable.TURN_12,
 		true,
@@ -265,7 +265,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 		
 		generator =	new SpriteGenerator(
-		ColorScheme.GREEN,
+		ColorScheme.GREEN(),
 		FillingTable.RAND_12,
 		AnimationTable.BEND_12,
 		true,
@@ -283,7 +283,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 		
 		generator =	new SpriteGenerator(
-		ColorScheme.PURPLE_RED,
+		ColorScheme.PURPLE_RED(),
 		FillingTable.RAND_12,
 		AnimationTable.CRAWL_12,
 		true,
@@ -301,7 +301,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 		
 		generator =	new SpriteGenerator(
-		ColorScheme.RED_YELLOW,
+		ColorScheme.RED_YELLOW(),
 		FillingTable.RAND_12,
 		AnimationTable.BUBBLE_12,
 		false,
@@ -319,7 +319,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 		
 		generator =	new SpriteGenerator(
-		ColorScheme.BLUE,
+		ColorScheme.BLUE(),
 		FillingTable.RAND_12,
 		AnimationTable.POKE_12,
 		true,
@@ -337,7 +337,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 		
 		generator =	new SpriteGenerator(
-		ColorScheme.BLUE_GREEN,
+		ColorScheme.BLUE_GREEN(),
 		FillingTable.RAND_12,
 		AnimationTable.WIGGLE_12,
 		true,
@@ -355,7 +355,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 		
 		generator =	new SpriteGenerator(
-		ColorScheme.BLUE_PURPLE,
+		ColorScheme.BLUE_PURPLE(),
 		FillingTable.RAND_12,
 		AnimationTable.WIGGLE2_12,
 		false,
@@ -373,7 +373,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 		
 		generator =	new SpriteGenerator(
-		ColorScheme.BROWN_RED_YELLOW,
+		ColorScheme.BROWN_RED_YELLOW(),
 		FillingTable.RAND_12,
 		AnimationTable.BOUNCE_12,
 		true,
@@ -391,7 +391,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 		
 		generator =	new SpriteGenerator(
-		ColorScheme.GRAY_BLUE_TEAL,
+		ColorScheme.GRAY_BLUE_TEAL(),
 		FillingTable.RAND_12,
 		AnimationTable.BOUNCE_12,
 		true,
@@ -409,7 +409,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 		
 		generator =	new SpriteGenerator(
-		ColorScheme.GREEN,
+		ColorScheme.GREEN(),
 		FillingTable.RAND_12,
 		AnimationTable.NULL_12,
 		true,
@@ -427,7 +427,7 @@ public class SpriteGeneratorBuilder {
 		instances.add(generator);
 		
 		generator =	new SpriteGenerator(
-		ColorScheme.PURPLE_RED,
+		ColorScheme.PURPLE_RED(),
 		FillingTable.RAND_12,
 		AnimationTable.NULL_12,
 		true,

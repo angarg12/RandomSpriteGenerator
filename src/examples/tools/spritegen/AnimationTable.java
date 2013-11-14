@@ -80,6 +80,7 @@ class AnimationTable {
 					{ B, B, 3, 3, 3, 3, 3, 3, 2, 2, 2, 0 },
 					{ B, B, B, 3, 3, 3, 3, 3, 2, 2, 2, 2 },
 					{ B, B, B, B, 3, 3, 3, 3, 3, 2, 2, 2 }}};
+	
 	static int[][][] BIRD_16 = new int[][][] {
 				  { { 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7 },
 					{ 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7 },
@@ -113,6 +114,7 @@ class AnimationTable {
 					{ B, B, B, B, 3, 3, 0, 0, 0, 0, 7, 7, F, F, F, F },
 					{ B, B, B, B, 3, 3, 0, 0, 0, 0, 7, 7, F, F, F, F },
 					{ B, B, B, B, 3, 3, 0, 0, 0, 0, 7, 7, F, F, F, F }}};
+	
 	static int[][][] BIRD_18 = new int[][][] {
 			      { { 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7, 7 },
 					{ 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7, 7 },
@@ -168,6 +170,7 @@ class AnimationTable {
 					{ 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7, 7 },
 					{ 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7, 7 },
 					{ 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7, 7 }}};
+	
 	static int[][][] BOUNCE_12 = new int[][][] {
 			      { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -217,6 +220,7 @@ class AnimationTable {
 					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }}};
+	
 	static int[][][] BUBBLE_12 = new int[][][] {
 			      { { 3, 2, 2, 2, 1, 1, 1, 1, 8, 8, 8, 7 },
 					{ 3, 3, 2, 2, 1, 1, 1, 1, 8, 8, 7, 7 },
@@ -828,7 +832,7 @@ class AnimationTable {
 		if(8 <= movement && movement <= 16){
 			return 2;
 		}
-		// BAD practice. If the value is not in range it should throw an error indicating
+		// TODO: BAD practice. If the value is not in range it should throw an error indicating
 		// that the value is bad
 		return -1;
 	}
