@@ -2,7 +2,7 @@ package examples.tools.spritegen.color;
 
 import java.util.Random;
 
-public class ColorSchemeGenerator {
+final public class ColorSchemeGenerator {
 	private ColorSchemeGenerator(){};
 	
 	private static Random random = new Random();

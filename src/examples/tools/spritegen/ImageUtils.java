@@ -4,26 +4,26 @@ import java.io.*;
 
 import examples.tools.spritegen.color.ColorScheme;
 
-class ImageUtils {
+final class ImageUtils {
 	private ImageUtils(){};
 
 	// http://stackoverflow.com/questions/11590075/crc32-calculation-with-pycrc-and-php-code-doesnt-match-expected-result
 	// http://stackoverflow.com/questions/2587766/how-is-a-crc32-checksum-calculated
 
 	/* Table of CRCs of all 8-bit messages. */
-	private static long[] crc_table = new long[256];
+	private static final long[] crc_table = new long[256];
 
 	/* Flag: has the table been computed? Initially false. */
 	private static boolean crc_table_computed = false;
 
-	private static byte[] pngHeader = new byte[] { (byte) 137, (byte) 80,
+	private static final byte[] pngHeader = new byte[] { (byte) 137, (byte) 80,
 			(byte) 78, (byte) 71, (byte) 13, (byte) 10, (byte) 26, (byte) 10 };
 
-	private static int[] pngIHDR = new int[] { 73, 72, 68, 82 };
+	private static final int[] pngIHDR = new int[] { 73, 72, 68, 82 };
 
-	private static int[] pngIDAT = new int[] { 73, 68, 65, 84 };
+	private static final int[] pngIDAT = new int[] { 73, 68, 65, 84 };
 
-	private static int[] pngIEND = new int[] { 73, 69, 78, 68 };
+	private static final int[] pngIEND = new int[] { 73, 69, 78, 68 };
 
 	public static void writePNG(String filename, int[][] pix, int width,
 			int height, int transcolor) {

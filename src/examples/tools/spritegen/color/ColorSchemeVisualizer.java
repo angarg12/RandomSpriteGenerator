@@ -7,7 +7,7 @@ import jgame.JGPoint;
 import jgame.platform.JGEngine;
 
 /** Minimal shooter for jgame skeletons. */
-public class ColorSchemeVisualizer extends JGEngine {
+public final class ColorSchemeVisualizer extends JGEngine {
 	static Random random = new Random();
 	int i1 = 123;
 	int i2 = 234;

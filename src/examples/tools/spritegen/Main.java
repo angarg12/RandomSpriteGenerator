@@ -13,7 +13,7 @@ import jgame.JGObject;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
 
-class Main extends JGEngine {
+final class Main extends JGEngine {
 	static int NUMBER_SPRITES_X = 16;
 	static int NUMBER_SPRITES_Y = 16;
 	static int SEPARATION_X = 22;
@@ -219,8 +219,8 @@ class Main extends JGEngine {
 		// The rest up to 1 is the Gouraud prob
 		
 		// Choose a random shape
-		SpriteGenerator generator = SpriteGeneratorBuilder.predefinedInstances()[(int) (random.nextDouble() * SpriteGeneratorBuilder.predefinedInstances().length)];
-		/*
+		//SpriteGenerator generator = SpriteGeneratorBuilder.predefinedInstances()[(int) (random.nextDouble() * SpriteGeneratorBuilder.predefinedInstances().length)];
+		
 		SpriteGeneratorBuilder builder = new SpriteGeneratorBuilder();
 		// Defines the probabilities of sprite features
 		double randomRoll = random.nextDouble();
@@ -234,9 +234,23 @@ class Main extends JGEngine {
 		}else{
 			builder.shading(Shading.GOURAUD);
 		}
-		*/
+		int[] color_table = generateColorSchemes()[(int)(random.nextDouble()*64)];
+		builder.colorTable(color_table).
+		fillTable(FillingTable.RAND_12).
+		animationTable(AnimationTable.BEND_12).
+		flipHorizontal(random.nextBoolean()).
+		flipVertical(random.nextBoolean()).
+		shadeAtFlipHorizontal(random.nextInt(3)).
+		shadeAtFlipVertical(random.nextInt(3)).
+		fillProbability(random.nextDouble()).
+		fillSmoothing(random.nextDouble()).
+		fillSmoothingHorizontalBias(random.nextDouble()).
+		blackProbability(random.nextDouble()).
+		highlightProbability(random.nextDouble()).
+		colorSmoothing(random.nextDouble()).
+		colorSmoothingHorizontalBias(random.nextDouble());
 		
-		return generator;
+		return builder.build();
 	}
 	
 	/**

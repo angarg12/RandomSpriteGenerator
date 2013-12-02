@@ -4,7 +4,7 @@ import java.util.Vector;
 
 import examples.tools.spritegen.color.ColorScheme;
 
-public class SpriteGeneratorBuilder {
+public final class SpriteGeneratorBuilder {
 	private int[] color_table;
 	private int[][] fill_table;
 	private int[][][] animation_table;

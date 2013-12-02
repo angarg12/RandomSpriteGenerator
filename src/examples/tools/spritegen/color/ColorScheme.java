@@ -1,6 +1,6 @@
 package examples.tools.spritegen.color;
 
-public class ColorScheme {
+public final class ColorScheme {
 	public static final int TRANSPARENT = 0x010101;
 
 	private static final int[] BROWN_RED_YELLOW = new int[] { 

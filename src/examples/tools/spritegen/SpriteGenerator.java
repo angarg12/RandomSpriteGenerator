@@ -4,25 +4,29 @@ import java.util.Random;
 
 import examples.tools.spritegen.color.ColorScheme;
 
-public class SpriteGenerator {
+public final class SpriteGenerator {
 	/**
 	 * TODO: Encapsulate filling tables, animation tables and generation
 	 * parameters in some kind of pattern (factory, strategy?)
 	 */
 	private static Random random = new Random();
 
+	/**
+	 * TODO: fixRandom should be package private, but tests are in another package
+	 * @param seed
+	 */
 	public static void fixRandom(int seed) {
 		random = new Random(seed);
 	}
 
-	private int[] color_table;
-	private int[][] fill_table;
-	private int[][][] animation_table;
+	private final int[] color_table;
+	private final int[][] fill_table;
+	private final int[][][] animation_table;
 
-	private boolean flip_x = true;
-	private boolean flip_y = false;
+	private final boolean flip_x;
+	private final boolean flip_y;
 
-	private Shading shading = Shading.NONE;
+	private final Shading shading;
 	// shades the colour when flipping
 	// this is based on the fact that there are only 3 hard-coded shades.
 	// with arbitrary values you don't have this limitation
@@ -30,25 +34,44 @@ public class SpriteGenerator {
 	// 0=no shading
 	// 1=darken
 	// 2=darken more
-	private int shade_at_flip_x = 0;
-	private int shade_at_flip_y = 0;
+	private final int shade_at_flip_x;
+	private final int shade_at_flip_y;
 
 	// probability of filling pixel
-	private double fill_probability = 0.6;
+	private final double fill_probability;
 	// probability that a pixel is filled the same as its neighbours
-	private double fill_smoothing = 0.2;
+	private final double fill_smoothing;
 	// balance between taking horizontal versus vertical neighbours
-	private double fill_smoothing_x_bias = 0.8;
+	private final double fill_smoothing_x_bias;
 	// probability of black pixel if enabled
 	// TODO: actually fills it black or transparent??
-	private double black_probability = 0.2;
+	private final double black_probability;
 	// probability of highlight pixel if enabled
-	private double highlight_probability = 0.4;
+	private final double highlight_probability;
 	// probability that a colour (non-black) pixel is taken from neighbour
-	private double color_smoothing = 0.7;
+	private final double color_smoothing;
 	// balance between taking horizontal versus vertical neighbours
-	private double color_smoothing_x_bias = 0.5;
+	private final double color_smoothing_x_bias;
 
+	/**
+	 * TODO: Constructor should be private, and make the builder a nested class?.
+	 * 
+	 * @param color_table
+	 * @param fill_table
+	 * @param animation_table
+	 * @param flip_x
+	 * @param flip_y
+	 * @param shading
+	 * @param shade_at_flip_x
+	 * @param shade_at_flip_y
+	 * @param fill_probability
+	 * @param fill_smoothing
+	 * @param fill_smoothing_x_bias
+	 * @param black_probability
+	 * @param highlight_probability
+	 * @param color_smoothing
+	 * @param color_smoothing_x_bias
+	 */
 	public SpriteGenerator(int[] color_table, 
 			int[][] fill_table, 
 			int[][][] animation_table, 
@@ -70,16 +93,22 @@ public class SpriteGenerator {
 		this.flip_x = flip_x;
 		this.flip_y = flip_y;
 		this.shading = shading;
-		this.shade_at_flip_x = shade_at_flip_x;
-		this.shade_at_flip_y = shade_at_flip_y;
-		this.highlight_probability = highlight_probability;
 		
-		if (this.shading == Shading.BEVEL) {
-			this.shade_at_flip_x = 0;
-			this.shade_at_flip_y = 0;
-			this.highlight_probability = 0;
-		}else if (this.shading == Shading.GOURAUD) {
-			this.highlight_probability = 0;
+		switch (this.shading){
+			case BEVEL:
+				this.shade_at_flip_x = 0;
+				this.shade_at_flip_y = 0;
+				this.highlight_probability = 0;
+				break;
+			case GOURAUD:
+				this.shade_at_flip_x = shade_at_flip_x;
+				this.shade_at_flip_y = shade_at_flip_y;
+				this.highlight_probability = 0;
+				break;
+			default:
+				this.shade_at_flip_x = shade_at_flip_x;
+				this.shade_at_flip_y = shade_at_flip_y;
+				this.highlight_probability = highlight_probability;
 		}
 		this.fill_probability = fill_probability;
 		this.fill_smoothing = fill_smoothing;
